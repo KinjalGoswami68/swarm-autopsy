@@ -2,9 +2,7 @@
 import random
 
 SIZES = {"S": (60, 12), "M": (200, 24), "L": (600, 48)}  # size -> (lines N, planted K)
-COLUMNS = ["row", "line_id", "payer", "service_code", "qty", "unit_rate", "paid"]
-PAYERS = ["Northgate Mutual", "Kestrel Health", "Arbor Benefit Co", "Lumen Assurance",
-          "Pinecrest Plan", "Harbor Union Fund", "Silverline Care", "Meridian Cover"]
+COLUMNS = ["row", "line_id", "qty", "unit_rate", "paid"]  # D9: payer/service code dropped
 ID_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"  # no 0/O/1/I
 
 TASK_TEXT = (
@@ -59,8 +57,7 @@ def generate(size, seed):
             key.append({"line_id": ids[i], "row": i + 1, "shortfall_cents": short})
         elif i in overpaid:
             paid = expected + _deviation(rng, expected)
-        rows.append({"row": i + 1, "line_id": ids[i], "payer": rng.choice(PAYERS),
-                     "service_code": f"SVC-{rng.randint(100, 999)}", "qty": qty,
+        rows.append({"row": i + 1, "line_id": ids[i], "qty": qty,
                      "unit_rate_cents": rate, "paid_cents": paid})
     return {"family": "remittance-ledger", "task_id": task_id(size, seed), "size": size,
             "seed": seed, "n_lines": n, "n_planted": k, "n_overpaid": k,
@@ -72,15 +69,15 @@ def money(cents):
 
 
 def header():
-    return " | ".join(COLUMNS)
+    return ",".join(COLUMNS)
 
 
 def render_rows(rows):
-    """Text table for a prompt. Same columns and number format for every row: no planted marker."""
+    """CSV text for a prompt. Same columns and number format for every row: no planted marker."""
     lines = [header()]
     for r in rows:
-        lines.append(" | ".join([str(r["row"]), r["line_id"], r["payer"], r["service_code"],
-                                 str(r["qty"]), money(r["unit_rate_cents"]), money(r["paid_cents"])]))
+        lines.append(",".join([str(r["row"]), r["line_id"], str(r["qty"]),
+                               money(r["unit_rate_cents"]), money(r["paid_cents"])]))
     return "\n".join(lines)
 
 

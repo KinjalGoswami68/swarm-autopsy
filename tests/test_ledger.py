@@ -39,7 +39,7 @@ def test_render_has_no_planted_marker():
     lines = text.splitlines()
     assert lines[0] == ledger.header()
     assert len(lines) == 61
-    assert all(len(line.split(" | ")) == len(ledger.COLUMNS) for line in lines)
+    assert all(len(line.split(",")) == len(ledger.COLUMNS) for line in lines)
 
 
 def test_no_round_deviations():

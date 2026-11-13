@@ -31,7 +31,52 @@ class RateLimitStop(Exception):
 
 
 class RequestTooLarge(Exception):
-    """The prompt exceeds the provider's per-request or per-minute token limit. Retrying cannot help."""
+    """The prompt exceeds the provider's per-request token limit. Retrying cannot help.
+
+    requested_tokens and limit_tokens are parsed from the provider message when present."""
+    def __init__(self, message):
+        super().__init__(message)
+        m = re.search(r"Limit\s+(\d+),\s*Requested\s+(\d+)", message or "")
+        self.limit_tokens = int(m.group(1)) if m else None
+        self.requested_tokens = int(m.group(2)) if m else None
+
+
+class Pacer:
+    """Client-side sliding window for an input-tokens-per-minute limit (D10).
+
+    Before a live call, waits until (input tokens sent in the last 60 s + this call's estimate)
+    fits under `itpm`. A call whose estimate alone exceeds `itpm` is sent anyway: the provider
+    rejects it (RequestTooLarge) without spending budget. itpm=0 disables pacing.
+    """
+    CHARS_PER_TOKEN = 1.2  # measured 1.33 on a size-S prompt (D9); digits tokenise one by one
+
+    def __init__(self, itpm=7000, window_s=60.0, clock=time.monotonic, sleep=None):
+        self.itpm, self.window_s, self.clock = itpm, window_s, clock
+        self.sleep = sleep or (lambda s: time.sleep(s))
+        self.sent = []  # (timestamp, tokens)
+
+    def estimate(self, messages):
+        return int(sum(len(m["content"]) for m in messages) / self.CHARS_PER_TOKEN) + 20
+
+    def _used(self, now):
+        self.sent = [(t, n) for t, n in self.sent if now - t < self.window_s]
+        return sum(n for _, n in self.sent)
+
+    def wait_for(self, tokens):
+        if not self.itpm or tokens > self.itpm:
+            return 0.0
+        waited = 0.0
+        while self._used(self.clock()) + tokens > self.itpm:
+            pause = self.sent[0][0] + self.window_s - self.clock() + 0.5
+            self.sleep(max(pause, 0.5))
+            waited += max(pause, 0.5)
+        return waited
+
+    def record(self, tokens):
+        self.sent.append((self.clock(), tokens))
+
+
+PACER = Pacer(itpm=0)  # the CLI sets the real limit (--itpm); tests and imports stay unpaced
 
 
 def set_endpoint(url):
@@ -40,9 +85,9 @@ def set_endpoint(url):
     ENDPOINT, _client = url.rstrip("/"), None
 
 
-def cache_key(model, temperature, reasoning_effort, messages, call_id):
+def cache_key(model, temperature, reasoning_effort, messages, call_id, max_tokens=None):
     """call_id = [task_id, role, index]: identical prompts in different roles never share a response."""
-    payload = json.dumps([model, temperature, reasoning_effort, messages, call_id, ENDPOINT])
+    payload = json.dumps([model, temperature, reasoning_effort, max_tokens, messages, call_id, ENDPOINT])
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -64,7 +109,7 @@ def _too_large(status, text):
     return status == 413 or "request too large" in (text or "").lower()
 
 
-def call_model(model, temperature, reasoning_effort, messages, post=None):
+def call_model(model, temperature, reasoning_effort, messages, post=None, max_tokens=None):
     """One POST to {ENDPOINT}/chat/completions. Fresh context: only `messages`, no history.
 
     Retries only when no model response arrived: 429, 5xx, connection error, timeout.
@@ -76,6 +121,8 @@ def call_model(model, temperature, reasoning_effort, messages, post=None):
     body = {"model": model, "temperature": temperature, "messages": messages}
     if reasoning_effort is not None:
         body["reasoning_effort"] = reasoning_effort
+    if max_tokens is not None:
+        body["max_tokens"] = max_tokens
     for attempt in range(MAX_RETRIES + 1):
         start = time.perf_counter()
         try:
@@ -86,8 +133,13 @@ def call_model(model, temperature, reasoning_effort, messages, post=None):
             error = f"HTTP {resp.status_code}: {resp.text[:400]}"
             if resp.status_code == 200:
                 data = resp.json()
-                message, usage = data["choices"][0]["message"], data.get("usage") or {}
+                choice, usage = data["choices"][0], data.get("usage") or {}
+                message = choice["message"]
+                limits = {k.lower(): v for k, v in (getattr(resp, "headers", None) or {}).items()
+                          if k.lower().startswith("x-ratelimit")}
                 return {
+                    "finish_reason": choice.get("finish_reason"),
+                    "ratelimit_headers": limits,
                     "raw_text": message.get("content"),
                     "reasoning": message.get("reasoning"),
                     "prompt_tokens": usage.get("prompt_tokens", 0),
@@ -107,7 +159,8 @@ def call_model(model, temperature, reasoning_effort, messages, post=None):
         time.sleep(wait)
 
 
-def call_agent(model, temperature, messages, call_id, reasoning_effort=None, post=None):
+def call_agent(model, temperature, messages, call_id, reasoning_effort=None, post=None,
+               max_tokens=None):
     """Return a call record. Cached responses are replayed; failed calls are never cached.
 
     A non-retryable API error returns a record with error set (raw_text None).
@@ -115,18 +168,27 @@ def call_agent(model, temperature, messages, call_id, reasoning_effort=None, pos
     """
     if isinstance(messages, str):
         messages = [{"role": "user", "content": messages}]
-    key = cache_key(model, temperature, reasoning_effort, messages, call_id)
+    key = cache_key(model, temperature, reasoning_effort, messages, call_id, max_tokens)
     path = CACHE_DIR / f"{key}.json"
     if path.exists():
         record = json.loads(path.read_text(encoding="utf-8"))
         return {**record, "cached": True}
+    estimate = PACER.estimate(messages)
+    PACER.wait_for(estimate)
     try:
-        record = call_model(model, temperature, reasoning_effort, messages, post=post)
+        record = call_model(model, temperature, reasoning_effort, messages, post=post,
+                            max_tokens=max_tokens)
+    except RequestTooLarge:
+        raise  # rejected before processing: nothing counted against the window
     except CallFailed as e:
-        return {"raw_text": None, "reasoning": None, "prompt_tokens": 0, "completion_tokens": 0,
+        PACER.record(estimate)
+        return {"raw_text": None, "reasoning": None, "finish_reason": None,
+                "prompt_tokens": 0, "completion_tokens": 0,
                 "latency_ms": None, "retries": e.retries, "error": str(e), "cached": False}
+    PACER.record(record["prompt_tokens"] or estimate)
     record["error"] = None
     record.update(model=model, temperature=temperature, reasoning_effort=reasoning_effort,
+                  max_tokens=max_tokens,
                   call_id=call_id, endpoint=ENDPOINT)
     CACHE_DIR.mkdir(exist_ok=True)
     tmp = path.with_suffix(".tmp")

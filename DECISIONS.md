@@ -77,11 +77,53 @@ reasoning_effort, messages, call id and endpoint. Failed calls are never cached.
 4xx is recorded in the run as a failed call. **New:** a 413, or any "request too large" error,
 raises `RequestTooLarge` and stops the run, since retrying cannot help.
 
-## D9. Size L does not fit the free tier in one call (open: awaiting owner decision)
+## D9. Free-tier input limit: shorter rows; size L is swarm only
 
 > Rs 0, Groq free tier, default model qwen/qwen3.8-27b
 
-Live check on 2026-11-13, size L seed 1, baseline prompt: HTTP 413 from Groq,
-"input tokens per minute (ITPM): Limit 7000, Requested 24702". The rendered ledger costs about
-41 input tokens per line, so the single-agent baseline also exceeds 7,000 at size M
-(estimate ~8,300). Size S (~2,600) fits. Per the owner's instruction, the grid was not run.
+**Finding (2026-11-13):** size L seed 1, baseline prompt, original row format (7 columns,
+`|`-separated): HTTP 413, "input tokens per minute (ITPM): Limit 7000, Requested 24702"
+(about 41 input tokens per line). A single request cannot exceed 7,000 input tokens.
+
+**Choice (confirmed by owner):**
+1. **Shorter rows.** Payer and service code are dropped (they were filler, D1) and rows are
+   CSV: `row,line_id,qty,unit_rate,paid`. The planner sees these five column headers (D2).
+   **Measured** with one size-S call (seed 1 baseline, 60 lines): 1,748 prompt tokens for
+   2,324 prompt characters, i.e. 1.33 characters per token (digits tokenise almost one per
+   token). That is 29.1 tokens per line including the fixed prompt text, or about 22.4 tokens per
+   line for the table alone. Projected one-call baselines: S about 1,750 (measured), M about
+   4,900, L about 14,700 input tokens.
+2. **S and M run swarm and baseline. L stays 600 lines and runs the swarm only.** The L
+   baseline call is still sent, so the provider measures its size; it is recorded as
+   `status: rejected_too_large`, `final: null`, with `requested_tokens` and `limit_tokens`.
+   The table shows "did not fit in one call" with those numbers, **never a score of zero**.
+
+## D10. Pacing to the per-minute limits
+
+**Choice:** a client-side sliding window (`agent.Pacer`) waits before each live call until the
+input tokens sent in the last 60 s plus this call's estimate fit under `--itpm` (default 7000).
+The estimate is characters / 1.2 (a little more pessimistic than the measured 1.33) and is
+replaced by the real `prompt_tokens` once the call returns. Cached calls are not paced. A 429
+with a short `retry-after` is still retried (D8), so the pacer only has to be close.
+
+## D11. A call rejected as too large is a recorded failure, not a crash
+
+**Choice (confirmed by owner):** any planner, worker, merger or baseline call the provider
+rejects as too large is recorded as `status: rejected_too_large` with the requested size and
+limit. A rejected worker is treated as having reported nothing; its parse note reads "worker
+call rejected: request too large", the run carries on, and the table footnotes it. If the
+planner gives one worker too many rows, that is a split failure. Only a real rate limit (429 with
+a wait over 120 s, or exhausted retries) stops the run, with exit code 2, to be resumed later.
+
+## D12. Output cap and free-tier output limit (open: awaiting owner decision)
+
+**Finding (2026-11-13):** the size-S measurement call stopped at exactly 2,048 completion tokens,
+inside its line-by-line working (39 of 60 lines), so no JSON was produced. `max_tokens` had not
+been sent, so the provider default applied. A retry with `max_tokens=32768` was refused (400:
+the maximum is 16,384). A retry with `max_tokens=16384` was refused before running: "Request too
+large ... on output tokens per minute (OTPM): Limit 1000, Requested 2048".
+
+The model writes about 40 output tokens per line when it shows its working, so any prompt over
+about 45 lines would be cut off by the provider, not missed by the model. Changes made:
+`max_tokens` is a CLI flag and part of the cache key; every call records `finish_reason`; a
+reply cut off by the cap has `status: truncated`, separate from `unparseable`.

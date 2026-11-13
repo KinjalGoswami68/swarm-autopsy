@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "swarm-autopsy/run.schema.json",
+  "title": "swarm-autopsy run file, schema_version 1",
+  "type": "object",
+  "required": ["schema_version", "run_id", "config", "items", "swarm", "baseline"],
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "value": {"type": ["integer", "null"]}
+      }
+    },
+    "items": {"type": "array", "items": {"$ref": "#/$defs/item"}},
+    "status": {
+      "enum": ["ok", "unparseable", "truncated", "call_failed", "rejected_too_large", "not_called"]
+    },
+    "call": {
+      "type": ["object", "null"],
+      "properties": {
+        "prompt": {"type": "string"},
+        "raw_text": {"type": ["string", "null"]},
+        "finish_reason": {"type": ["string", "null"]},
+        "prompt_tokens": {"type": "integer"},
+        "completion_tokens": {"type": "integer"},
+        "latency_ms": {"type": ["integer", "null"]},
+        "retries": {"type": "integer"},
+        "cached": {"type": "boolean"},
+        "error": {"type": ["string", "null"]},
+        "rejected_too_large": {"type": "boolean"},
+        "requested_tokens": {"type": ["integer", "null"]},
+        "limit_tokens": {"type": ["integer", "null"]}
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": 1},
+    "run_id": {"type": "string"},
+    "created_utc": {"type": "string"},
+    "config": {
+      "type": "object",
+      "required": ["model", "temperature", "workers"],
+      "properties": {
+        "model": {"type": "string"},
+        "endpoint": {"type": "string"},
+        "temperature": {"type": "number"},
+        "reasoning_effort": {"type": ["string", "null"]},
+        "workers": {"type": "integer", "minimum": 1},
+        "max_tokens": {"type": ["integer", "null"]},
+        "itpm": {"type": ["integer", "null"]}
+      }
+    },
+    "task": {"type": "object"},
+    "items": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "universe": {"type": "array", "items": {"type": "string"}},
+        "key": {"$ref": "#/$defs/items"},
+        "value_unit": {"type": "string"}
+      }
+    },
+    "swarm": {
+      "type": "object",
+      "required": ["planner", "workers", "merger"],
+      "properties": {
+        "planner": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {"status": {"$ref": "#/$defs/status"}, "call": {"$ref": "#/$defs/call"},
+                         "briefs_used": {"type": "integer"},
+                         "parse_notes": {"type": "array", "items": {"type": "string"}}}
+        },
+        "workers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["worker", "slice", "reported", "status"],
+            "properties": {
+              "worker": {"type": "integer"},
+              "brief": {"type": "string"},
+              "ranges": {"type": "array", "items": {"type": "array", "items": {"type": "integer"},
+                                                    "minItems": 2, "maxItems": 2}},
+              "slice": {"type": "array", "items": {"type": "string"}},
+              "reported": {"$ref": "#/$defs/items"},
+              "status": {"$ref": "#/$defs/status"},
+              "call": {"$ref": "#/$defs/call"},
+              "parse_notes": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "merger": {
+          "type": "object",
+          "required": ["final", "status"],
+          "properties": {"final": {"$ref": "#/$defs/items"}, "status": {"$ref": "#/$defs/status"},
+                         "call": {"$ref": "#/$defs/call"}}
+        }
+      }
+    },
+    "baseline": {
+      "type": ["object", "null"],
+      "required": ["status", "final"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "final": {"oneOf": [{"$ref": "#/$defs/items"}, {"type": "null"}]},
+        "call": {"$ref": "#/$defs/call"}
+      }
+    },
+    "usage": {"type": "object"}
+  }
+}

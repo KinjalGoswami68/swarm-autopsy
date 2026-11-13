@@ -102,3 +102,61 @@ def test_temperature_and_model_sent():
 ])
 def test_extract_json(text, expected):
     assert agent.extract_json(text) == expected
+
+
+class FakeClock:
+    def __init__(self):
+        self.t = 0.0
+
+    def __call__(self):
+        return self.t
+
+    def sleep(self, s):
+        self.t += s
+
+
+def test_pacer_waits_until_window_has_room():
+    clock = FakeClock()
+    p = agent.Pacer(itpm=1000, clock=clock, sleep=clock.sleep)
+    assert p.wait_for(600) == 0
+    p.record(600)
+    clock.t = 10
+    waited = p.wait_for(600)  # 600 + 600 > 1000: must wait until the first call leaves the window
+    assert waited > 0 and clock.t >= 60
+
+
+def test_pacer_does_not_wait_for_oversized_call():
+    clock = FakeClock()
+    p = agent.Pacer(itpm=1000, clock=clock, sleep=clock.sleep)
+    p.record(900)
+    assert p.wait_for(5000) == 0  # will be rejected by the provider anyway
+
+
+def test_pacer_disabled():
+    p = agent.Pacer(itpm=0)
+    p.record(10**6)
+    assert p.wait_for(10**6) == 0
+
+
+def test_request_too_large_parses_limit_and_size():
+    msg = ('HTTP 413: {"error":{"message":"Request too large for model `q` on input tokens per '
+           'minute (ITPM): Limit 7000, Requested 24702, please reduce"}}')
+    e = agent.RequestTooLarge(msg)
+    assert e.limit_tokens == 7000 and e.requested_tokens == 24702
+    assert agent.RequestTooLarge("other").requested_tokens is None
+
+
+def test_max_tokens_sent_and_keys_cache():
+    post = scripted(ok("[1]"))
+    agent.call_agent("m", 0, "hi", ["t"], post=post, max_tokens=999)
+    assert post.calls[0]["max_tokens"] == 999
+    r = agent.call_agent("m", 0, "hi", ["t"], post=scripted(ok("[2]")), max_tokens=1000)
+    assert r["cached"] is False and r["raw_text"] == "[2]"
+
+
+def test_finish_reason_recorded():
+    resp = Resp(200, {"choices": [{"message": {"content": "[1"}, "finish_reason": "length"}],
+                      "usage": {}}, headers={"x-ratelimit-limit-tokens": "7000"})
+    r = agent.call_agent("m", 0, "hi", ["t"], post=scripted(resp))
+    assert r["finish_reason"] == "length"
+    assert r["ratelimit_headers"] == {"x-ratelimit-limit-tokens": "7000"}
