@@ -11,6 +11,7 @@ import agent
 import autopsy
 import ledger
 import judge
+import replay
 import ledger2
 import runfile
 import swarm
@@ -118,6 +119,80 @@ def why_table(runs):
         ver = sum(x["quote_verified"] for x in quotes)
         lines.append(f"| {w} | {len(anns)} of {total} | {a} | {bb} | {ver} of {len(quotes)} |")
     return "\n".join(lines)
+
+
+def cmd_replay(args):
+    agent.BUDGET = agent.RequestBudget(rpd=args.rpd)
+    agent.PACER = agent.Pacer(itpm=args.tpm, combined=True) if args.tpm else agent.Pacer(itpm=0)
+    for path in args.run_files:
+        run = runfile.load(path)
+        agent.set_endpoint(run["config"]["endpoint"])
+        for label in args.replays:
+            out = replay.path_for(run, label)
+            if out.exists() and not args.force:
+                print(f"{out.name}: exists, skipped", flush=True)
+                continue
+            start = time.monotonic()
+            try:
+                rec = replay.replay(run, label)
+            except agent.RateLimitStop as e:
+                print(f"STOPPED by rate limit: {e}\nRe-run the same command later; cached calls are "
+                      "replayed and finished replays are skipped.", flush=True)
+                sys.exit(2)
+            runfile.save(rec, out)
+            s = autopsy.swarm_autopsy(rec)
+            print(f"{out.name}: recall {autopsy.pct(s['score']['recall'])}, lost {s['lost']}, "
+                  f"new calls {rec['usage']['replay_new_calls']['calls']}, "
+                  f"{time.monotonic() - start:.0f}s", flush=True)
+
+
+REPLAY_BUCKETS = [b for b in autopsy.BUCKETS if b != "kept"]
+SHORT = {"never_assigned": "never assigned", "context_not_passed": "context not passed",
+         "evidence_split": "evidence split", "assigned_unreached": "unreached",
+         "holder_returned_nothing": "holder returned nothing",
+         "holder_answered_missed": "holder answered, missed", "dropped_at_merge": "dropped at merge"}
+
+
+def replay_table(originals, replays_by_orig):
+    lines = ["> " + ledger2.FIXED_SENTENCE, "",
+             "No merge replay: in all nine original runs the merger dropped no item a worker had "
+             "reported (\"found, dropped at merge\" = 0), so a merge counterfactual has nothing to "
+             "recover. Far pairs can only come back when both rows land with one worker; none of "
+             "R1-R3 changes which rows a worker holds apart from adding the rate table, so they "
+             "cannot recover a far pair.", ""]
+    head = ["run", "replay", "recall", *[f"lost: {SHORT[b]}" for b in REPLAY_BUCKETS],
+            "recovered vs original", "newly lost vs original", "far pairs found",
+            "near pairs found", "new calls"]
+    lines += ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
+    for run in originals:
+        base = autopsy.swarm_autopsy(run)
+        kept0 = {p["id"] for p in base["per_item"] if p["bucket"] == "kept"}
+        name = f"S s{run['task']['seed']} W={run['config']['workers']}"
+        rows = [("original", run, base)] + [
+            (f"{r['replay']['label']} {r['replay']['name']}", r, autopsy.swarm_autopsy(r))
+            for r in sorted(replays_by_orig.get(run["run_id"], []), key=lambda r: r["replay"]["label"])]
+        for label, r, a in rows:
+            kept = {p["id"] for p in a["per_item"] if p["bucket"] == "kept"}
+            bt = a["score"]["by_type"]
+            far, near = bt.get("far pair", {"found": 0, "total": 0}), bt.get("near pair", {"found": 0, "total": 0})
+            new_calls = r.get("usage", {}).get("replay_new_calls", {}).get("calls", "") if r is not run else ""
+            lines.append("| " + " | ".join([
+                name, label, f"{autopsy.pct(a['score']['recall'])} ({a['score']['true_positives']}/{a['key_count']})",
+                *[str(a["buckets"][b]) for b in REPLAY_BUCKETS],
+                "" if r is run else f"+{len(kept - kept0)}",
+                "" if r is run else f"-{len(kept0 - kept)}",
+                f"{far['found']}/{far['total']}", f"{near['found']}/{near['total']}", str(new_calls),
+            ]) + " |")
+    return "\n".join(lines)
+
+
+def cmd_replay_table(args):
+    originals = [runfile.load(p) for p in args.run_files]
+    reps = {}
+    for p in sorted(replay.REPLAY_DIR.glob("*.json")):
+        r = runfile.load(p)
+        reps.setdefault(r["replay"]["of"], []).append(r)
+    print(replay_table(originals, reps))
 
 
 def cmd_autopsy(args):
@@ -298,6 +373,18 @@ def main(argv=None):
     j.add_argument("--max-tokens-total", type=int, default=8000)
     j.add_argument("--rpd", type=int, default=1000)
     j.set_defaults(func=cmd_annotate)
+
+    rp = sub.add_parser("replay", help="stage 2 counterfactual replays (D29)")
+    rp.add_argument("run_files", nargs="+")
+    rp.add_argument("--replays", nargs="+", default=list(replay.REPLAYS), choices=list(replay.REPLAYS))
+    rp.add_argument("--tpm", type=int, default=8000)
+    rp.add_argument("--rpd", type=int, default=1000)
+    rp.add_argument("--force", action="store_true")
+    rp.set_defaults(func=cmd_replay)
+
+    rt = sub.add_parser("replay-table", help="replay results beside the original runs")
+    rt.add_argument("run_files", nargs="+")
+    rt.set_defaults(func=cmd_replay_table)
 
     a = sub.add_parser("autopsy", help="full autopsy of one run file")
     a.add_argument("run_file")

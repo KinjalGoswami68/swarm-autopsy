@@ -521,3 +521,38 @@ yes/no is used. The 42 stored annotations were re-derived from their saved repli
 calls). Result: (b) "yes" in 0 of 6 briefs at W=2, 9 of 12 at W=4, 23 of 24 at W=8, matching the
 hand check (D27) in every case; the debatable seed-1 W=4 worker-2 brief ("claim_id counts")
 now reads "no". Annotations still never change a score.
+
+
+## D29. Stage 2: replays
+
+**Owner decision (2026-11-13).** A replay re-runs part of a stored run with one thing changed and
+reports how many key items come back. Code: `replay.py`, `cli.py replay` / `replay-table`.
+Each replay is a labelled counterfactual stored as `runs/replays/<run_id>__<label>.json` (a full run
+record with a `replay` block: `of`, `label`, `name`, `change`). **The original run files and the
+frozen planner wording (D22) are never changed.** Workers and merger are re-run with the run's own
+model and settings (endpoint, temperature, reasoning effort, max_tokens_total from its `config`).
+The baseline is copied from the original, not re-run. Replay calls use their own cache ids
+(`[task, "replay", label, role, ...]`).
+
+- **R1 table to everyone:** the planner's slices unchanged, plus the rate-table rows added to every
+  worker's slice. Briefs unchanged.
+- **R2 neutral briefs:** the planner's slices unchanged; every brief replaced by
+  "Report every underpaid line and every duplicate claim you can establish from the rows you were given; you cannot see anything else and cannot contact other workers."
+- **R3 both:** R1 and R2 together.
+- **R4 planner told the truth:** the frozen planner prompt with one sentence inserted right after
+  "Their reports will then be combined into one final answer.": "Workers cannot communicate with each other, and each worker sees only its own rows." New planner call, then workers and merger.
+
+**Reuse rule (decided under the standing rule, it does not change what a number means):** a worker
+or merger whose prompt is byte-identical to the original's reuses the original output
+(`reused_from_original: true`) instead of a new call, so a difference between a replay and its
+original comes only from the change, not from re-sampling. (Example: under R1 a worker whose slice
+already held the rate table gets an identical prompt.) A worker with no rows under the planner
+(seed 2 W=8 worker 8) gets the table only under R1.
+
+**No merge replay:** in all nine original runs "found, dropped at merge" is 0, so a merge
+counterfactual has nothing to recover. **Far pairs** come back only when both rows land with one
+worker; R1-R3 keep the planner's slices (R1/R3 only add the rate table), so they cannot recover a
+far pair; only R4 can. Far and near pairs are reported separately.
+
+**Report per replay:** recall, the bucket breakdown, items recovered (kept in the replay, not in
+the original) and items newly lost (kept in the original, not in the replay).
