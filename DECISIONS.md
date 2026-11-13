@@ -488,3 +488,26 @@ list, stop and report.
    (briefs are short; a smaller request lets about three calls fit per minute). This is the
    run's own model, chosen because Gemini's 20 daily requests are committed to the size-M
    schedule (D24); it is not an independent reader, so its annotations were checked by hand.
+
+**Hand check of the annotations (2026-11-13), all 42 briefs of the nine family-2 gpt-oss runs,
+read against the brief text and the worker's rows:**
+- **(a) relies on something not given: 42 of 42 correct.** Every "yes" quote is the right sentence
+  (e.g. "Assume the rate table from rows 1-10 is globally available for lookup.", "Same as
+  Worker 2.", "Using the rate-code lookup built by Worker 1 ...").
+- **(b) limits the worker to some kinds: 10 wrong, 1 debatable, 31 correct.** Two error patterns:
+  (1) 7 briefs that ask for both kinds but say to report duplicates "within the rows you
+  processed" were marked "yes": a scope limit read as a kinds limit (all six W=2 briefs, and
+  seed 2 W=8 worker 8); (2) 3 table-only briefs ending "No further output is required" or "No
+  calculations are needed here" were marked "no" although they ask for no finding at all (seed 2
+  and 3 W=4 worker 1, seed 2 W=8 worker 1). Debatable: seed 1 W=4 worker 2 asks for "claim_id
+  counts", not duplicates as such; the judge said yes there but no for workers 3 and 4, which ask
+  the same. In every wrong case the judge's own `kinds` list was right and contradicted its
+  yes/no answer.
+- **Quotes:** 3 "yes" quotes were shortened with "..." and are correctly flagged
+  `quote_verified: false`; all others are verbatim.
+- Hand-corrected counts of (b) "yes": W=2 0 of 6 (judge 6), W=4 9 of 12 (judge 8), W=8 23 of 24
+  (judge 23; two errors cancel). The (a) counts need no correction: 3, 9, 19.
+
+**Open (owner to decide):** derive (b) deterministically from the judge's `kinds` list (yes when
+it lists fewer kinds than the task has) instead of its yes/no answer. On these 42 briefs that
+would agree with the hand check in every case except the debatable one.
