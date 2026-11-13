@@ -449,3 +449,13 @@ tokens, `finish_reason: length`, no answer (0 of 12 key items), latency 557 s. T
 condition for the W = 2/4/8 runs ("if it fits and answers") is not met; nothing else was run.
 At most about 5,900 output tokens could be requested within the 8,000 combined limit even with
 an exact input estimate. About 7,300 of the day's 200,000 tokens were used.
+
+## D26. gpt-oss-120b on family 2 uses reasoning_effort=low
+
+**Owner decision (2026-11-13), replacing D4's provider-default reasoning for the Groq family-2
+runs only.** Reason: with default reasoning the model did not answer the family-2 S baseline
+within the 8,000-token combined limit (D25). Low reasoning answered the old-ledger S baseline
+fully (12/12, 0 false positives, D19). Every role and the baseline use the same setting, so
+swarm and baseline are still treated the same. Known risk: at old-ledger M, low reasoning gave
+up and answered `[]` (D19). Rule set by the owner: if the probe gives up or returns an empty
+list, stop and report.
