@@ -1224,5 +1224,102 @@
    "completion_tokens": 1774,
    "latency_ms": 5144
   }
+ },
+ "annotations": {
+  "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+  "judge_version": 1,
+  "judge": {
+   "model": "openai/gpt-oss-120b",
+   "endpoint": "https://api.groq.com/openai/v1",
+   "temperature": 0.0,
+   "reasoning_effort": "low"
+  },
+  "briefs": [
+   {
+    "worker": 1,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "No underpayment or duplicate checks are needed here.",
+     "quote_verified": true,
+     "kinds": []
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"No underpayment or duplicate checks are needed here.\",\n    \"kinds\": []\n  }\n}",
+    "error": null,
+    "prompt_tokens": 423,
+    "completion_tokens": 180,
+    "cached": false
+   },
+   {
+    "worker": 2,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Using the rate‑code map supplied by Worker 1, determine the unit rate for each line (use the line’s own unit_rate if present, otherwise look up its rate_code).",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Return two lists: (a) underpaid lines with row number, claim_id, shortfall; (b) claim_id counts.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid",
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the rate‑code map supplied by Worker 1, determine the unit rate for each line (use the line’s own unit_rate if present, otherwise look up its rate_code).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Return two lists: (a) underpaid lines with row number, claim_id, shortfall; (b) claim_id counts.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 518,
+    "completion_tokens": 396,
+    "cached": false
+   },
+   {
+    "worker": 3,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false,
+     "kinds": [
+      "underpaid",
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 432,
+    "completion_tokens": 375,
+    "cached": false
+   },
+   {
+    "worker": 4,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false,
+     "kinds": [
+      "underpaid",
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 432,
+    "completion_tokens": 383,
+    "cached": false
+   }
+  ]
  }
 }

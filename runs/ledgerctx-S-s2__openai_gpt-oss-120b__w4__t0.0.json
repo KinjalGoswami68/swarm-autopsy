@@ -1204,5 +1204,99 @@
    "completion_tokens": 2114,
    "latency_ms": 6004
   }
+ },
+ "annotations": {
+  "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+  "judge_version": 1,
+  "judge": {
+   "model": "openai/gpt-oss-120b",
+   "endpoint": "https://api.groq.com/openai/v1",
+   "temperature": 0.0,
+   "reasoning_effort": "low"
+  },
+  "briefs": [
+   {
+    "worker": 1,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false,
+     "kinds": []
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": []\n  }\n}",
+    "error": null,
+    "prompt_tokens": 417,
+    "completion_tokens": 145,
+    "cached": false
+   },
+   {
+    "worker": 2,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Using the rate‑code lookup built from rows 1‑10, process rows 11‑30 (line items).",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "If paid < amount owed, record the line as UNDERPAID and note the shortfall (amount owed – paid) rounded to two decimals. Also record the claim_id for every line item you process.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the rate‑code lookup built from rows 1‑10, process rows 11‑30 (line items).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount owed, record the line as UNDERPAID and note the shortfall (amount owed – paid) rounded to two decimals. Also record the claim_id for every line item you process.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 515,
+    "completion_tokens": 247,
+    "cached": false
+   },
+   {
+    "worker": 3,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Using the same rate‑code lookup, process rows 31‑50 (line items). Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the same rate‑code lookup, process rows 31‑50 (line items). Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 451,
+    "completion_tokens": 263,
+    "cached": false
+   },
+   {
+    "worker": 4,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Using the same rate‑code lookup, process rows 51‑70 (line items).",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the same rate‑code lookup, process rows 51‑70 (line items).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"identify UNDERPAID lines and their shortfall, and record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 454,
+    "completion_tokens": 259,
+    "cached": false
+   }
+  ]
  }
 }

@@ -1427,5 +1427,183 @@
    "completion_tokens": 1774,
    "latency_ms": 5144
   }
+ },
+ "annotations": {
+  "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+  "judge_version": 1,
+  "judge": {
+   "model": "openai/gpt-oss-120b",
+   "endpoint": "https://api.groq.com/openai/v1",
+   "temperature": 0.0,
+   "reasoning_effort": "low"
+  },
+  "briefs": [
+   {
+    "worker": 1,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "otherwise look up the rate_code in the rate table (rows 1‑10).",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "If paid < amount_owed, report the line as UNDERPAID with the shortfall (amount_owed – paid) rounded to two decimals.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"otherwise look up the rate_code in the rate table (rows 1‑10).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, report the line as UNDERPAID with the shortfall (amount_owed – paid) rounded to two decimals.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 512,
+    "completion_tokens": 238,
+    "cached": false
+   },
+   {
+    "worker": 2,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same underpayment analysis as described for Worker 1.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Report each underpaid line with its shortfall.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 418,
+    "completion_tokens": 186,
+    "cached": false
+   },
+   {
+    "worker": 3,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same underpayment analysis as described for Worker 1.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Report each underpaid line with its shortfall.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 418,
+    "completion_tokens": 220,
+    "cached": false
+   },
+   {
+    "worker": 4,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same underpayment analysis as described for Worker 1.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Report each underpaid line with its shortfall.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 418,
+    "completion_tokens": 220,
+    "cached": false
+   },
+   {
+    "worker": 5,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same underpayment analysis as described for Worker 1.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Report each underpaid line with its shortfall.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 418,
+    "completion_tokens": 185,
+    "cached": false
+   },
+   {
+    "worker": 6,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same underpayment analysis as described for Worker 1.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Report each underpaid line with its shortfall.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 418,
+    "completion_tokens": 186,
+    "cached": false
+   },
+   {
+    "worker": 7,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "No underpayment analysis is needed.",
+     "quote_verified": true,
+     "kinds": []
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"No underpayment analysis is needed.\",\n    \"kinds\": []\n  }\n}",
+    "error": null,
+    "prompt_tokens": 453,
+    "completion_tokens": 269,
+    "cached": false
+   },
+   {
+    "worker": 8,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "identify every claim_id that appears on more than one line item.",
+     "quote_verified": true,
+     "kinds": [
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"identify every claim_id that appears on more than one line item.\",\n    \"kinds\": [\"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 476,
+    "completion_tokens": 238,
+    "cached": false
+   }
+  ]
  }
 }

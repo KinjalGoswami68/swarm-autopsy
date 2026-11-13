@@ -1215,5 +1215,61 @@
    "completion_tokens": 2114,
    "latency_ms": 6004
   }
+ },
+ "annotations": {
+  "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+  "judge_version": 1,
+  "judge": {
+   "model": "openai/gpt-oss-120b",
+   "endpoint": "https://api.groq.com/openai/v1",
+   "temperature": 0.0,
+   "reasoning_effort": "low"
+  },
+  "briefs": [
+   {
+    "worker": 1,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "if the unit_rate field is non‑empty use it, otherwise look up the rate_code in the rate table.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "If paid < amount_owed, record the line as UNDERPAID ... Also track every claim_id you encounter. ... output ... claim_ids that appear more than once within the rows you processed as DUPLICATED",
+     "quote_verified": false,
+     "kinds": [
+      "underpaid",
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"if the unit_rate field is non‑empty use it, otherwise look up the rate_code in the rate table.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record the line as UNDERPAID ... Also track every claim_id you encounter. ... output ... claim_ids that appear more than once within the rows you processed as DUPLICATED\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 617,
+    "completion_tokens": 384,
+    "cached": false
+   },
+   {
+    "worker": 2,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Use the same rate table rows 1‑10 to resolve any missing unit_rate via rate_code.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Output two JSON lists: (1) underpaid lines as objects {\"row\": <row>, \"shortfall\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid",
+      "duplicates"
+     ]
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Use the same rate table rows 1‑10 to resolve any missing unit_rate via rate_code.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two JSON lists: (1) underpaid lines as objects {\\\"row\\\": <row>, \\\"shortfall\\\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 590,
+    "completion_tokens": 287,
+    "cached": false
+   }
+  ]
  }
 }
