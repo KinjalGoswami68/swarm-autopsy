@@ -274,3 +274,29 @@ it would score as a genuine miss.
 `LLM_API_KEY`. On 2026-11-13 `.env` held only `GROQ_API_KEY` (unchanged since it was copied
 in), and `LLM_API_KEY` in `.env.example` is empty. The OpenAI-compatible `/models` call
 without a key returned 404. No Gemini call has been made.
+
+## D20. Gemini 3.8 Flash probes; model choice (open: awaiting owner confirmation)
+
+Endpoint `https://generativelanguage.googleapis.com/v1beta/openai` (`--endpoint`), key
+`LLM_API_KEY`. The key's model list includes `models/gemini-3.8-flash`, the model Acyclic's
+README names for its pilots; it is used as `gemini-3.8-flash`.
+
+**Probes (2026-11-13), seed 1 baselines, answer-only prompts, temperature 0, no max_tokens,
+reasoning at the provider default.** Gemini reports hidden "thinking" only inside
+`total_tokens`, so output including reasoning = total − prompt (`agent.py` now stores the full
+`usage` block of every call).
+
+| size | input | visible output | output incl. thinking | finish | listed only underpaid | recall | false positives | shortfalls exact | latency | retries |
+|---|---|---|---|---|---|---|---|---|---|---|
+| S | 1,779 | 325 | 4,165 | stop | yes | 12/12 | 0 | 12/12 | 143 s | 0 |
+| M | 5,688 | 643 | 10,033 | stop | yes | 24/24 | 0 | 24/24 | 181 s | 4 |
+| L | 17,011 | 1,297 | 28,930 | stop | yes | 48/48 | 0 | 48/48 | 221 s | 1 |
+
+**Limits:** no rate-limit headers were returned. The 5 retries (429 or 5xx) were absorbed by
+the backoff, and their messages were not kept. Google's public rate-limit page does not list
+free-tier numbers for this model; it says limits apply per project and requests-per-day reset at
+midnight Pacific time, and points to the signed-in page aistudio.google.com/rate-limit.
+
+**Consequence if chosen:** the single-agent baseline is perfect on seed 1 at every size, so on
+this task any swarm loss is a loss the model alone does not make. Baseline quality is
+measured on one seed per size only.

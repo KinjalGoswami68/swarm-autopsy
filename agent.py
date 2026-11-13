@@ -162,6 +162,7 @@ def call_model(model, temperature, reasoning_effort, messages, post=None, max_to
                     "reasoning": message.get("reasoning"),
                     "prompt_tokens": usage.get("prompt_tokens", 0),
                     "completion_tokens": usage.get("completion_tokens", 0),
+                    "usage": usage,  # provider's full usage block (e.g. hidden reasoning counts)
                     "latency_ms": round((time.perf_counter() - start) * 1000),
                     "retries": attempt,
                 }
