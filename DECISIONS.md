@@ -439,3 +439,13 @@ the 1.74 measured, + 100) − 100, so the request never exceeds the limit; `--tp
 a combined 60-second window. A rejection on that limit is recorded with `limit_kind: combined`.
 Groq's 200,000 tokens-per-day limit message says "per day", so it stops the run at once (D23).
 Groq runs pass `--rpd 1000` (Groq's daily request limit for this model, from its headers).
+
+## D25. gpt-oss-120b, default reasoning, does not answer the family-2 S baseline (open)
+
+**Probe (2026-11-13),** family 2 (`ledgerctx-S-s1`) baseline, openai/gpt-oss-120b on Groq,
+temperature 0, default reasoning, `--max-tokens-total 8000`: prompt 3,663 characters = 1,969
+input tokens (1.86 characters per token), `max_tokens` sent 5,358. Reply: 5,358 completion
+tokens, `finish_reason: length`, no answer (0 of 12 key items), latency 557 s. The owner's
+condition for the W = 2/4/8 runs ("if it fits and answers") is not met; nothing else was run.
+At most about 5,900 output tokens could be requested within the 8,000 combined limit even with
+an exact input estimate. About 7,300 of the day's 200,000 tokens were used.
