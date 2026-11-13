@@ -556,3 +556,29 @@ far pair; only R4 can. Far and near pairs are reported separately.
 
 **Report per replay:** recall, the bucket breakdown, items recovered (kept in the replay, not in
 the original) and items newly lost (kept in the original, not in the replay).
+
+## D30. Stage 3 build decisions (site mechanics)
+
+Decided under the owner's standing rule; none changes what a number means.
+
+- **Every number is computed in the browser** by `site/js/autopsy.js`, a line-for-line port of
+  `autopsy.py`. `tests/test_site_parity.py` runs it under Node on every committed run and replay
+  file plus edge-case runs and requires output identical to Python's, including list order and
+  message text. Percentages round halves to even, as Python's `:.0f` does.
+- **Schema check in the browser:** `site/js/validate.js` implements exactly the JSON Schema keywords
+  `schema/run.schema.json` uses and refuses a schema with any other keyword, so it cannot silently
+  skip a rule. Chosen over bundling Ajv: no third-party code, and the site makes no external
+  requests (owner). `tests/test_site_validate.py` checks it accepts and rejects the same files as
+  Python's `jsonschema` (all committed files, plus 11 broken variants).
+- **"Try your own run" reads files locally** (File API); nothing is uploaded, no key.
+- **Model output is inserted as text only**, never as HTML (briefs and replies are model output).
+- **Loading:** `build_site.py` writes `_site/manifest.json` with file paths only (no numbers) and
+  copies the run files; the browser loads at most 4 files at a time.
+- **Local preview:** `tools/serve.mjs` (Node). Python's `http.server` reset connections mid-file
+  on this Windows machine (curl exit 56 on about half the fetches of the 168 KB files); the Node
+  server passed 87 of 87 complete fetches. GitHub Pages is not affected.
+- **360 px check:** `tools/check_mobile.mjs` emulates a 360 px phone through Chrome's DevTools
+  protocol (headless Chrome's window cannot be narrower than about 500 px) and fails if any page
+  is wider than the viewport.
+- **Deploy:** `.github/workflows/pages.yml` on push to `main`: install, run the full test suite
+  (the parity tests gate the deploy), `build_site.py`, publish `_site/` with GitHub's Pages actions.
