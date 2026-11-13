@@ -25,7 +25,10 @@ export function table(head, rows, opts = {}) {
       opts.caption ? el("caption", { text: opts.caption }) : null,
       el("thead", {}, el("tr", {}, head.map((h) => el("th", { scope: "col", text: h })))),
       el("tbody", {}, rows.map((r) => el("tr", { class: r.className || "" },
-        (r.cells || r).map((c, i) => el(i === 0 ? "th" : "td", i === 0 ? { scope: "row" } : {}, c)))))));
+        (r.cells || r).map((c, i) => el(i === 0 ? "th" : "td",
+          // data-label lets the 360px layout show each row as a card ("Recall: 25%")
+          i === 0 ? { scope: "row" } : { "data-label": head[i] || "",
+            class: typeof c === "string" && c.length <= 14 ? "nowrap" : null }, c)))))));
 }
 
 /** The fixed family-2 sentence, read from the run file (task.fixed_sentence); null if absent. */

@@ -582,3 +582,32 @@ Decided under the owner's standing rule; none changes what a number means.
   is wider than the viewport.
 - **Deploy:** `.github/workflows/pages.yml` on push to `main`: install, run the full test suite
   (the parity tests gate the deploy), `build_site.py`, publish `_site/` with GitHub's Pages actions.
+
+## D31. Site styling from the measured reference values
+
+**Owner decision (2026-11-13):** style from colour and layout values measured from the reference
+image (the image itself is not in the repo), with DESIGN.md and SITE_RULES.md.
+
+- **Colours:** page #0a0a0a, card #111111, plum panel #3a1533, accent pink-violet #e39bd2, primary
+  text #f2f2f2, secondary text #9a9a9a, track/divider #3a3a3a, hairlines #2a2a2a. Metallic plum is
+  built from #3a1533 with a lighter band #4d1d44 and a darker edge #24091f.
+- **Contrast (WCAG AA, checked before use):** primary text 17.7:1 on the page, 16.9 on cards,
+  14.1 on plum; secondary 7.0 / 6.7 / 5.6, and 4.7 on the plum highlight; pink 9.3 / 8.9 / 7.4.
+  Bars on the track: pink 5.4, grey 4.0, near-white 10.2. **Plum is a surface only, never text
+  (1.3:1).** In the three-part share bar, adjacent parts do not reach 3:1 against each other
+  (pink/grey 1.3, grey/white 2.5), so each part is separated by a background gap (each part is at
+  least 7:1 against the page) and labelled with its count; nothing relies on colour alone.
+- **Metallic finish:** the lighter band lives only in the plum panel's empty top strip and drifts
+  toward the pointer (`js/metal.js`, eased, once per frame, skipped when off-screen); panel text sits
+  below the strip, never on the moving highlight. Off for touch-only pointers and under
+  prefers-reduced-motion.
+- **Type:** self-hosted fonts under the SIL Open Font License (licence files in `site/fonts/`):
+  Instrument Serif (large tight headlines), Inter (body), JetBrains Mono (run ids, code). The site
+  makes no external requests (owner).
+- **Layout:** large left-aligned serif headline in the hero, secondary-grey body, a pill badge
+  with a plum tag above it, the rounded metallic plum feature panel on the right (pink letter-spaced
+  label, very large serif number, short sentence), cards on #111111 with large radius and a
+  hairline border, wide empty spacing. Under 640 px every table row becomes a card, with each value
+  under its column name.
+- **Interaction:** slight lift on hover and a soft glow on press, done with transforms only (no
+  layout shift); all transitions off under prefers-reduced-motion.

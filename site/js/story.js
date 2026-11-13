@@ -3,6 +3,7 @@
 import { autopsy, BUCKET_LABEL, LOSS_BUCKETS, pct, noSplit } from "./autopsy.js";
 import { loadAll, replaysByOriginal } from "./data.js";
 import { el, table, caveat, nav, footer } from "./ui.js";
+import { startMetal } from "./metal.js";
 
 const STORY_RUN = "runs/ledgerctx-S-s1__openai_gpt-oss-120b__w4__t0.0.json";
 const OLD_LEDGER_RUN = "runs/ledger-S-s1__gemini-3.8-flash__w4__t0.0.json";
@@ -63,11 +64,34 @@ async function main() {
 
   const parts = [];
 
-  // 0. Hero
+  // 0. Hero: headline left, metallic feature panel right, a three-part share bar below.
+  const B = s.buckets;
+  const lostSplit = B.never_assigned + B.context_not_passed + B.evidence_split;
+  const lostWorker = B.assigned_unreached + B.holder_returned_nothing + B.holder_answered_missed;
+  const kept = B.kept;
+  const share = (n, cls) => el("span", { class: cls, style: `flex:${n} 1 0` });
   parts.push(el("section", { id: "hero", class: "story hero", "aria-labelledby": "hero-h" },
     el("div", { class: "ascii", "data-scene": "ledger-whole", "aria-hidden": "true" }),
-    el("h1", { id: "hero-h" }, `One agent found ${base.score.true_positives} of ${K}. ${Word(W)} agents found ${s.score.true_positives}.`),
-    el("p", { class: "lede" }, `Same model, same ledger, same ${K} planted problems. swarm-autopsy takes one finished multi-agent run and puts every lost item in exactly one place: the split, a worker, or the merge.`),
+    el("div", { class: "hero-text" },
+      el("p", { class: "badge-pill" }, el("span", { class: "tag" }, "One run"),
+        `seed ${t.seed} · ${W} workers · ${run.config.model}`),
+      // non-breaking spaces keep "12 of 12" and "found 3" on one line
+      el("h1", { id: "hero-h" }, `One agent found ${base.score.true_positives} of ${K}. ${Word(W)} agents found ${s.score.true_positives}.`),
+      el("p", { class: "lede" }, `Same model, same ledger, same ${K} planted problems. swarm-autopsy takes one finished multi-agent run and puts every lost item in exactly one place: the split, a worker, or the merge.`)),
+    el("aside", { class: "feature metal", "aria-label": "Items the swarm lost" },
+      el("p", { class: "label" }, "Lost by the swarm"),
+      el("p", { class: "big" }, String(s.lost)),
+      el("p", {}, `of the ${K} planted problems never reached the swarm's final answer. The single agent, on the same ledger, missed ${K - base.score.true_positives}.`)),
+    el("div", { class: "shares" },
+      el("div", { class: "sharebar", role: "img",
+        "aria-label": `${lostSplit} lost in the split, ${lostWorker} lost in workers, ${B.dropped_at_merge} lost at the merge, ${kept} kept, of ${K}` },
+        lostSplit ? share(lostSplit, "s-pink") : null, lostWorker ? share(lostWorker, "s-grey") : null,
+        kept ? share(kept, "s-white") : null),
+      el("ul", { class: "sharelegend" },
+        el("li", {}, el("i", { class: "s-pink" }), "lost in the split ", el("b", {}, String(lostSplit))),
+        el("li", {}, el("i", { class: "s-grey" }), "lost in workers ", el("b", {}, String(lostWorker))),
+        el("li", {}, "lost at the merge ", el("b", {}, String(B.dropped_at_merge))),
+        el("li", {}, el("i", { class: "s-white" }), "kept ", el("b", {}, String(kept))))),
     caveat(run)));
 
   // 1. The task
@@ -187,6 +211,7 @@ async function main() {
 
   main.replaceChildren(...parts.filter(Boolean));
   document.body.append(footer());
+  startMetal();
 }
 
 main();
