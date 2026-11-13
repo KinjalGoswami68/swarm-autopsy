@@ -691,3 +691,12 @@ image (the image itself is not in the repo), with DESIGN.md and SITE_RULES.md.
 
    Reduced motion: correct scene and caption, 0 animation frames. 360 px: all three pages exactly
    360 px wide; the canvas and caption are not shown.
+
+## D34. Independence line removed
+
+**Owner decision (2026-11-13):** the line stating that this is an independent project not
+affiliated with Acyclic Labs is removed from the site footer and from the README. The footer now
+reads only "Built by Kinjal Goswami · source on GitHub". This overrides the SITE_RULES.md rule
+"The footer says so in one line"; SITE_RULES.md itself is left as written. The rest of that rule
+still holds: Acyclic's name appears only as the SwarmBench credit in the method section and the
+README, never as branding.

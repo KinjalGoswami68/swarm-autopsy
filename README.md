@@ -124,7 +124,6 @@ Every one of these choices, and every other judgement call, is in [DECISIONS.md]
 ## Credit
 
 The comparison of a swarm with the same model working alone follows the shape of Acyclic Labs'
-public [SwarmBench page](https://acyclic.dev/benchmark). This is an independent project, not
-affiliated with or endorsed by Acyclic Labs.
+public [SwarmBench page](https://acyclic.dev/benchmark).
 
 Built by Kinjal Goswami.
