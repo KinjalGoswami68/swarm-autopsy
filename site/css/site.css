@@ -1,0 +1,50 @@
+/* Plain interim styling (stage 3 build step 2). The DESIGN.md look replaces this once
+   reference.png is in the repo. System fonts only: the site makes no external requests. */
+:root {
+  --bg: #ffffff; --fg: #16151a; --muted: #5b5866; --line: #dcd9e2; --panel: #f6f5f8;
+  --lost: #8a3b78; --kept: #4d4a57; --mark: #f3e6f0;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f0e12; --fg: #ebe9f0; --muted: #a8a4b3; --line: #2e2b36; --panel: #17151c;
+          --lost: #d79cc8; --kept: #b9b5c4; --mark: #3a2236; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 72rem; margin: 0 auto; padding: 1rem 16px 3rem; }
+h1 { font-size: 1.35rem; overflow-wrap: anywhere; }
+h2 { font-size: 1.15rem; margin-top: 2.2rem; border-top: 1px solid var(--line); padding-top: 1.2rem; }
+h3 { font-size: 1rem; margin: 0 0 .3rem; }
+a { color: inherit; }
+.muted { color: var(--muted); }
+.site-nav { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; padding: .8rem 16px; border-bottom: 1px solid var(--line); }
+.site-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+.site-nav a[aria-current="page"] { font-weight: 600; }
+.site-footer { max-width: 72rem; margin: 0 auto; padding: 1.5rem 16px 2.5rem; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: .9rem; }
+.site-footer p { margin: .2rem 0; }
+.picker { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+select { font: inherit; max-width: 100%; min-height: 44px; }
+.caveat { border-left: 3px solid var(--lost); padding: .4rem .8rem; background: var(--panel); font-size: .95rem; }
+.table-wrap { max-width: 100%; overflow-x: auto; margin: .6rem 0; }
+table { border-collapse: collapse; font-size: .92rem; }
+th, td { text-align: left; padding: .35rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font-weight: 600; }
+td { font-variant-numeric: tabular-nums; }
+tr.zero { color: var(--muted); }
+tr.no-split { color: var(--muted); font-style: italic; }
+.buckets td:nth-child(3) { width: 40%; min-width: 8rem; }
+.bar-track { display: block; height: .7rem; background: var(--panel); }
+.bar { display: block; height: 100%; }
+.bar-lost { background: var(--lost); } .bar-kept { background: var(--kept); }
+.worker { border: 1px solid var(--line); padding: .8rem 1rem; margin: .8rem 0; background: var(--panel); }
+.facts { color: var(--muted); font-size: .9rem; margin: 0 0 .5rem; }
+.brief { white-space: pre-wrap; overflow-wrap: anywhere; margin: .4rem 0; }
+mark { background: var(--mark); color: inherit; }
+.annotation { border-top: 1px dashed var(--line); margin-top: .6rem; padding-top: .4rem; font-size: .92rem; }
+.annotation .label { color: var(--muted); margin: 0 0 .2rem; }
+.annotation q { display: block; margin: .2rem 0 .2rem 1rem; overflow-wrap: anywhere; }
+.badge { display: inline-block; font-size: .8rem; border: 1px solid var(--line); padding: 0 .4rem; margin-left: .3rem; }
+.trace ol { padding-left: 1.3rem; }
+.trace li { margin: .25rem 0; overflow-wrap: anywhere; }
