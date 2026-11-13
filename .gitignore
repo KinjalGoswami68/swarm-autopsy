@@ -5,3 +5,5 @@ __pycache__/
 cache/
 grid.log
 *.tmp
+pass1.log
+probe_ctx.log
