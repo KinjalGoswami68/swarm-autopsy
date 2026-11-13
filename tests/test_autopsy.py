@@ -106,3 +106,16 @@ def test_render_runs():
     run = make_run([(["B", "C", "E"], ["C"]), (["D", "F"], ["D"])], final=["D"])
     text = autopsy.render(run)
     assert "never assigned (split)" in text and "Every lost key item" in text
+
+
+def test_cross_check_baseline_also_missed():
+    # B and C assigned and missed by the swarm; baseline found C only.
+    run = make_run([(["B", "C"], [])], final=[], baseline_final=["C"])
+    c = autopsy.autopsy(run)["cross"]
+    assert c == {"assigned_missed": 2, "baseline_also_missed": 1, "ids": ["B"]}
+    assert "baseline also missed" in autopsy.render(run)
+
+
+def test_cross_check_none_without_baseline_score():
+    run = make_run([(["B"], [])], final=[], baseline_final=None, baseline_status="rejected_too_large")
+    assert autopsy.autopsy(run)["cross"]["baseline_also_missed"] is None

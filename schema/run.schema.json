@@ -49,7 +49,8 @@
         "reasoning_effort": {"type": ["string", "null"]},
         "workers": {"type": "integer", "minimum": 1},
         "max_tokens": {"type": ["integer", "null"]},
-        "itpm": {"type": ["integer", "null"]}
+        "itpm": {"type": ["integer", "null"]},
+        "otpm": {"type": ["integer", "null"]}
       }
     },
     "task": {"type": "object"},

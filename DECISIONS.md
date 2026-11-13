@@ -115,7 +115,7 @@ call rejected: request too large", the run carries on, and the table footnotes i
 planner gives one worker too many rows, that is a split failure. Only a real rate limit (429 with
 a wait over 120 s, or exhausted retries) stops the run, with exit code 2, to be resumed later.
 
-## D12. Output cap and free-tier output limit (open: awaiting owner decision)
+## D12. Output cap and free-tier output limit: answer-only replies
 
 **Finding (2026-11-13):** the size-S measurement call stopped at exactly 2,048 completion tokens,
 inside its line-by-line working (39 of 60 lines), so no JSON was produced. `max_tokens` had not
@@ -127,3 +127,26 @@ The model writes about 40 output tokens per line when it shows its working, so a
 about 45 lines would be cut off by the provider, not missed by the model. Changes made:
 `max_tokens` is a CLI flag and part of the cache key; every call records `finish_reason`; a
 reply cut off by the cap has `status: truncated`, separate from `unparseable`.
+
+**Choice (confirmed by owner):** answer-only replies for every role, baseline included. The
+shared format line starts "Do not show your working or any explanation." and the planner gets
+the same sentence. `max_tokens` is not sent (sending more than the free-tier output limit is
+refused), so the provider's default cap of 2,048 output tokens applies. The pacer also keeps
+completion tokens under `--otpm` (default 1000) per minute (D10).
+
+**All results in this project are under this constraint.** The model computes qty x unit_rate
+without visible working, so **arithmetic misses are expected to be higher than with visible
+working**, for the swarm and the baseline alike.
+
+**Re-measurement (2026-11-13), size S seed 1 baseline, answer-only:** 1,754 input tokens
+(29.2 per line including the fixed prompt text), 1,353 output tokens, finish_reason `stop`. All 12
+planted items were listed (2 of 12 shortfalls correct to the cent), but the reply listed 57
+of 60 lines, most with `"shortfall": 0.00`. See D13.
+
+## D13. Replies that list non-underpaid lines (open: awaiting owner decision)
+
+The answer-only S baseline listed nearly every line, most with shortfall 0.00, despite the
+task text ("must not be reported") and the format line ("Use [] if there are none").
+At about 23 output tokens per listed line, the same behaviour would exceed the 2,048-token
+output cap for the M baseline (200 lines) and for L workers (about 150 lines each), cutting the
+reply off before the JSON array closes.

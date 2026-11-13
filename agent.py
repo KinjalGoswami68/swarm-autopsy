@@ -42,41 +42,49 @@ class RequestTooLarge(Exception):
 
 
 class Pacer:
-    """Client-side sliding window for an input-tokens-per-minute limit (D10).
+    """Client-side sliding windows for input and output tokens per minute (D10, D12).
 
-    Before a live call, waits until (input tokens sent in the last 60 s + this call's estimate)
-    fits under `itpm`. A call whose estimate alone exceeds `itpm` is sent anyway: the provider
-    rejects it (RequestTooLarge) without spending budget. itpm=0 disables pacing.
+    Input: before a live call, waits until (input tokens sent in the last 60 s + this call's
+    estimate) fits under `itpm`. A call whose estimate alone exceeds `itpm` is sent anyway: the
+    provider rejects it (RequestTooLarge) without spending budget.
+    Output: the reply length is unknown in advance, so waits until (completion tokens received in
+    the last 60 s + OUT_RESERVE) fits under `otpm`. A 429 with a short retry-after covers the rest.
+    A limit of 0 disables that window.
     """
     CHARS_PER_TOKEN = 1.2  # measured 1.33 on a size-S prompt (D9); digits tokenise one by one
+    OUT_RESERVE = 300  # typical answer-only reply (D12)
 
-    def __init__(self, itpm=7000, window_s=60.0, clock=time.monotonic, sleep=None):
-        self.itpm, self.window_s, self.clock = itpm, window_s, clock
+    def __init__(self, itpm=7000, otpm=0, window_s=60.0, clock=time.monotonic, sleep=None):
+        self.itpm, self.otpm, self.window_s, self.clock = itpm, otpm, window_s, clock
         self.sleep = sleep or (lambda s: time.sleep(s))
-        self.sent = []  # (timestamp, tokens)
+        self.sent = []  # (timestamp, input tokens, output tokens)
 
     def estimate(self, messages):
         return int(sum(len(m["content"]) for m in messages) / self.CHARS_PER_TOKEN) + 20
 
     def _used(self, now):
-        self.sent = [(t, n) for t, n in self.sent if now - t < self.window_s]
-        return sum(n for _, n in self.sent)
+        self.sent = [e for e in self.sent if now - e[0] < self.window_s]
+        return sum(e[1] for e in self.sent), sum(e[2] for e in self.sent)
+
+    def _blocked(self, tokens):
+        used_in, used_out = self._used(self.clock())
+        over_in = bool(self.itpm) and tokens <= self.itpm and used_in + tokens > self.itpm
+        over_out = bool(self.otpm) and used_out + min(self.OUT_RESERVE, self.otpm) > self.otpm
+        return over_in or over_out
 
     def wait_for(self, tokens):
-        if not self.itpm or tokens > self.itpm:
-            return 0.0
         waited = 0.0
-        while self._used(self.clock()) + tokens > self.itpm:
-            pause = self.sent[0][0] + self.window_s - self.clock() + 0.5
-            self.sleep(max(pause, 0.5))
-            waited += max(pause, 0.5)
+        while self._blocked(tokens):
+            pause = max(self.sent[0][0] + self.window_s - self.clock() + 0.5, 0.5)
+            self.sleep(pause)
+            waited += pause
         return waited
 
-    def record(self, tokens):
-        self.sent.append((self.clock(), tokens))
+    def record(self, tokens, out_tokens=0):
+        self.sent.append((self.clock(), tokens, out_tokens))
 
 
-PACER = Pacer(itpm=0)  # the CLI sets the real limit (--itpm); tests and imports stay unpaced
+PACER = Pacer(itpm=0)  # the CLI sets the real limits (--itpm, --otpm); tests stay unpaced
 
 
 def set_endpoint(url):
@@ -185,7 +193,7 @@ def call_agent(model, temperature, messages, call_id, reasoning_effort=None, pos
         return {"raw_text": None, "reasoning": None, "finish_reason": None,
                 "prompt_tokens": 0, "completion_tokens": 0,
                 "latency_ms": None, "retries": e.retries, "error": str(e), "cached": False}
-    PACER.record(record["prompt_tokens"] or estimate)
+    PACER.record(record["prompt_tokens"] or estimate, record["completion_tokens"] or 0)
     record["error"] = None
     record.update(model=model, temperature=temperature, reasoning_effort=reasoning_effort,
                   max_tokens=max_tokens,

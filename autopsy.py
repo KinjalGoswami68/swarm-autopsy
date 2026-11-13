@@ -144,9 +144,23 @@ def baseline_autopsy(run):
             "missed": len(key_values) - score["true_positives"]}
 
 
+def cross_check(s, b, run):
+    """Of the swarm's assigned-but-missed items, how many the baseline also missed on this task.
+
+    Separates "the model cannot do this line" from "the swarm lost it". None when the baseline
+    was not scored (e.g. it did not fit in one call)."""
+    missed = [p["id"] for p in s["per_item"] if p["bucket"] == "assigned_missed"]
+    if "score" not in b:
+        return {"assigned_missed": len(missed), "baseline_also_missed": None, "ids": None}
+    base_ids = set(_ids(run["baseline"]["final"]))
+    also = [i for i in missed if i not in base_ids]
+    return {"assigned_missed": len(missed), "baseline_also_missed": len(also), "ids": also}
+
+
 def autopsy(run):
-    return {"run_id": run.get("run_id"), "swarm": swarm_autopsy(run),
-            "baseline": baseline_autopsy(run)}
+    s, b = swarm_autopsy(run), baseline_autopsy(run)
+    return {"run_id": run.get("run_id"), "swarm": s, "baseline": b,
+            "cross": cross_check(s, b, run)}
 
 
 # ---------- rendering ----------
@@ -222,10 +236,17 @@ def render(run, a=None):
     out.append("")
 
     out.append("## Every lost key item")
+    base_ids = set(_ids(run["baseline"]["final"])) if "score" in b else None
     for p in s["per_item"]:
         if p["bucket"] != "kept":
+            base = ("baseline not scored" if base_ids is None
+                    else "baseline also missed" if p["id"] not in base_ids else "baseline found it")
             out.append(f"{p['id']}: {BUCKET_LABEL[p['bucket']]}; in slices of {p['in_slices'] or '-'}; "
-                       f"reported by {p['reported_by'] or '-'}")
+                       f"reported by {p['reported_by'] or '-'}; {base}")
+    c = a["cross"]
+    if c["baseline_also_missed"] is not None:
+        out.append(f"of {c['assigned_missed']} assigned-but-missed items, the baseline also missed "
+                   f"{c['baseline_also_missed']}")
     if s["flags"] or s["notes"]:
         out.append("")
         out.append("## Flags")

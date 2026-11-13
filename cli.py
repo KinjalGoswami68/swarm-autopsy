@@ -30,9 +30,9 @@ def cmd_generate(args):
 def cmd_run(args):
     if args.endpoint:
         agent.set_endpoint(args.endpoint)
-    agent.PACER = agent.Pacer(itpm=args.itpm)
+    agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm)
     cfg = dict(model=args.model, temperature=args.temperature, reasoning_effort=args.reasoning_effort,
-               workers=args.workers, max_tokens=args.max_tokens, itpm=args.itpm)
+               workers=args.workers, max_tokens=args.max_tokens, itpm=args.itpm, otpm=args.otpm)
     runs_dir = Path(args.runs_dir)
     total = len(args.sizes) * len(args.seeds)
     done = 0
@@ -84,6 +84,14 @@ def _fmt_mean(values, as_pct=False):
     return f"{autopsy.pct(m) if as_pct else f'{m:.1f}'} ({each})"
 
 
+def _cross(crosses):
+    if any(c["baseline_also_missed"] is None for c in crosses):
+        return "n/a (no baseline)"
+    also = sum(c["baseline_also_missed"] for c in crosses)
+    total = sum(c["assigned_missed"] for c in crosses)
+    return f"{also} of {total}"
+
+
 def table(runs):
     """Markdown table: one row per size, means over seeds with per-seed values in brackets."""
     by_size = defaultdict(list)
@@ -92,8 +100,9 @@ def table(runs):
     order = [s for s in ledger.SIZES if s in by_size] + sorted(set(by_size) - set(ledger.SIZES))
     lines = ["| size | seeds | K | baseline recall | baseline precision | swarm recall | "
              "swarm precision | lost: never assigned | lost: assigned, missed | "
-             "lost: dropped at merge | swarm FPs kept / invented by merger |",
-             "|---|---|---|---|---|---|---|---|---|---|---|"]
+             "assigned, missed: baseline also missed | lost: dropped at merge | "
+             "swarm FPs kept-invented by merger, per seed |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     notes = []
     for size in order:
         rs = sorted(by_size[size], key=lambda r: r["task"]["seed"])
@@ -115,7 +124,10 @@ def table(runs):
             b_rec, b_pre,
             _fmt_mean([s["score"]["recall"] for s in sw], True),
             _fmt_mean([s["score"]["precision"] for s in sw], True),
-            *[_fmt_mean([s["buckets"][bk] for s in sw]) for bk in autopsy.LOSS_BUCKETS],
+            _fmt_mean([s["buckets"]["never_assigned"] for s in sw]),
+            _fmt_mean([s["buckets"]["assigned_missed"] for s in sw]),
+            _cross([a["cross"] for a in aa]),
+            _fmt_mean([s["buckets"]["dropped_at_merge"] for s in sw]),
             "/".join(f"{len(s['false_positives']['worker_reported_kept'])}-"
                      f"{len(s['false_positives']['invented_by_merger'])}" for s in sw),
         ]) + " |")
@@ -157,6 +169,7 @@ def main(argv=None):
     r.add_argument("--reasoning-effort", default=None)
     r.add_argument("--max-tokens", type=int, default=None)
     r.add_argument("--itpm", type=int, default=7000, help="input tokens/minute to pace to (0 = off)")
+    r.add_argument("--otpm", type=int, default=1000, help="output tokens/minute to pace to (0 = off)")
     r.add_argument("--runs-dir", default=str(RUNS_DIR))
     r.add_argument("--force", action="store_true", help="rewrite existing run files")
     r.set_defaults(func=cmd_run)

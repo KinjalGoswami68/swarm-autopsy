@@ -160,3 +160,18 @@ def test_finish_reason_recorded():
     r = agent.call_agent("m", 0, "hi", ["t"], post=scripted(resp))
     assert r["finish_reason"] == "length"
     assert r["ratelimit_headers"] == {"x-ratelimit-limit-tokens": "7000"}
+
+
+def test_pacer_waits_for_output_window():
+    clock = FakeClock()
+    p = agent.Pacer(itpm=0, otpm=1000, clock=clock, sleep=clock.sleep)
+    p.record(100, 900)  # 900 + 300 reserve > 1000
+    clock.t = 5
+    assert p.wait_for(100) > 0 and clock.t >= 60
+
+
+def test_pacer_output_room_no_wait():
+    clock = FakeClock()
+    p = agent.Pacer(itpm=0, otpm=1000, clock=clock, sleep=clock.sleep)
+    p.record(100, 500)
+    assert p.wait_for(100) == 0

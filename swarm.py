@@ -8,8 +8,10 @@ import ledger
 
 SCHEMA_VERSION = 1
 
+ANSWER_ONLY = "Do not show your working or any explanation."  # D12: free-tier output cap
+
 ITEM_FORMAT = (
-    'Reply with a JSON array and nothing after it. Each element is '
+    ANSWER_ONLY + ' Reply with only a JSON array. Each element is '
     '{"line_id": "<line_id>", "shortfall": <amount with two decimals>}. '
     'Use [] if there are none.'
 )
@@ -25,7 +27,8 @@ def planner_prompt(task, workers):
         "the ledger rows you assign to it, given as inclusive row ranges. Workers cannot see the "
         "task description above, each other, or any rows you do not assign to them. Their reports "
         "will then be combined into one final answer.\n\n"
-        f"Write a brief for each of the {workers} workers. Reply with a JSON object and nothing after it:\n"
+        f"Write a brief for each of the {workers} workers. {ANSWER_ONLY} "
+        "Reply with only a JSON object:\n"
         '{"workers": [{"worker": 1, "brief": "<instructions>", "ranges": [[<first row>, <last row>]]}, ...]}'
     )
 
@@ -258,7 +261,7 @@ def run_task(task, cfg, only=None):
         "config": {"model": cfg["model"], "endpoint": agent.ENDPOINT,
                    "temperature": cfg["temperature"], "reasoning_effort": cfg["reasoning_effort"],
                    "workers": cfg["workers"], "max_tokens": cfg.get("max_tokens"),
-                   "itpm": cfg.get("itpm")},
+                   "itpm": cfg.get("itpm"), "otpm": cfg.get("otpm")},
         "task": {"family": task["family"], "task_id": task["task_id"], "size": task["size"],
                  "seed": task["seed"], "n_lines": task["n_lines"], "n_planted": task["n_planted"],
                  "task_text": ledger.TASK_TEXT, "columns": ledger.COLUMNS, "rows": task["rows"]},
