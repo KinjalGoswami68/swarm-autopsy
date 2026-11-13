@@ -28,8 +28,7 @@ def cmd_generate(args):
 
 
 def cmd_run(args):
-    if args.endpoint:
-        agent.set_endpoint(args.endpoint)
+    agent.set_endpoint(args.endpoint)
     if args.max_tokens is None and args.otpm:
         args.max_tokens = args.otpm  # D15: expected output never exceeds the per-minute limit
     agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm, out_reserve=args.max_tokens or 300)
@@ -182,12 +181,15 @@ def main(argv=None):
     r.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3])
     r.add_argument("--workers", type=int, default=4)
     r.add_argument("--model", default=agent.DEFAULT_MODEL)
-    r.add_argument("--endpoint", default=None, help="OpenAI-compatible base URL (default Groq)")
+    r.add_argument("--endpoint", default=agent.GEMINI_ENDPOINT,
+                   help=f"OpenAI-compatible base URL (Groq: {agent.DEFAULT_ENDPOINT})")
     r.add_argument("--temperature", type=float, default=0.0)
     r.add_argument("--reasoning-effort", default=None)
     r.add_argument("--max-tokens", type=int, default=None)
-    r.add_argument("--itpm", type=int, default=7000, help="input tokens/minute to pace to (0 = off)")
-    r.add_argument("--otpm", type=int, default=1000, help="output tokens/minute to pace to (0 = off)")
+    r.add_argument("--itpm", type=int, default=0,
+                   help="input tokens/minute to pace to; 0 = off (qwen on Groq: 7000)")
+    r.add_argument("--otpm", type=int, default=0,
+                   help="output tokens/minute to pace to; 0 = off (qwen on Groq: 1000)")
     r.add_argument("--runs-dir", default=str(RUNS_DIR))
     r.add_argument("--force", action="store_true", help="rewrite existing run files")
     r.set_defaults(func=cmd_run)

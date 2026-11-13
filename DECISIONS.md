@@ -300,3 +300,23 @@ midnight Pacific time, and points to the signed-in page aistudio.google.com/rate
 **Consequence if chosen:** the single-agent baseline is perfect on seed 1 at every size, so on
 this task any swarm loss is a loss the model alone does not make. Baseline quality is
 measured on one seed per size only.
+
+## D21. Default model: gemini-3.8-flash
+
+**Choice (confirmed by owner, 2026-11-13):** the default model is `gemini-3.8-flash` on Google
+AI Studio's OpenAI-compatible endpoint, free tier (key `LLM_API_KEY`). **Reason:** it is the
+only candidate whose single-agent baseline fits one call at every size (S, M, L), with no
+output cap cutting replies off (D20). The qwen/qwen3.8-27b free tier on Groq cut off most M and L
+replies (D16, D17), and gpt-oss-120b's 8,000 tokens-per-minute limit left no room for an M or L
+baseline (D18, D19). It is also the model Acyclic's README names for its pilots.
+
+Consequences:
+- CLI defaults: `--model gemini-3.8-flash`, `--endpoint` = the Gemini URL. The 9 qwen run files
+  stay in `runs/` as the qwen results; the table is filtered by `--model`.
+- Pacing is **off by default** (`--itpm 0 --otpm 0`), so no `max_tokens` is sent and the provider
+  default applies. The qwen settings (7000/1000, D10, D15) are passed explicitly for Groq runs.
+  Rate limits are absorbed by the retry rules (D8). Free-tier numbers for this model are not
+  published (D20); the owner will supply them.
+- HTTP timeout raised from 300 to 600 s (L baseline took 221 s).
+- Thinking stays at the provider default and is hidden; answer-only prompts (D12) still apply
+  to every role, so swarm and baseline are treated the same.

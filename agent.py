@@ -12,8 +12,9 @@ from pathlib import Path
 CACHE_DIR = Path(__file__).parent / "cache"
 MAX_RETRIES = 6
 MAX_WAIT_S = 120  # a longer retry-after usually means a daily cap: stop instead of sleeping
-DEFAULT_ENDPOINT = "https://api.groq.com/openai/v1"
-DEFAULT_MODEL = "qwen/qwen3.8-27b"
+DEFAULT_ENDPOINT = "https://api.groq.com/openai/v1"  # Groq: uses GROQ_API_KEY
+GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/openai"  # uses LLM_API_KEY
+DEFAULT_MODEL = "gemini-3.8-flash"  # D21; the qwen and gpt-oss runs passed --model/--endpoint
 ENDPOINT = DEFAULT_ENDPOINT  # one endpoint per process, set by --endpoint via set_endpoint()
 
 _client = None
@@ -119,7 +120,7 @@ def client():
         load_dotenv(Path(__file__).parent / ".env")
         key = os.environ.get("GROQ_API_KEY" if ENDPOINT == DEFAULT_ENDPOINT else "LLM_API_KEY")
         headers = {"Authorization": f"Bearer {key}"} if key else {}
-        _client = httpx.Client(base_url=ENDPOINT, headers=headers, timeout=300)
+        _client = httpx.Client(base_url=ENDPOINT, headers=headers, timeout=600)  # D21: Gemini L calls take ~4 min
     return _client
 
 
