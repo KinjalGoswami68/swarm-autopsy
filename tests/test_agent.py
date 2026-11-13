@@ -226,3 +226,15 @@ def test_request_budget_counts_attempts_and_stops(tmp_path, monkeypatch):
         agent.call_agent("m", 0, "b", ["t2"], post=post)
     assert post.calls == []  # stopped before sending
     agent.call_agent("m", 0, "a", ["t1"], post=scripted())  # cached: no attempt, no budget
+
+
+def test_combined_pacer_counts_input_plus_requested_output(monkeypatch):
+    clock = FakeClock()
+    monkeypatch.setattr(agent, "PACER", agent.Pacer(itpm=8000, combined=True, clock=clock,
+                                                   sleep=clock.sleep))
+    agent.call_agent("m", 0, "x" * 120, ["a"], post=scripted(ok()), max_tokens=7000)
+    assert agent.PACER.sent[-1][1] == 15  # actual prompt + completion tokens recorded
+    clock.t = 1
+    agent.PACER.record(4000)
+    agent.call_agent("m", 0, "y" * 120, ["b"], post=scripted(ok()), max_tokens=7000)
+    assert clock.t >= 60  # 4015 used + ~120 + 7000 requested > 8000: waited for the window

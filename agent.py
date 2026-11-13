@@ -44,7 +44,9 @@ class RequestTooLarge(Exception):
         # D15: "input" = the prompt itself is over the limit (did not fit); "output" = the
         # provider's expected output for this request is over the per-minute output limit.
         self.limit_kind = ("output" if "output tokens" in low else
-                           "input" if "input tokens" in low or "413" in low else None)
+                           "input" if "input tokens" in low else
+                           "combined" if "tokens per minute" in low else      # D24: Groq TPM
+                           "input" if "413" in low else None)
 
 
 class Pacer:
@@ -61,9 +63,12 @@ class Pacer:
     CHARS_PER_TOKEN = 1.2  # measured 1.33 on a size-S prompt (D9); digits tokenise one by one
 
     def __init__(self, itpm=7000, otpm=0, out_reserve=300, window_s=60.0, clock=time.monotonic,
-                 sleep=None):
+                 sleep=None, combined=False):
         self.itpm, self.otpm, self.window_s, self.clock = itpm, otpm, window_s, clock
         self.out_reserve = out_reserve
+        # combined=True (D24, Groq gpt-oss): `itpm` is one tokens-per-minute limit counting input
+        # plus requested max_tokens before the call, and input plus actual output after it.
+        self.combined = combined
         self.sleep = sleep or (lambda s: time.sleep(s))
         self.sent = []  # (timestamp, input tokens, output tokens)
 
@@ -260,7 +265,7 @@ def call_agent(model, temperature, messages, call_id, reasoning_effort=None, pos
         record = json.loads(path.read_text(encoding="utf-8"))
         return {**record, "cached": True}
     estimate = PACER.estimate(messages)
-    PACER.wait_for(estimate)
+    PACER.wait_for(estimate + (max_tokens or 0) if PACER.combined else estimate)
     try:
         record = call_model(model, temperature, reasoning_effort, messages, post=post,
                             max_tokens=max_tokens)
@@ -271,7 +276,10 @@ def call_agent(model, temperature, messages, call_id, reasoning_effort=None, pos
         return {"raw_text": None, "reasoning": None, "finish_reason": None,
                 "prompt_tokens": 0, "completion_tokens": 0,
                 "latency_ms": None, "retries": e.retries, "error": str(e), "cached": False}
-    PACER.record(record["prompt_tokens"] or estimate, record["completion_tokens"] or 0)
+    if PACER.combined:
+        PACER.record((record["prompt_tokens"] or estimate) + (record["completion_tokens"] or 0))
+    else:
+        PACER.record(record["prompt_tokens"] or estimate, record["completion_tokens"] or 0)
     record["error"] = None
     record.update(model=model, temperature=temperature, reasoning_effort=reasoning_effort,
                   max_tokens=max_tokens,

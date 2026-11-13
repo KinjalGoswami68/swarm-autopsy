@@ -34,8 +34,12 @@ def cmd_run(args):
     if args.max_tokens is None and args.otpm:
         args.max_tokens = args.otpm  # D15: expected output never exceeds the per-minute limit
     agent.BUDGET = agent.RequestBudget(rpd=args.rpd)
-    agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm, out_reserve=args.max_tokens or 300)
-    cfg = dict(model=args.model, temperature=args.temperature, reasoning_effort=args.reasoning_effort,
+    if args.tpm:  # D24: one combined limit (input + requested output), e.g. Groq gpt-oss 8000
+        agent.PACER = agent.Pacer(itpm=args.tpm, combined=True)
+    else:
+        agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm, out_reserve=args.max_tokens or 300)
+    cfg = dict(max_tokens_total=args.max_tokens_total, tpm=args.tpm,
+               model=args.model, temperature=args.temperature, reasoning_effort=args.reasoning_effort,
                workers=args.workers, max_tokens=args.max_tokens, itpm=args.itpm, otpm=args.otpm)
     runs_dir = Path(args.runs_dir)
     total = len(args.sizes) * len(args.seeds)
@@ -224,6 +228,10 @@ def main(argv=None):
                    help="input tokens/minute to pace to; 0 = off (qwen on Groq: 7000)")
     r.add_argument("--otpm", type=int, default=0,
                    help="output tokens/minute to pace to; 0 = off (qwen on Groq: 1000)")
+    r.add_argument("--tpm", type=int, default=0,
+                   help="combined tokens/minute (input + requested output) to pace to; 0 = off (D24)")
+    r.add_argument("--max-tokens-total", type=int, default=0,
+                   help="per call, max_tokens = this - estimated input (D24); 0 = off")
     r.add_argument("--rpd", type=int, default=20,
                    help="daily request budget per model, every attempt counted (D23); 0 = off")
     r.add_argument("--runs-dir", default=str(RUNS_DIR))

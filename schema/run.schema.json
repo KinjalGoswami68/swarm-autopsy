@@ -55,7 +55,9 @@
         "workers": {"type": "integer", "minimum": 1},
         "max_tokens": {"type": ["integer", "null"]},
         "itpm": {"type": ["integer", "null"]},
-        "otpm": {"type": ["integer", "null"]}
+        "otpm": {"type": ["integer", "null"]},
+        "max_tokens_total": {"type": ["integer", "null"]},
+        "tpm": {"type": ["integer", "null"]}
       }
     },
     "task": {"type": "object"},

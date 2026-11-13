@@ -192,3 +192,11 @@ def test_truncated_reply_salvages_complete_entries():
 def test_truncated_status_kept_even_with_salvage():
     call = {"finish_reason": "length", "rejected_too_large": False, "error": None}
     assert swarm._status(call, [{"id": "A", "value": 1}]) == "truncated"
+
+
+def test_max_tokens_total_leaves_room_for_input():
+    cfg = dict(CFG, max_tokens_total=8000)
+    prompt = "x" * 3000  # estimated 2100 input tokens
+    mt = swarm.max_tokens_for(cfg, prompt)
+    assert mt == 8000 - (2000 + 100) - 100
+    assert swarm.max_tokens_for(CFG, prompt) is None

@@ -414,3 +414,28 @@ probe made no successful call.
 S, M and L with W=4 is about 21 calls (18 swarm + 3 baseline); the full family-1 grid (S, M,
 L W=4, L W=12, 3 seeds) is about 105 calls, so about 6 days. Owner to decide whether that is
 acceptable.
+
+## D24. Plan change: family 2 is the experiment, the axis is the number of workers
+
+**Owner decision (2026-11-13). Reason:** at 20 Gemini requests per day (D23) the full old-ledger
+grid would take about 6 days, and the old ledger is the wrong test anyway: when every line can
+be judged alone, splitting has nothing to lose (qwen results D16/D17; Gemini S seed 1: 12/12
+kept, 0 lost in any bucket).
+
+1. **Old-ledger grid dropped.** The Gemini S seed-1 run and the 9 qwen run files stay as the
+   evidence that splitting loses nothing when lines are independent. The queued Gemini M and L
+   old-ledger runs were cancelled before they started.
+2. **Groq, openai/gpt-oss-120b, default reasoning:** family 2 at size S, W = 2, 4 and 8, seeds
+   1 to 3, swarm plus one baseline per seed (the baseline call does not depend on W, so it is
+   made once per seed and reused from the cache). After a one-call probe of the S baseline.
+3. **Gemini gemini-3.8-flash, 20 requests per day:** family 2 at size M, one run per day in the
+   background (day 1: baseline + W=4; later days: other W, baseline from cache).
+4. **Table for the Groq runs:** one row per W.
+
+**Mechanics for gpt-oss (provider limits, under the owner's standing rule):** Groq counts input
+plus requested `max_tokens` against one 8,000 tokens-per-minute limit (D18). `--max-tokens-total
+8000` sets each call's `max_tokens` to 8,000 − (input estimated at 1.5 characters per token, above
+the 1.74 measured, + 100) − 100, so the request never exceeds the limit; `--tpm 8000` paces calls on
+a combined 60-second window. A rejection on that limit is recorded with `limit_kind: combined`.
+Groq's 200,000 tokens-per-day limit message says "per day", so it stops the run at once (D23).
+Groq runs pass `--rpd 1000` (Groq's daily request limit for this model, from its headers).

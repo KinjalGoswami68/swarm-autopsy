@@ -193,13 +193,28 @@ def parse_plan(text, n_lines, workers):
 TOO_LARGE = "request too large"
 
 
+CHARS_PER_TOKEN_LOW = 1.5  # D24: below the 1.74 measured for gpt-oss, so input is over-estimated
+MAX_TOKENS_MARGIN = 100
+
+
+def max_tokens_for(cfg, prompt):
+    """D24: with max_tokens_total set, max_tokens = total - (over-)estimated input - margin, so input
+    plus requested output never exceeds a combined per-minute limit. Depends only on the prompt,
+    so cache keys are stable."""
+    total = cfg.get("max_tokens_total")
+    if not total:
+        return cfg.get("max_tokens")
+    est = int(len(prompt) / CHARS_PER_TOKEN_LOW) + MAX_TOKENS_MARGIN
+    return max(total - est - MAX_TOKENS_MARGIN, 256)
+
+
 def _call(cfg, prompt, call_id):
     """One call record. A request-too-large rejection is recorded, not raised (D9, D11).
     RateLimitStop propagates and stops the run."""
     try:
         r = agent.call_agent(cfg["model"], cfg["temperature"], prompt, call_id,
                              reasoning_effort=cfg["reasoning_effort"],
-                             max_tokens=cfg.get("max_tokens"))
+                             max_tokens=max_tokens_for(cfg, prompt))
     except agent.RequestTooLarge as e:
         return {"prompt": prompt, "raw_text": None, "reasoning": None, "finish_reason": None,
                 "prompt_tokens": 0,
@@ -312,6 +327,7 @@ def run_task(task, cfg, only=None):
         "config": {"model": cfg["model"], "endpoint": agent.ENDPOINT,
                    "temperature": cfg["temperature"], "reasoning_effort": cfg["reasoning_effort"],
                    "workers": cfg["workers"], "max_tokens": cfg.get("max_tokens"),
+                   "max_tokens_total": cfg.get("max_tokens_total"), "tpm": cfg.get("tpm"),
                    "itpm": cfg.get("itpm"), "otpm": cfg.get("otpm")},
         "task": family(task).task_block(task),
         "items": family(task).items_block(task),
