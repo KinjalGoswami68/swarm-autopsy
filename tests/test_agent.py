@@ -195,3 +195,34 @@ def test_pacer_counts_full_out_reserve():
     p.record(100, 50)  # counted as 1000: the provider may count the whole max_tokens
     clock.t = 1
     assert p.wait_for(100) > 0 and clock.t >= 60
+
+
+DAILY_429 = ('{"error": {"code": 429, "message": "Generate content requests per day limit exceeded", '
+             '"details": [{"quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier", '
+             '"quotaValue": "20"}, {"retryDelay": "7283s"}]}}')
+
+
+def test_daily_quota_429_stops_without_retry():
+    post = scripted(Resp(429, text=DAILY_429))
+    with pytest.raises(agent.RateLimitStop, match="PerDay.*limit 20"):
+        agent.call_agent("m", 0, "hi", ["t"], post=post)
+    assert len(post.calls) == 1
+
+
+def test_per_minute_429_waits_for_stated_delay(monkeypatch):
+    waits = []
+    monkeypatch.setattr(agent.time, "sleep", waits.append)
+    body = '{"error": {"message": "per minute", "details": [{"retryDelay": "37s"}]}}'
+    agent.call_agent("m", 0, "hi", ["t"], post=scripted(Resp(429, text=body), ok()))
+    assert waits == [38.0]
+
+
+def test_request_budget_counts_attempts_and_stops(tmp_path, monkeypatch):
+    monkeypatch.setattr(agent, "BUDGET", agent.RequestBudget(rpd=2, path=tmp_path / "r.json"))
+    agent.call_agent("m", 0, "a", ["t1"], post=scripted(Resp(503, text="x"), ok()))  # 2 attempts
+    assert agent.BUDGET.used("m") == 2
+    post = scripted(ok())
+    with pytest.raises(agent.RateLimitStop, match="budget reached"):
+        agent.call_agent("m", 0, "b", ["t2"], post=post)
+    assert post.calls == []  # stopped before sending
+    agent.call_agent("m", 0, "a", ["t1"], post=scripted())  # cached: no attempt, no budget

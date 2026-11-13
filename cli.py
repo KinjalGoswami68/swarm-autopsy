@@ -33,6 +33,7 @@ def cmd_run(args):
     agent.set_endpoint(args.endpoint)
     if args.max_tokens is None and args.otpm:
         args.max_tokens = args.otpm  # D15: expected output never exceeds the per-minute limit
+    agent.BUDGET = agent.RequestBudget(rpd=args.rpd)
     agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm, out_reserve=args.max_tokens or 300)
     cfg = dict(model=args.model, temperature=args.temperature, reasoning_effort=args.reasoning_effort,
                workers=args.workers, max_tokens=args.max_tokens, itpm=args.itpm, otpm=args.otpm)
@@ -223,6 +224,8 @@ def main(argv=None):
                    help="input tokens/minute to pace to; 0 = off (qwen on Groq: 7000)")
     r.add_argument("--otpm", type=int, default=0,
                    help="output tokens/minute to pace to; 0 = off (qwen on Groq: 1000)")
+    r.add_argument("--rpd", type=int, default=20,
+                   help="daily request budget per model, every attempt counted (D23); 0 = off")
     r.add_argument("--runs-dir", default=str(RUNS_DIR))
     r.add_argument("--force", action="store_true", help="rewrite existing run files")
     r.set_defaults(func=cmd_run)

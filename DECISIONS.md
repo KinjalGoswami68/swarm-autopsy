@@ -388,3 +388,29 @@ Workers get `<brief>` + "Your ledger rows:" + their rows as up to two CSV blocks
 table:" and/or "Line items:", each with its header) + the format line. The merger gets the
 task text, each worker's parsed items re-serialised in the reply format (D6), "Produce the final
 report." and the format line. The baseline gets the task text, the whole ledger and the format line.
+
+## D23. Gemini free tier: 20 requests per day, retries included
+
+Decided under the owner's standing rule (provider limits and pacing).
+
+**Finding (2026-11-13):** the family-2 probe stopped on HTTP 429 "Generate content requests per
+day limit exceeded on Free Tier", quotaId `GenerateRequestsPerDayPerProjectPerModel-FreeTier`,
+**quotaValue 20**, reset at midnight Pacific time. By then the day had 9 successful
+gemini-3.8-flash calls and 11 retried attempts (429 or 5xx, absorbed by the D8 backoff), exactly
+20: **every HTTP attempt counts against the daily quota, including rejected ones.** The first pass
+(old ledger, seed 1) finished size S only; it was stopped by hand before M. The family-2
+probe made no successful call.
+
+**Choice:**
+1. A 429 whose body names a per-day quota stops the run immediately (no retries), with the
+   quota id, limit and reset time in the message.
+2. A per-minute 429 waits for the provider's stated `retryDelay` (+1 s) instead of 1–32 s backoff.
+3. `--rpd` (default 20) counts every HTTP attempt per model per Pacific-time day in
+   `cache/requests.json` and stops cleanly *before* an attempt that would exceed it. Pacific
+   time is taken as UTC-8 all year; the provider's own 429 is the backstop during US summer time.
+   Today's count was seeded with 21 (20 above plus one request made to read the full error).
+
+**Consequence:** about 20 calls per day, fewer when retries occur. One seed of one family at
+S, M and L with W=4 is about 21 calls (18 swarm + 3 baseline); the full family-1 grid (S, M,
+L W=4, L W=12, 3 seeds) is about 105 calls, so about 6 days. Owner to decide whether that is
+acceptable.

@@ -1,0 +1,975 @@
+{
+ "schema_version": 1,
+ "run_id": "ledger-S-s1__gemini-3.8-flash__w4__t0.0",
+ "created_utc": "2026-11-13T05:56:16+00:00",
+ "config": {
+  "model": "gemini-3.8-flash",
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai",
+  "temperature": 0.0,
+  "reasoning_effort": null,
+  "workers": 4,
+  "max_tokens": null,
+  "itpm": 0,
+  "otpm": 0
+ },
+ "task": {
+  "family": "remittance-ledger",
+  "task_id": "ledger-S-s1",
+  "size": "S",
+  "seed": 1,
+  "n_lines": 60,
+  "n_planted": 12,
+  "task_text": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.",
+  "columns": [
+   "row",
+   "line_id",
+   "qty",
+   "unit_rate",
+   "paid"
+  ],
+  "rows": [
+   {
+    "row": 1,
+    "line_id": "RX-UZM82",
+    "qty": 34,
+    "unit_rate_cents": 47399,
+    "paid_cents": 1611566
+   },
+   {
+    "row": 2,
+    "line_id": "RX-L5GYN",
+    "qty": 39,
+    "unit_rate_cents": 9688,
+    "paid_cents": 454934
+   },
+   {
+    "row": 3,
+    "line_id": "RX-4L4GJ",
+    "qty": 28,
+    "unit_rate_cents": 21280,
+    "paid_cents": 558609
+   },
+   {
+    "row": 4,
+    "line_id": "RX-APNWE",
+    "qty": 32,
+    "unit_rate_cents": 11216,
+    "paid_cents": 371929
+   },
+   {
+    "row": 5,
+    "line_id": "RX-Y372R",
+    "qty": 33,
+    "unit_rate_cents": 14725,
+    "paid_cents": 485925
+   },
+   {
+    "row": 6,
+    "line_id": "RX-7ALPG",
+    "qty": 22,
+    "unit_rate_cents": 27662,
+    "paid_cents": 608564
+   },
+   {
+    "row": 7,
+    "line_id": "RX-PU93C",
+    "qty": 21,
+    "unit_rate_cents": 35015,
+    "paid_cents": 563036
+   },
+   {
+    "row": 8,
+    "line_id": "RX-SPY65",
+    "qty": 13,
+    "unit_rate_cents": 23499,
+    "paid_cents": 305487
+   },
+   {
+    "row": 9,
+    "line_id": "RX-N2VWC",
+    "qty": 13,
+    "unit_rate_cents": 9044,
+    "paid_cents": 117572
+   },
+   {
+    "row": 10,
+    "line_id": "RX-6GH73",
+    "qty": 14,
+    "unit_rate_cents": 19427,
+    "paid_cents": 271978
+   },
+   {
+    "row": 11,
+    "line_id": "RX-WGAGU",
+    "qty": 13,
+    "unit_rate_cents": 4774,
+    "paid_cents": 62062
+   },
+   {
+    "row": 12,
+    "line_id": "RX-BHYS4",
+    "qty": 14,
+    "unit_rate_cents": 20564,
+    "paid_cents": 287896
+   },
+   {
+    "row": 13,
+    "line_id": "RX-HSDK2",
+    "qty": 30,
+    "unit_rate_cents": 7768,
+    "paid_cents": 233040
+   },
+   {
+    "row": 14,
+    "line_id": "RX-FHHE7",
+    "qty": 26,
+    "unit_rate_cents": 1329,
+    "paid_cents": 34554
+   },
+   {
+    "row": 15,
+    "line_id": "RX-YUBFM",
+    "qty": 22,
+    "unit_rate_cents": 36039,
+    "paid_cents": 1055027
+   },
+   {
+    "row": 16,
+    "line_id": "RX-H8KA5",
+    "qty": 36,
+    "unit_rate_cents": 41504,
+    "paid_cents": 1494144
+   },
+   {
+    "row": 17,
+    "line_id": "RX-3RB4R",
+    "qty": 12,
+    "unit_rate_cents": 20219,
+    "paid_cents": 242628
+   },
+   {
+    "row": 18,
+    "line_id": "RX-WJARV",
+    "qty": 12,
+    "unit_rate_cents": 7694,
+    "paid_cents": 92328
+   },
+   {
+    "row": 19,
+    "line_id": "RX-95DF5",
+    "qty": 2,
+    "unit_rate_cents": 36763,
+    "paid_cents": 73526
+   },
+   {
+    "row": 20,
+    "line_id": "RX-J4EQG",
+    "qty": 6,
+    "unit_rate_cents": 6344,
+    "paid_cents": 40639
+   },
+   {
+    "row": 21,
+    "line_id": "RX-QZT6D",
+    "qty": 14,
+    "unit_rate_cents": 32271,
+    "paid_cents": 451794
+   },
+   {
+    "row": 22,
+    "line_id": "RX-SCJDU",
+    "qty": 18,
+    "unit_rate_cents": 3047,
+    "paid_cents": 54846
+   },
+   {
+    "row": 23,
+    "line_id": "RX-JRCHK",
+    "qty": 7,
+    "unit_rate_cents": 24753,
+    "paid_cents": 173271
+   },
+   {
+    "row": 24,
+    "line_id": "RX-RECU2",
+    "qty": 29,
+    "unit_rate_cents": 33948,
+    "paid_cents": 1290508
+   },
+   {
+    "row": 25,
+    "line_id": "RX-MPN29",
+    "qty": 4,
+    "unit_rate_cents": 43038,
+    "paid_cents": 172152
+   },
+   {
+    "row": 26,
+    "line_id": "RX-7UJ3T",
+    "qty": 20,
+    "unit_rate_cents": 45073,
+    "paid_cents": 901460
+   },
+   {
+    "row": 27,
+    "line_id": "RX-H28L3",
+    "qty": 20,
+    "unit_rate_cents": 23385,
+    "paid_cents": 334260
+   },
+   {
+    "row": 28,
+    "line_id": "RX-WCHHR",
+    "qty": 11,
+    "unit_rate_cents": 25320,
+    "paid_cents": 278520
+   },
+   {
+    "row": 29,
+    "line_id": "RX-PW8BS",
+    "qty": 21,
+    "unit_rate_cents": 18748,
+    "paid_cents": 393708
+   },
+   {
+    "row": 30,
+    "line_id": "RX-QD8KM",
+    "qty": 3,
+    "unit_rate_cents": 19422,
+    "paid_cents": 58266
+   },
+   {
+    "row": 31,
+    "line_id": "RX-HCYBG",
+    "qty": 19,
+    "unit_rate_cents": 33672,
+    "paid_cents": 639768
+   },
+   {
+    "row": 32,
+    "line_id": "RX-EQTRM",
+    "qty": 14,
+    "unit_rate_cents": 35741,
+    "paid_cents": 350501
+   },
+   {
+    "row": 33,
+    "line_id": "RX-APKJ8",
+    "qty": 26,
+    "unit_rate_cents": 40677,
+    "paid_cents": 980053
+   },
+   {
+    "row": 34,
+    "line_id": "RX-CZLEC",
+    "qty": 32,
+    "unit_rate_cents": 41494,
+    "paid_cents": 1327808
+   },
+   {
+    "row": 35,
+    "line_id": "RX-PH222",
+    "qty": 34,
+    "unit_rate_cents": 6789,
+    "paid_cents": 230826
+   },
+   {
+    "row": 36,
+    "line_id": "RX-BP642",
+    "qty": 5,
+    "unit_rate_cents": 32288,
+    "paid_cents": 111916
+   },
+   {
+    "row": 37,
+    "line_id": "RX-GQV7G",
+    "qty": 20,
+    "unit_rate_cents": 42099,
+    "paid_cents": 924854
+   },
+   {
+    "row": 38,
+    "line_id": "RX-7HP6X",
+    "qty": 35,
+    "unit_rate_cents": 18708,
+    "paid_cents": 568196
+   },
+   {
+    "row": 39,
+    "line_id": "RX-8G3NG",
+    "qty": 26,
+    "unit_rate_cents": 16989,
+    "paid_cents": 302005
+   },
+   {
+    "row": 40,
+    "line_id": "RX-DYQVC",
+    "qty": 1,
+    "unit_rate_cents": 13357,
+    "paid_cents": 13357
+   },
+   {
+    "row": 41,
+    "line_id": "RX-5D942",
+    "qty": 2,
+    "unit_rate_cents": 25294,
+    "paid_cents": 50588
+   },
+   {
+    "row": 42,
+    "line_id": "RX-EGVS7",
+    "qty": 11,
+    "unit_rate_cents": 42139,
+    "paid_cents": 463529
+   },
+   {
+    "row": 43,
+    "line_id": "RX-U8QTX",
+    "qty": 5,
+    "unit_rate_cents": 7863,
+    "paid_cents": 39315
+   },
+   {
+    "row": 44,
+    "line_id": "RX-GCPPY",
+    "qty": 25,
+    "unit_rate_cents": 33004,
+    "paid_cents": 1015892
+   },
+   {
+    "row": 45,
+    "line_id": "RX-TGF7J",
+    "qty": 38,
+    "unit_rate_cents": 9199,
+    "paid_cents": 445455
+   },
+   {
+    "row": 46,
+    "line_id": "RX-VFWC8",
+    "qty": 10,
+    "unit_rate_cents": 11966,
+    "paid_cents": 119660
+   },
+   {
+    "row": 47,
+    "line_id": "RX-H7UWC",
+    "qty": 13,
+    "unit_rate_cents": 18151,
+    "paid_cents": 235963
+   },
+   {
+    "row": 48,
+    "line_id": "RX-3GGNW",
+    "qty": 11,
+    "unit_rate_cents": 26117,
+    "paid_cents": 223051
+   },
+   {
+    "row": 49,
+    "line_id": "RX-JSJ9Y",
+    "qty": 8,
+    "unit_rate_cents": 42139,
+    "paid_cents": 332131
+   },
+   {
+    "row": 50,
+    "line_id": "RX-2CCVF",
+    "qty": 34,
+    "unit_rate_cents": 46879,
+    "paid_cents": 1593886
+   },
+   {
+    "row": 51,
+    "line_id": "RX-3ZXQK",
+    "qty": 12,
+    "unit_rate_cents": 2374,
+    "paid_cents": 36546
+   },
+   {
+    "row": 52,
+    "line_id": "RX-XVYXA",
+    "qty": 4,
+    "unit_rate_cents": 22671,
+    "paid_cents": 90684
+   },
+   {
+    "row": 53,
+    "line_id": "RX-M43EM",
+    "qty": 28,
+    "unit_rate_cents": 4207,
+    "paid_cents": 143785
+   },
+   {
+    "row": 54,
+    "line_id": "RX-R3EH6",
+    "qty": 19,
+    "unit_rate_cents": 19783,
+    "paid_cents": 300731
+   },
+   {
+    "row": 55,
+    "line_id": "RX-UNARH",
+    "qty": 29,
+    "unit_rate_cents": 4333,
+    "paid_cents": 125657
+   },
+   {
+    "row": 56,
+    "line_id": "RX-9X68X",
+    "qty": 4,
+    "unit_rate_cents": 45313,
+    "paid_cents": 193150
+   },
+   {
+    "row": 57,
+    "line_id": "RX-UY3HM",
+    "qty": 11,
+    "unit_rate_cents": 25428,
+    "paid_cents": 182498
+   },
+   {
+    "row": 58,
+    "line_id": "RX-BPY4H",
+    "qty": 9,
+    "unit_rate_cents": 22651,
+    "paid_cents": 203859
+   },
+   {
+    "row": 59,
+    "line_id": "RX-V2EAA",
+    "qty": 40,
+    "unit_rate_cents": 16498,
+    "paid_cents": 730286
+   },
+   {
+    "row": 60,
+    "line_id": "RX-GQC5L",
+    "qty": 35,
+    "unit_rate_cents": 23335,
+    "paid_cents": 816725
+   }
+  ]
+ },
+ "items": {
+  "universe": [
+   "RX-UZM82",
+   "RX-L5GYN",
+   "RX-4L4GJ",
+   "RX-APNWE",
+   "RX-Y372R",
+   "RX-7ALPG",
+   "RX-PU93C",
+   "RX-SPY65",
+   "RX-N2VWC",
+   "RX-6GH73",
+   "RX-WGAGU",
+   "RX-BHYS4",
+   "RX-HSDK2",
+   "RX-FHHE7",
+   "RX-YUBFM",
+   "RX-H8KA5",
+   "RX-3RB4R",
+   "RX-WJARV",
+   "RX-95DF5",
+   "RX-J4EQG",
+   "RX-QZT6D",
+   "RX-SCJDU",
+   "RX-JRCHK",
+   "RX-RECU2",
+   "RX-MPN29",
+   "RX-7UJ3T",
+   "RX-H28L3",
+   "RX-WCHHR",
+   "RX-PW8BS",
+   "RX-QD8KM",
+   "RX-HCYBG",
+   "RX-EQTRM",
+   "RX-APKJ8",
+   "RX-CZLEC",
+   "RX-PH222",
+   "RX-BP642",
+   "RX-GQV7G",
+   "RX-7HP6X",
+   "RX-8G3NG",
+   "RX-DYQVC",
+   "RX-5D942",
+   "RX-EGVS7",
+   "RX-U8QTX",
+   "RX-GCPPY",
+   "RX-TGF7J",
+   "RX-VFWC8",
+   "RX-H7UWC",
+   "RX-3GGNW",
+   "RX-JSJ9Y",
+   "RX-2CCVF",
+   "RX-3ZXQK",
+   "RX-XVYXA",
+   "RX-M43EM",
+   "RX-R3EH6",
+   "RX-UNARH",
+   "RX-9X68X",
+   "RX-UY3HM",
+   "RX-BPY4H",
+   "RX-V2EAA",
+   "RX-GQC5L"
+  ],
+  "key": [
+   {
+    "id": "RX-4L4GJ",
+    "value": 37231
+   },
+   {
+    "id": "RX-PU93C",
+    "value": 172279
+   },
+   {
+    "id": "RX-H28L3",
+    "value": 133440
+   },
+   {
+    "id": "RX-EQTRM",
+    "value": 149873
+   },
+   {
+    "id": "RX-APKJ8",
+    "value": 77549
+   },
+   {
+    "id": "RX-BP642",
+    "value": 49524
+   },
+   {
+    "id": "RX-7HP6X",
+    "value": 86584
+   },
+   {
+    "id": "RX-8G3NG",
+    "value": 139709
+   },
+   {
+    "id": "RX-3GGNW",
+    "value": 64236
+   },
+   {
+    "id": "RX-JSJ9Y",
+    "value": 4981
+   },
+   {
+    "id": "RX-R3EH6",
+    "value": 75146
+   },
+   {
+    "id": "RX-UY3HM",
+    "value": 97210
+   }
+  ],
+  "value_unit": "cents"
+ },
+ "swarm": {
+  "planner": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\nThe ledger has 60 lines, numbered row 1 to row 60. Its columns are:\nrow,line_id,qty,unit_rate,paid\nYou will not see the rows themselves.\n\nYou coordinate 4 workers. Each worker receives only the brief you write for it and the ledger rows you assign to it, given as inclusive row ranges. Workers cannot see the task description above, each other, or any rows you do not assign to them. Their reports will then be combined into one final answer.\n\nWrite a brief for each of the 4 workers. Do not show your working or any explanation. Reply with only a JSON object:\n{\"workers\": [{\"worker\": 1, \"brief\": \"<instructions>\", \"ranges\": [[<first row>, <last row>]]}, ...]}",
+    "raw_text": "{\"workers\": [{\"worker\": 1, \"brief\": \"Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\", \"ranges\": [[1, 15]]}, {\"worker\": 2, \"brief\": \"Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\", \"ranges\": [[16, 30]]}, {\"worker\": 3, \"brief\": \"Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\", \"ranges\": [[31, 45]]}, {\"worker\": 4, \"brief\": \"Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\", \"ranges\": [[46, 60]]}]}",
+    "reasoning": null,
+    "finish_reason": "stop",
+    "prompt_tokens": 259,
+    "completion_tokens": 494,
+    "latency_ms": 277528,
+    "retries": 0,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "briefs_used": 4
+  },
+  "workers": [
+   {
+    "worker": 1,
+    "brief": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.",
+    "ranges": [
+     [
+      1,
+      15
+     ]
+    ],
+    "slice": [
+     "RX-UZM82",
+     "RX-L5GYN",
+     "RX-4L4GJ",
+     "RX-APNWE",
+     "RX-Y372R",
+     "RX-7ALPG",
+     "RX-PU93C",
+     "RX-SPY65",
+     "RX-N2VWC",
+     "RX-6GH73",
+     "RX-WGAGU",
+     "RX-BHYS4",
+     "RX-HSDK2",
+     "RX-FHHE7",
+     "RX-YUBFM"
+    ],
+    "call": {
+     "prompt": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n1,RX-UZM82,34,473.99,16115.66\n2,RX-L5GYN,39,96.88,4549.34\n3,RX-4L4GJ,28,212.80,5586.09\n4,RX-APNWE,32,112.16,3719.29\n5,RX-Y372R,33,147.25,4859.25\n6,RX-7ALPG,22,276.62,6085.64\n7,RX-PU93C,21,350.15,5630.36\n8,RX-SPY65,13,234.99,3054.87\n9,RX-N2VWC,13,90.44,1175.72\n10,RX-6GH73,14,194.27,2719.78\n11,RX-WGAGU,13,47.74,620.62\n12,RX-BHYS4,14,205.64,2878.96\n13,RX-HSDK2,30,77.68,2330.40\n14,RX-FHHE7,26,13.29,345.54\n15,RX-YUBFM,22,360.39,10550.27\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[{\"line_id\": \"RX-4L4GJ\", \"shortfall\": 372.31}, {\"line_id\": \"RX-PU93C\", \"shortfall\": 1722.79}]",
+     "reasoning": null,
+     "finish_reason": "stop",
+     "prompt_tokens": 580,
+     "completion_tokens": 52,
+     "latency_ms": 57401,
+     "retries": 1,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-4L4GJ",
+      "value": 37231
+     },
+     {
+      "id": "RX-PU93C",
+      "value": 172279
+     }
+    ]
+   },
+   {
+    "worker": 2,
+    "brief": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.",
+    "ranges": [
+     [
+      16,
+      30
+     ]
+    ],
+    "slice": [
+     "RX-H8KA5",
+     "RX-3RB4R",
+     "RX-WJARV",
+     "RX-95DF5",
+     "RX-J4EQG",
+     "RX-QZT6D",
+     "RX-SCJDU",
+     "RX-JRCHK",
+     "RX-RECU2",
+     "RX-MPN29",
+     "RX-7UJ3T",
+     "RX-H28L3",
+     "RX-WCHHR",
+     "RX-PW8BS",
+     "RX-QD8KM"
+    ],
+    "call": {
+     "prompt": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n16,RX-H8KA5,36,415.04,14941.44\n17,RX-3RB4R,12,202.19,2426.28\n18,RX-WJARV,12,76.94,923.28\n19,RX-95DF5,2,367.63,735.26\n20,RX-J4EQG,6,63.44,406.39\n21,RX-QZT6D,14,322.71,4517.94\n22,RX-SCJDU,18,30.47,548.46\n23,RX-JRCHK,7,247.53,1732.71\n24,RX-RECU2,29,339.48,12905.08\n25,RX-MPN29,4,430.38,1721.52\n26,RX-7UJ3T,20,450.73,9014.60\n27,RX-H28L3,20,233.85,3342.60\n28,RX-WCHHR,11,253.20,2785.20\n29,RX-PW8BS,21,187.48,3937.08\n30,RX-QD8KM,3,194.22,582.66\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[{\"line_id\": \"RX-H28L3\", \"shortfall\": 1334.40}]",
+     "reasoning": null,
+     "finish_reason": "stop",
+     "prompt_tokens": 582,
+     "completion_tokens": 28,
+     "latency_ms": 61542,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-H28L3",
+      "value": 133440
+     }
+    ]
+   },
+   {
+    "worker": 3,
+    "brief": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.",
+    "ranges": [
+     [
+      31,
+      45
+     ]
+    ],
+    "slice": [
+     "RX-HCYBG",
+     "RX-EQTRM",
+     "RX-APKJ8",
+     "RX-CZLEC",
+     "RX-PH222",
+     "RX-BP642",
+     "RX-GQV7G",
+     "RX-7HP6X",
+     "RX-8G3NG",
+     "RX-DYQVC",
+     "RX-5D942",
+     "RX-EGVS7",
+     "RX-U8QTX",
+     "RX-GCPPY",
+     "RX-TGF7J"
+    ],
+    "call": {
+     "prompt": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n31,RX-HCYBG,19,336.72,6397.68\n32,RX-EQTRM,14,357.41,3505.01\n33,RX-APKJ8,26,406.77,9800.53\n34,RX-CZLEC,32,414.94,13278.08\n35,RX-PH222,34,67.89,2308.26\n36,RX-BP642,5,322.88,1119.16\n37,RX-GQV7G,20,420.99,9248.54\n38,RX-7HP6X,35,187.08,5681.96\n39,RX-8G3NG,26,169.89,3020.05\n40,RX-DYQVC,1,133.57,133.57\n41,RX-5D942,2,252.94,505.88\n42,RX-EGVS7,11,421.39,4635.29\n43,RX-U8QTX,5,78.63,393.15\n44,RX-GCPPY,25,330.04,10158.92\n45,RX-TGF7J,38,91.99,4454.55\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[{\"line_id\": \"RX-EQTRM\", \"shortfall\": 1498.73}, {\"line_id\": \"RX-APKJ8\", \"shortfall\": 775.49}, {\"line_id\": \"RX-BP642\", \"shortfall\": 495.24}, {\"line_id\": \"RX-7HP6X\", \"shortfall\": 865.84}, {\"line_id\": \"RX-8G3NG\", \"shortfall\": 1397.09}]",
+     "reasoning": null,
+     "finish_reason": "stop",
+     "prompt_tokens": 584,
+     "completion_tokens": 126,
+     "latency_ms": 121900,
+     "retries": 1,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-EQTRM",
+      "value": 149873
+     },
+     {
+      "id": "RX-APKJ8",
+      "value": 77549
+     },
+     {
+      "id": "RX-BP642",
+      "value": 49524
+     },
+     {
+      "id": "RX-7HP6X",
+      "value": 86584
+     },
+     {
+      "id": "RX-8G3NG",
+      "value": 139709
+     }
+    ]
+   },
+   {
+    "worker": 4,
+    "brief": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.",
+    "ranges": [
+     [
+      46,
+      60
+     ]
+    ],
+    "slice": [
+     "RX-VFWC8",
+     "RX-H7UWC",
+     "RX-3GGNW",
+     "RX-JSJ9Y",
+     "RX-2CCVF",
+     "RX-3ZXQK",
+     "RX-XVYXA",
+     "RX-M43EM",
+     "RX-R3EH6",
+     "RX-UNARH",
+     "RX-9X68X",
+     "RX-UY3HM",
+     "RX-BPY4H",
+     "RX-V2EAA",
+     "RX-GQC5L"
+    ],
+    "call": {
+     "prompt": "Audit each assigned row of the ledger (columns: row, line_id, qty, unit_rate, paid). Calculate the amount owed as (qty * unit_rate). If paid is strictly less than the amount owed, the line is underpaid; calculate the shortfall as (qty * unit_rate) - paid formatted to two decimal places. Do not report lines that are paid exactly or overpaid. For each underpaid line found, report: row, line_id, and shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n46,RX-VFWC8,10,119.66,1196.60\n47,RX-H7UWC,13,181.51,2359.63\n48,RX-3GGNW,11,261.17,2230.51\n49,RX-JSJ9Y,8,421.39,3321.31\n50,RX-2CCVF,34,468.79,15938.86\n51,RX-3ZXQK,12,23.74,365.46\n52,RX-XVYXA,4,226.71,906.84\n53,RX-M43EM,28,42.07,1437.85\n54,RX-R3EH6,19,197.83,3007.31\n55,RX-UNARH,29,43.33,1256.57\n56,RX-9X68X,4,453.13,1931.50\n57,RX-UY3HM,11,254.28,1824.98\n58,RX-BPY4H,9,226.51,2038.59\n59,RX-V2EAA,40,164.98,7302.86\n60,RX-GQC5L,35,233.35,8167.25\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[{\"line_id\": \"RX-3GGNW\", \"shortfall\": 642.36}, {\"line_id\": \"RX-JSJ9Y\", \"shortfall\": 49.81}, {\"line_id\": \"RX-R3EH6\", \"shortfall\": 751.46}, {\"line_id\": \"RX-UY3HM\", \"shortfall\": 972.10}]",
+     "reasoning": null,
+     "finish_reason": "stop",
+     "prompt_tokens": 587,
+     "completion_tokens": 98,
+     "latency_ms": 255040,
+     "retries": 1,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-3GGNW",
+      "value": 64236
+     },
+     {
+      "id": "RX-JSJ9Y",
+      "value": 4981
+     },
+     {
+      "id": "RX-R3EH6",
+      "value": 75146
+     },
+     {
+      "id": "RX-UY3HM",
+      "value": 97210
+     }
+    ]
+   }
+  ],
+  "merger": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\n4 workers each checked part of the ledger. You do not see the ledger. Their reports:\nWorker 1: [{\"line_id\": \"RX-4L4GJ\", \"shortfall\": 372.31}, {\"line_id\": \"RX-PU93C\", \"shortfall\": 1722.79}]\nWorker 2: [{\"line_id\": \"RX-H28L3\", \"shortfall\": 1334.4}]\nWorker 3: [{\"line_id\": \"RX-EQTRM\", \"shortfall\": 1498.73}, {\"line_id\": \"RX-APKJ8\", \"shortfall\": 775.49}, {\"line_id\": \"RX-BP642\", \"shortfall\": 495.24}, {\"line_id\": \"RX-7HP6X\", \"shortfall\": 865.84}, {\"line_id\": \"RX-8G3NG\", \"shortfall\": 1397.09}]\nWorker 4: [{\"line_id\": \"RX-3GGNW\", \"shortfall\": 642.36}, {\"line_id\": \"RX-JSJ9Y\", \"shortfall\": 49.81}, {\"line_id\": \"RX-R3EH6\", \"shortfall\": 751.46}, {\"line_id\": \"RX-UY3HM\", \"shortfall\": 972.1}]\n\nProduce the final list of underpaid lines.\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+    "raw_text": "[{\"line_id\": \"RX-4L4GJ\", \"shortfall\": 372.31}, {\"line_id\": \"RX-PU93C\", \"shortfall\": 1722.79}, {\"line_id\": \"RX-H28L3\", \"shortfall\": 1334.4}, {\"line_id\": \"RX-EQTRM\", \"shortfall\": 1498.73}, {\"line_id\": \"RX-APKJ8\", \"shortfall\": 775.49}, {\"line_id\": \"RX-BP642\", \"shortfall\": 495.24}, {\"line_id\": \"RX-7HP6X\", \"shortfall\": 865.84}, {\"line_id\": \"RX-8G3NG\", \"shortfall\": 1397.09}, {\"line_id\": \"RX-3GGNW\", \"shortfall\": 642.36}, {\"line_id\": \"RX-JSJ9Y\", \"shortfall\": 49.81}, {\"line_id\": \"RX-R3EH6\", \"shortfall\": 751.46}, {\"line_id\": \"RX-UY3HM\", \"shortfall\": 972.1}]",
+    "reasoning": null,
+    "finish_reason": "stop",
+    "prompt_tokens": 496,
+    "completion_tokens": 299,
+    "latency_ms": 264664,
+    "retries": 3,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "nonpositive_dropped": 0,
+   "final": [
+    {
+     "id": "RX-4L4GJ",
+     "value": 37231
+    },
+    {
+     "id": "RX-PU93C",
+     "value": 172279
+    },
+    {
+     "id": "RX-H28L3",
+     "value": 133440
+    },
+    {
+     "id": "RX-EQTRM",
+     "value": 149873
+    },
+    {
+     "id": "RX-APKJ8",
+     "value": 77549
+    },
+    {
+     "id": "RX-BP642",
+     "value": 49524
+    },
+    {
+     "id": "RX-7HP6X",
+     "value": 86584
+    },
+    {
+     "id": "RX-8G3NG",
+     "value": 139709
+    },
+    {
+     "id": "RX-3GGNW",
+     "value": 64236
+    },
+    {
+     "id": "RX-JSJ9Y",
+     "value": 4981
+    },
+    {
+     "id": "RX-R3EH6",
+     "value": 75146
+    },
+    {
+     "id": "RX-UY3HM",
+     "value": 97210
+    }
+   ]
+  }
+ },
+ "baseline": {
+  "call": {
+   "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\nThe ledger:\nrow,line_id,qty,unit_rate,paid\n1,RX-UZM82,34,473.99,16115.66\n2,RX-L5GYN,39,96.88,4549.34\n3,RX-4L4GJ,28,212.80,5586.09\n4,RX-APNWE,32,112.16,3719.29\n5,RX-Y372R,33,147.25,4859.25\n6,RX-7ALPG,22,276.62,6085.64\n7,RX-PU93C,21,350.15,5630.36\n8,RX-SPY65,13,234.99,3054.87\n9,RX-N2VWC,13,90.44,1175.72\n10,RX-6GH73,14,194.27,2719.78\n11,RX-WGAGU,13,47.74,620.62\n12,RX-BHYS4,14,205.64,2878.96\n13,RX-HSDK2,30,77.68,2330.40\n14,RX-FHHE7,26,13.29,345.54\n15,RX-YUBFM,22,360.39,10550.27\n16,RX-H8KA5,36,415.04,14941.44\n17,RX-3RB4R,12,202.19,2426.28\n18,RX-WJARV,12,76.94,923.28\n19,RX-95DF5,2,367.63,735.26\n20,RX-J4EQG,6,63.44,406.39\n21,RX-QZT6D,14,322.71,4517.94\n22,RX-SCJDU,18,30.47,548.46\n23,RX-JRCHK,7,247.53,1732.71\n24,RX-RECU2,29,339.48,12905.08\n25,RX-MPN29,4,430.38,1721.52\n26,RX-7UJ3T,20,450.73,9014.60\n27,RX-H28L3,20,233.85,3342.60\n28,RX-WCHHR,11,253.20,2785.20\n29,RX-PW8BS,21,187.48,3937.08\n30,RX-QD8KM,3,194.22,582.66\n31,RX-HCYBG,19,336.72,6397.68\n32,RX-EQTRM,14,357.41,3505.01\n33,RX-APKJ8,26,406.77,9800.53\n34,RX-CZLEC,32,414.94,13278.08\n35,RX-PH222,34,67.89,2308.26\n36,RX-BP642,5,322.88,1119.16\n37,RX-GQV7G,20,420.99,9248.54\n38,RX-7HP6X,35,187.08,5681.96\n39,RX-8G3NG,26,169.89,3020.05\n40,RX-DYQVC,1,133.57,133.57\n41,RX-5D942,2,252.94,505.88\n42,RX-EGVS7,11,421.39,4635.29\n43,RX-U8QTX,5,78.63,393.15\n44,RX-GCPPY,25,330.04,10158.92\n45,RX-TGF7J,38,91.99,4454.55\n46,RX-VFWC8,10,119.66,1196.60\n47,RX-H7UWC,13,181.51,2359.63\n48,RX-3GGNW,11,261.17,2230.51\n49,RX-JSJ9Y,8,421.39,3321.31\n50,RX-2CCVF,34,468.79,15938.86\n51,RX-3ZXQK,12,23.74,365.46\n52,RX-XVYXA,4,226.71,906.84\n53,RX-M43EM,28,42.07,1437.85\n54,RX-R3EH6,19,197.83,3007.31\n55,RX-UNARH,29,43.33,1256.57\n56,RX-9X68X,4,453.13,1931.50\n57,RX-UY3HM,11,254.28,1824.98\n58,RX-BPY4H,9,226.51,2038.59\n59,RX-V2EAA,40,164.98,7302.86\n60,RX-GQC5L,35,233.35,8167.25\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+   "raw_text": "[\n  {\"line_id\": \"RX-4L4GJ\", \"shortfall\": 372.31},\n  {\"line_id\": \"RX-PU93C\", \"shortfall\": 1722.79},\n  {\"line_id\": \"RX-H28L3\", \"shortfall\": 1334.4},\n  {\"line_id\": \"RX-EQTRM\", \"shortfall\": 1498.73},\n  {\"line_id\": \"RX-APKJ8\", \"shortfall\": 775.49},\n  {\"line_id\": \"RX-BP642\", \"shortfall\": 495.24},\n  {\"line_id\": \"RX-7HP6X\", \"shortfall\": 865.84},\n  {\"line_id\": \"RX-8G3NG\", \"shortfall\": 1397.09},\n  {\"line_id\": \"RX-3GGNW\", \"shortfall\": 642.36},\n  {\"line_id\": \"RX-JSJ9Y\", \"shortfall\": 49.81},\n  {\"line_id\": \"RX-R3EH6\", \"shortfall\": 751.46},\n  {\"line_id\": \"RX-UY3HM\", \"shortfall\": 972.1}\n]",
+   "reasoning": null,
+   "finish_reason": "stop",
+   "prompt_tokens": 1779,
+   "completion_tokens": 325,
+   "latency_ms": 143147,
+   "retries": 0,
+   "cached": true,
+   "error": null,
+   "rejected_too_large": false
+  },
+  "status": "ok",
+  "parsed_ok": true,
+  "parse_notes": [],
+  "nonpositive_dropped": 0,
+  "final": [
+   {
+    "id": "RX-4L4GJ",
+    "value": 37231
+   },
+   {
+    "id": "RX-PU93C",
+    "value": 172279
+   },
+   {
+    "id": "RX-H28L3",
+    "value": 133440
+   },
+   {
+    "id": "RX-EQTRM",
+    "value": 149873
+   },
+   {
+    "id": "RX-APKJ8",
+    "value": 77549
+   },
+   {
+    "id": "RX-BP642",
+    "value": 49524
+   },
+   {
+    "id": "RX-7HP6X",
+    "value": 86584
+   },
+   {
+    "id": "RX-8G3NG",
+    "value": 139709
+   },
+   {
+    "id": "RX-3GGNW",
+    "value": 64236
+   },
+   {
+    "id": "RX-JSJ9Y",
+    "value": 4981
+   },
+   {
+    "id": "RX-R3EH6",
+    "value": 75146
+   },
+   {
+    "id": "RX-UY3HM",
+    "value": 97210
+   }
+  ]
+ },
+ "usage": {
+  "swarm": {
+   "calls": 6,
+   "prompt_tokens": 3088,
+   "completion_tokens": 1097,
+   "latency_ms": 1038075
+  },
+  "baseline": {
+   "calls": 1,
+   "prompt_tokens": 1779,
+   "completion_tokens": 325,
+   "latency_ms": 143147
+  }
+ }
+}

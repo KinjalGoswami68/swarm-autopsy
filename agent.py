@@ -143,6 +143,7 @@ def call_model(model, temperature, reasoning_effort, messages, post=None, max_to
     if max_tokens is not None:
         body["max_tokens"] = max_tokens
     for attempt in range(MAX_RETRIES + 1):
+        BUDGET.take(model)  # D23: every HTTP attempt counts against the provider's daily quota
         start = time.perf_counter()
         try:
             resp = post(body)
@@ -173,10 +174,75 @@ def call_model(model, temperature, reasoning_effort, messages, post=None, max_to
                 raise CallFailed(error, attempt)
         wait = 2 ** attempt
         if resp is not None and resp.status_code == 429:
-            wait = float(resp.headers.get("retry-after", wait))
+            if _daily_quota(resp.text):  # D23: retrying cannot help and each retry costs quota
+                raise RateLimitStop(f"daily quota exhausted: {_quota_summary(resp.text)}")
+            wait = float(resp.headers.get("retry-after") or _retry_delay(resp.text) or wait)
         if attempt == MAX_RETRIES or wait > MAX_WAIT_S:
             raise RateLimitStop(f"{error} after {attempt} retries (next wait would be {wait:.0f}s)")
         time.sleep(wait)
+
+
+def _daily_quota(text):
+    t = text or ""
+    return "PerDay" in t or "per day" in t.lower()
+
+
+def _retry_delay(text):
+    """Gemini puts the wait in the body: "retryDelay": "37s" (or "Please retry in 36.5s")."""
+    m = re.search(r'"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"', text or "") or \
+        re.search(r"retry in (\d+(?:\.\d+)?)s", text or "")
+    return float(m.group(1)) + 1 if m else None
+
+
+def _quota_summary(text):
+    m = re.search(r'"quotaId"\s*:\s*"([^"]+)"', text or "")
+    v = re.search(r'"quotaValue"\s*:\s*"(\d+)"', text or "")
+    d = _retry_delay(text)
+    return (f"{m.group(1) if m else 'daily quota'}"
+            + (f", limit {v.group(1)}" if v else "")
+            + (f", resets in about {d / 3600:.1f} h" if d else ""))
+
+
+class RequestBudget:
+    """D23: a local count of HTTP attempts per model per Pacific-time day (the reset Google uses),
+    kept in cache/requests.json so it survives restarts. take() raises RateLimitStop *before* an
+    attempt that would exceed `rpd`. rpd=0 disables it. Pacific time is taken as UTC-8 all year
+    (off by one hour during US daylight saving time; the provider's own 429 is the backstop)."""
+
+    def __init__(self, rpd=0, path=None):
+        self.rpd = rpd
+        self.path = path or (CACHE_DIR / "requests.json")
+
+    @staticmethod
+    def day():
+        from datetime import datetime, timedelta, timezone
+        return datetime.now(timezone(timedelta(hours=-8))).strftime("%Y-%m-%d")
+
+    def _load(self):
+        try:
+            return json.loads(Path(self.path).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
+
+    def used(self, model):
+        return self._load().get(self.day(), {}).get(model, 0)
+
+    def take(self, model):
+        if not self.rpd:
+            return
+        data = self._load()
+        today = data.setdefault(self.day(), {})
+        if today.get(model, 0) >= self.rpd:
+            raise RateLimitStop(f"daily request budget reached: {today[model]} of {self.rpd} "
+                                f"attempts used today (Pacific) for {model}")
+        today[model] = today.get(model, 0) + 1
+        Path(self.path).parent.mkdir(exist_ok=True)
+        tmp = Path(self.path).with_suffix(".tmp")
+        tmp.write_text(json.dumps(data, indent=1), encoding="utf-8")
+        os.replace(tmp, self.path)
+
+
+BUDGET = RequestBudget(rpd=0)  # the CLI sets --rpd; tests stay unbudgeted
 
 
 def call_agent(model, temperature, messages, call_id, reasoning_effort=None, post=None,
