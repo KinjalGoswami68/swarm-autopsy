@@ -182,10 +182,11 @@ select:active, .drop:active { transform: scale(1.01); box-shadow: 0 0 0 4px rgba
 .track { display: block; }
 .track-stage { display: none; }
 @media (min-width: 1000px) {
-  .track { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 3rem; align-items: start; }
+  .track { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
   .track-text { min-width: 0; }
-  .track-stage { display: block; position: sticky; top: 8vh; height: 84vh; border-radius: var(--radius); overflow: hidden; }
-  .ascii-canvas { display: block; width: 100%; height: 100%; }
+  .track-stage { display: flex; flex-direction: column; position: sticky; top: 6vh; height: 88vh; border-radius: var(--radius); overflow: hidden; }
+  .ascii-canvas { display: block; width: 100%; flex: 1 1 auto; min-height: 0; }
+  .ascii-caption { margin: 0; padding: .5rem 1rem .9rem; color: var(--sec); font-size: .92rem; text-align: center; max-width: none; min-height: 2.6em; }
 }
 
 /* short caveat line between the hero and the method section (D32) */

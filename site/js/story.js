@@ -54,9 +54,36 @@ function buildAsciiModel(run, a, r4run, r4a) {
     for (const p of aa.swarm.per_item) if (p.bucket === "kept") for (const n of p.needs) if (!n.startsWith("RATE:")) ids.add(n);
     return ids;
   };
-  const farRows = new Set();
-  for (const p of a.swarm.per_item) if (p.type === "far pair") for (const n of p.needs) farRows.add(n);
+  const farRows = new Set(), farPairs = [];
+  let farSplit = 0;
+  for (const p of a.swarm.per_item) {
+    if (p.type !== "far pair") continue;
+    p.needs.forEach((n) => farRows.add(n));
+    farPairs.push(p.needs);
+    if (!p.complete_in.length) farSplit++;
+  }
+  // captions under the canvas: every number comes from the run (D33)
+  const W = run.swarm.workers.length;
+  const holders = (wk) => wk.filter((w) => w.slice.some((i) => String(i).startsWith("RATE:"))).map((w) => w.worker);
+  const h0 = holders(run.swarm.workers);
+  const empty = run.swarm.workers.filter((w) => w.reported.length === 0).map((w) => w.worker);
+  const finalKey = a.swarm.score.true_positives;
+  const wList = (xs) => (xs.length < 2 ? `worker ${xs.join("")}` : `workers ${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+  const captions = {
+    "ledger-whole": `${run.task.rows.length} rows, as the single agent sees them`,
+    scatter: `the planner's ${W} blocks; ` + (h0.length === 1 ? `only worker ${h0[0]} holds the rate table` : `${h0.length} of ${W} workers hold the rate table`),
+    dim: `dimmed: ${wList(empty)}, which returned an empty list`,
+    reform: `lit: the ${finalKey} item${finalKey === 1 ? "" : "s"} in the final answer`,
+    apart: farSplit === farPairs.length ? `pink: each duplicate claim's two rows, in different workers`
+      : `pink: the ${farPairs.length} duplicate claims' rows; ${farSplit} split across workers`,
+  };
+  if (r4run) {
+    const h4 = holders(r4run.swarm.workers), n4 = r4run.swarm.workers.length;
+    captions.rescatter = `after one sentence to the planner: ` +
+      (h4.length === n4 ? "every worker holds the rate table" : `${h4.length} of ${n4} workers hold the rate table`);
+  }
   return {
+    captions, farPairs,
     rows,
     columns: cols(run.swarm.workers),
     emptyWorkers: run.swarm.workers.map((w, i) => (w.reported.length === 0 ? i : -1)).filter((i) => i >= 0),
@@ -209,7 +236,8 @@ async function main() {
 
   // Sections 1-6 share one sticky ASCII stage on the right (D32). It draws the run's real rows.
   const trackSections = parts.splice(trackStart, parts.length - trackStart);
-  const stage = el("div", { class: "track-stage", "aria-hidden": "true" }, el("canvas", { class: "ascii-canvas" }));
+  const stage = el("div", { class: "track-stage", "aria-hidden": "true" },
+    el("canvas", { class: "ascii-canvas" }), el("p", { class: "ascii-caption" }));
   parts.push(el("div", { class: "track" }, el("div", { class: "track-text" }, trackSections), stage));
   const asciiModel = buildAsciiModel(run, a, r4 ? r4.run : null, r4 ? r4.a : null);
 

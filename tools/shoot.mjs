@@ -73,7 +73,7 @@ if (fpsMs) {
 }
 const state = await evaluate(`({ ascii: window.__ascii ? { glyphs: window.__ascii.glyphs, scene: window.__ascii.scene() } : null,
   stage: (() => { const s = document.querySelector('.track-stage'); if (!s) return null; const r = s.getBoundingClientRect(); return { display: getComputedStyle(s).display, top: Math.round(r.top), h: Math.round(r.height), w: Math.round(r.width) }; })(),
-  reduced: matchMedia("(prefers-reduced-motion: reduce)").matches, engine: window.__ascii && window.__ascii.stats ? window.__ascii.stats() : null })`);
+  caption: (document.querySelector(".ascii-caption") || {}).textContent, reduced: matchMedia("(prefers-reduced-motion: reduce)").matches, engine: window.__ascii && window.__ascii.stats ? window.__ascii.stats() : null })`);
 console.log(JSON.stringify(state));
 if (problems.length) console.log("PROBLEMS:\n  " + problems.join("\n  "));
 const shot = await send("Page.captureScreenshot", { format: "png" });

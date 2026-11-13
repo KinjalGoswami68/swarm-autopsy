@@ -10,7 +10,8 @@
 // Rules: the canvas sits in its own column, never over text; dropped below 1000px; one still frame
 // under prefers-reduced-motion; the loop runs only while something moves and the stage is visible.
 
-const COLORS = { grey: "#9a9a9a", pink: "#e39bd2", white: "#f2f2f2", lav: "#8e6fa3" };
+// light/lavLight: resting rows, brighter so they read without effort (D33); grey/lav: dimmed rows
+const COLORS = { grey: "#9a9a9a", pink: "#e39bd2", white: "#f2f2f2", lav: "#8e6fa3", light: "#d6d6d6", lavLight: "#c3a6d6" };
 const FLICKER = "·:;+=*#%";
 const TRANSITION_MS = 900, MAX_DELAY_MS = 320, PUSH_RADIUS = 80, PUSH_PX = 22;
 
@@ -25,6 +26,7 @@ export function startAscii(stage, model, sections) {
   const wide = matchMedia("(min-width: 1000px)");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const ctx = canvas.getContext("2d");
+  const caption = stage.querySelector(".ascii-caption");
   const dotsLayer = document.createElement("div"); // parallax dot field (CSS), behind the canvas
   dotsLayer.className = "ascii-dots";
   stage.prepend(dotsLayer);
@@ -53,8 +55,12 @@ export function startAscii(stage, model, sections) {
   const firstGlyph = new Int32Array(tokens.length).fill(-1);
   glyphs.forEach((g, i) => { if (firstGlyph[g.t] < 0) firstGlyph[g.t] = i; });
   const loose = new Uint8Array(tokens.length); // 1 = draw this row glyph by glyph this frame
+  const tokenOf = new Map(tokens.map((t, i) => [`${t.id}|${t.k}`, i]));
+  const maxColRows = Math.max(1, ...layouts.flat().map((c) => c.length));
+  const blockCols = Math.ceil(model.rows.length / maxColRows); // the one-block view wraps to the same height
   let tokenImages = new Map();
   const dots = dotsLayer;
+  let cache = null, cacheValid = false; // the settled scene, drawn once (D33)
 
   // ---- geometry and glyph atlas (rebuilt on resize)
   let W = 0, H = 0, dpr = 1, fs = 10, lineH = 14, charW = 6, atlas = null, cellW = 0, cellH = 0;
@@ -74,36 +80,40 @@ export function startAscii(stage, model, sections) {
   }
   const charIndex = new Map(charset.map((ch, i) => [ch, i]));
 
+  const TOP = 46; // room for the column labels
   function measure() {
-    const r = stage.getBoundingClientRect();
+    const r = canvas.getBoundingClientRect();
     W = Math.max(1, r.width); H = Math.max(1, r.height);
     dpr = Math.min(2, devicePixelRatio || 1);
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-    canvas.style.width = `${W}px`; canvas.style.height = `${H}px`;
-    const maxRows = Math.max(Math.ceil(model.rows.length / 2), ...layouts.flat().map((c) => c.length)) + 3;
-    const maxCols = Math.max(2, ...layouts.map((c) => c.length));
-    const byHeight = (H - 48) / maxRows / 1.45;
-    const byWidth = (W - 32) / (maxCols * (maxLen + 2.2)) / 0.6;
-    fs = Math.max(7, Math.min(13, byHeight, byWidth));
-    lineH = fs * 1.45; charW = fs * 0.6;
+    const rowsTall = maxColRows + 1;
+    const maxCols = Math.max(blockCols, ...layouts.map((c) => c.length));
+    const byHeight = (H - TOP) / rowsTall / 1.3;
+    const byWidth = (W - 24) / (maxCols * (maxLen + 2.2)) / 0.6;
+    fs = Math.max(8, Math.min(17, byHeight, byWidth));
+    charW = fs * 0.6;
+    lineH = Math.min(fs * 1.6, (H - TOP) / rowsTall); // extra row spacing when the height allows
     buildAtlas();
     tokenImages = new Map();
+    cache = document.createElement("canvas");
+    cache.width = canvas.width; cache.height = canvas.height;
+    cacheValid = false;
   }
 
   // ---- scenes: a target (x, y, alpha, colour) for every token; spare copies hide on their row
-  const colX = (n, i) => {
-    const colW = (maxLen + 2.2) * charW;
-    const total = n * colW;
+  const colX = (n, i, gap = 2.2) => {
+    const colW = (maxLen + gap) * charW;
+    const total = n * colW - gap * charW;
     return (W - total) / 2 + i * colW;
   };
-  function place(cols, style) {
+  function place(cols, style, gap = 2.2) {
     const targets = new Array(tokens.length).fill(null);
     const used = new Map();
     cols.forEach((col, ci) => col.forEach((id, ri) => {
       const k = used.get(id) || 0; used.set(id, k + 1);
       const ti = tokens.findIndex((t) => t.id === id && t.k === k);
       if (ti < 0) return;
-      targets[ti] = { x: colX(cols.length, ci), y: 40 + ri * lineH, ...style(byId.get(id), ci) };
+      targets[ti] = { x: colX(cols.length, ci, gap), y: TOP + ri * lineH, ...style(byId.get(id), ci) };
     }));
     tokens.forEach((t, ti) => {
       if (targets[ti]) return;
@@ -112,20 +122,22 @@ export function startAscii(stage, model, sections) {
     });
     return targets;
   }
-  const block = () => { // the rows as one block: two touching half-columns in ledger order
-    const ids = model.rows.map((r) => r.id), half = Math.ceil(ids.length / 2);
-    return [ids.slice(0, half), ids.slice(half)];
+  const block = () => { // the rows as one block, in ledger order, wrapped to the tallest worker column
+    const ids = model.rows.map((r) => r.id), per = Math.ceil(ids.length / blockCols);
+    return Array.from({ length: blockCols }, (_, i) => ids.slice(i * per, (i + 1) * per));
   };
-  const base = (r, a = 0.8) => (r.rate ? { a: Math.min(1, a + 0.1), c: "lav" } : { a, c: "grey" });
+  const BLOCK_GAP = 1.2;
+  const base = (r, a = 0.95) => (r.rate ? { a, c: "lavLight" } : { a, c: "light" });
+  const dimmed = (r, a = 0.13) => ({ a, c: r.rate ? "lav" : "grey" });
   const SCENES = {
-    "ledger-whole": () => ({ targets: place(block(), (r) => base(r)), labels: null, tight: true }),
+    "ledger-whole": () => ({ targets: place(block(), (r) => base(r), BLOCK_GAP), labels: null }),
     scatter: () => ({ targets: place(model.columns, (r) => base(r)), labels: model.columns }),
-    dim: () => ({ targets: place(model.columns, (r, ci) => (model.emptyWorkers.includes(ci) ? { a: 0.13, c: r.rate ? "lav" : "grey" } : base(r))), labels: model.columns }),
-    reform: () => ({ targets: place(block(), (r) => (model.kept.has(r.id) ? { a: 1, c: "white" } : { a: 0.2, c: r.rate ? "lav" : "grey" })), labels: null, tight: true }),
+    dim: () => ({ targets: place(model.columns, (r, ci) => (model.emptyWorkers.includes(ci) ? dimmed(r) : base(r))), labels: model.columns }),
+    reform: () => ({ targets: place(block(), (r) => (model.kept.has(r.id) ? { a: 1, c: "white" } : dimmed(r, 0.2)), BLOCK_GAP), labels: null }),
     rescatter: () => (model.columnsR4
-      ? { targets: place(model.columnsR4, (r) => (model.keptR4.has(r.id) ? { a: 1, c: "white" } : base(r, 0.42))), labels: model.columnsR4 }
+      ? { targets: place(model.columnsR4, (r) => (model.keptR4.has(r.id) ? { a: 1, c: "white" } : dimmed(r, 0.38))), labels: model.columnsR4 }
       : SCENES.scatter()),
-    apart: () => ({ targets: place(model.columns, (r) => (model.farRows.has(r.id) ? { a: 1, c: "pink" } : { a: 0.14, c: r.rate ? "lav" : "grey" })), labels: model.columns }),
+    apart: () => ({ targets: place(model.columns, (r) => (model.farRows.has(r.id) ? { a: 1, c: "pink" } : dimmed(r, 0.14))), labels: model.columns, pairs: true }),
   };
 
   // ---- state
@@ -136,11 +148,12 @@ export function startAscii(stage, model, sections) {
     if (!SCENES[name]) return;
     scene = name;
     current = SCENES[name]();
-    // tight block: pull the two half-columns together so they read as one block
-    const shift = current.tight ? ((maxLen + 2.2) * charW - (maxLen + 1.4) * charW) / 2 : 0;
+    if (caption) caption.textContent = (model.captions || {})[name] || "";
+    cacheValid = false;
+    prebuild();
     for (const g of glyphs) {
       const tg = current.targets[g.t];
-      const left = tg.x + (current.tight ? (tg.x < W / 2 ? shift : -shift) : 0);
+      const left = tg.x;
       g.sx = g.x; g.sy = g.y; g.sa = g.a; g.sc = g.c;
       g.tx = left + g.ci * charW; g.ty = tg.y; g.ta = tg.a; g.tc = tg.c;
       if (instant) { g.x = g.tx; g.y = g.ty; g.a = g.ta; g.c = g.tc; }
@@ -206,19 +219,103 @@ export function startAscii(stage, model, sections) {
     return img;
   }
 
+  // build every row image the current scene needs while the browser is idle, a few at a time,
+  // so scene changes do not pay for it in a frame
+  let prebuildJob = 0;
+  function prebuild() {
+    if (!current) return;
+    const want = [];
+    for (let ti = 0; ti < tokens.length; ti++) {
+      const tg = current.targets[ti];
+      if (tg && tg.a >= 0.01) want.push([ti, tg.c]);
+    }
+    const job = ++prebuildJob;
+    const idle = window.requestIdleCallback || ((f) => setTimeout(() => f({ timeRemaining: () => 8 }), 16));
+    const work = (deadline) => {
+      if (job !== prebuildJob) return;
+      while (want.length && deadline.timeRemaining() > 2) { const [ti, c] = want.pop(); tokenImage(ti, c); }
+      if (want.length) idle(work);
+    };
+    idle(work);
+  }
+
+  function rowBox(ti) { // the settled row's rectangle, with a little margin
+    const g0 = glyphs[firstGlyph[ti]];
+    return [g0.x - 2, g0.y - lineH / 2 - 1, (tokens[ti].row.text.length + 1) * charW + 4, lineH + 2];
+  }
+
+  function drawSettledRows(c, skipLoose) {
+    for (let ti = 0; ti < tokens.length; ti++) {
+      if (skipLoose && loose[ti]) continue;
+      const g0 = glyphs[firstGlyph[ti]];
+      if (g0.a < 0.01) continue;
+      const img = tokenImage(ti, g0.c);
+      c.globalAlpha = g0.a;
+      c.drawImage(img, g0.x, g0.y - lineH / 2, img.width / dpr, img.height / dpr);
+    }
+    c.globalAlpha = 1;
+  }
+
+  function drawLabels(c, now) {
+    if (!labelSet) return;
+    const la = Math.min(1, (now - labelFrom) / 600) * 0.75;
+    c.globalAlpha = reduce.matches ? 0.75 : la;
+    c.fillStyle = COLORS.pink;
+    c.font = `500 ${Math.max(10, fs * 0.85)}px "Inter", system-ui, sans-serif`;
+    labelSet.forEach((col, i) => c.fillText(`worker ${i + 1}`, colX(labelSet.length, i), TOP - lineH * 0.9));
+    c.globalAlpha = 1;
+  }
+
+  function drawLooseGlyphs(onlyLoose) {
+    for (let ti = 0; ti < tokens.length; ti++) {
+      if (onlyLoose && !loose[ti]) continue;
+      for (let gi = firstGlyph[ti]; gi < glyphs.length && glyphs[gi].t === ti; gi++) {
+        const g = glyphs[gi];
+        if (g.a < 0.01) continue;
+        const ch = g.flick && !reduce.matches ? FLICKER[(g.ci + g.t) % FLICKER.length] : g.ch;
+        const i = charIndex.get(ch);
+        if (i === undefined) continue;
+        ctx.globalAlpha = g.a;
+        ctx.drawImage(atlas[g.c], i * cellW, 0, cellW, cellH, g.x + g.dx, g.y + g.dy - lineH / 2, cellW / dpr, cellH / dpr);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
   function draw(now) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    // depth: a faint dot field drifting slower than the page (parallax), still under reduced motion
-    // depth: the dot field is a separate CSS layer behind the canvas, moved by the compositor
     if (dots) dots.style.transform = `translate3d(0, ${-(reduce.matches ? 0 : (scrollY * 0.12) % 26)}px, 0)`;
+    const settled = now - t0 > MAX_DELAY_MS + TRANSITION_MS + 650; // rows, labels and pair lines at rest
+    if (settled && cache) {
+      if (!cacheValid) { // draw the resting scene once
+        const cc = cache.getContext("2d");
+        cc.setTransform(dpr, 0, 0, dpr, 0, 0);
+        cc.clearRect(0, 0, W, H);
+        drawSettledRows(cc, false); // resting positions; rows near the pointer are redrawn below
+        drawLabels(cc, now);
+        cacheValid = true;
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(cache, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (let ti = 0; ti < tokens.length; ti++) if (loose[ti]) ctx.clearRect(...rowBox(ti)); // rows near the pointer
+      drawLooseGlyphs(true);
+      drawPairLines(now);
+      return;
+    }
+    drawFull(now);
+  }
+
+  function drawFull(now) {
+    ctx.clearRect(0, 0, W, H);
     // column labels (decorative; the page text says the same)
     if (labelSet) {
       const la = Math.min(1, (now - labelFrom) / 600) * 0.75;
       ctx.globalAlpha = reduce.matches ? 0.75 : la;
       ctx.fillStyle = COLORS.pink;
-      ctx.font = `${Math.max(9, fs * 0.9)}px "Inter", system-ui, sans-serif`;
-      labelSet.forEach((col, i) => ctx.fillText(`worker ${i + 1}`, colX(labelSet.length, i), 22));
+      ctx.font = `500 ${Math.max(10, fs * 0.85)}px "Inter", system-ui, sans-serif`;
+      labelSet.forEach((col, i) => ctx.fillText(`worker ${i + 1}`, colX(labelSet.length, i), TOP - lineH * 0.9));
     }
     for (let ti = 0; ti < tokens.length; ti++) {
       const g0 = glyphs[firstGlyph[ti]];
@@ -240,6 +337,27 @@ export function startAscii(stage, model, sections) {
       }
     }
     ctx.globalAlpha = 1;
+    drawPairLines(now);
+  }
+
+  function drawPairLines(now) {
+    if (current && current.pairs) {
+      const fade = reduce.matches ? 1 : Math.min(1, Math.max(0, (now - t0 - MAX_DELAY_MS - TRANSITION_MS * 0.6) / 500));
+      if (fade > 0) {
+        ctx.strokeStyle = COLORS.pink; ctx.lineWidth = 1.25; ctx.globalAlpha = 0.8 * fade;
+        for (const [a, b] of model.farPairs) {
+          const ga = glyphs[firstGlyph[tokenOf.get(`${a}|0`)]], gb = glyphs[firstGlyph[tokenOf.get(`${b}|0`)]];
+          if (!ga || !gb) continue;
+          const [L, R] = ga.x <= gb.x ? [ga, gb] : [gb, ga];
+          const lenL = tokens[L.t].row.text.length;
+          ctx.beginPath();
+          ctx.moveTo(L.x + L.dx + lenL * charW + 4, L.y + L.dy);
+          ctx.lineTo(R.x + R.dx - 4, R.y + R.dy);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
   }
 
   const stats = { frames: 0, ms: 0, max: 0 };

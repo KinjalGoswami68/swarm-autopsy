@@ -658,3 +658,36 @@ image (the image itself is not in the repo), with DESIGN.md and SITE_RULES.md.
    (`?noascii`, diagnostics only), the same page holds 16.7 ms at 4x slower, so the engine is the cost.
 6. **Tools:** `tools/shoot.mjs` (viewport screenshots, reduced motion, CPU throttling, frame
    timing) and `tools/check_mobile.mjs` (page width at 360 px and full-page captures).
+
+## D33. ASCII refinements: captions, legibility, pair lines (site frozen after this)
+
+**Owner decisions (2026-11-13).** After these, no further site changes.
+
+1. **Caption under the canvas**, in secondary grey (7:1 on the page), changing with the scene.
+   Every number in it comes from the run data (`buildAsciiModel` in `story.js`): "70 rows, as the
+   single agent sees them"; "the planner's 4 blocks; only worker 1 holds the rate table";
+   "dimmed: workers 1, 2 and 4, which returned an empty list"; "lit: the 3 items in the final
+   answer"; "after one sentence to the planner: every worker holds the rate table"; "pink: each
+   duplicate claim's two rows, in different workers". If the data differed (for example, a pair
+   not split), the wording changes with it.
+2. **Legibility:** the track is now two equal columns; the one-block view wraps to the height of
+   the tallest worker column (three sub-columns of up to 24 rows instead of two of 35), which lets
+   the type grow from about 12 px to about 15 px at 1440 px, with extra row spacing when the height
+   allows. Resting rows are drawn in a lighter grey (#d6d6d6) and lighter lavender (#c3a6d6) at 95%
+   strength; dimmed rows stay #9a9a9a / #8e6fa3 at 13-20% strength.
+3. **Far pairs:** a thin pink line (1.25 px, 80% strength) joins each pair's two rows across the
+   columns, fading in as the scene settles; drawn every frame on top, so it never breaks.
+4. **Performance work:** the larger type doubled per-frame drawing cost, so: (a) the settled scene
+   is drawn once into an off-screen cache; while the pointer moves, each frame draws the cache in
+   one step, clears only the rows near the pointer and redraws those letter by letter; (b) every
+   row image a scene needs is built during idle time after the scene changes, not in its first frames.
+   Re-measured (pointer sweeping the stage, page scrolling through a scene change, two runs each):
+
+   | CPU speed | median frame | p95 frame | frames over 33 ms | engine cost per frame |
+   |---|---|---|---|---|
+   | normal | 16.7 ms | 16.8 ms | 0 | 1.2-1.3 ms |
+   | 2x slower | 16.7 ms | 16.7-16.8 ms | 0 | 2.3-2.6 ms |
+   | 4x slower | 16.7 ms | 33.4 ms | 8-11 of about 265 | 3.8-3.9 ms (lite mode) |
+
+   Reduced motion: correct scene and caption, 0 animation frames. 360 px: all three pages exactly
+   360 px wide; the canvas and caption are not shown.
