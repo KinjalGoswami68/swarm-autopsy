@@ -95,19 +95,21 @@ def _cross(crosses):
 
 
 def table(runs):
-    """Markdown table: one row per size, means over seeds with per-seed values in brackets."""
+    """Markdown table: one row per (size, workers), means over seeds with per-seed values in brackets."""
     by_size = defaultdict(list)
     for run in runs:
-        by_size[run["task"]["size"]].append(run)
-    order = [s for s in ledger.SIZES if s in by_size] + sorted(set(by_size) - set(ledger.SIZES))
-    lines = ["| size | seeds | K | baseline recall | baseline precision | swarm recall | "
-             "swarm precision | lost: never assigned | lost: assigned, missed | "
-             "assigned, missed: baseline also missed | lost: dropped at merge | "
-             "swarm FPs kept-invented by merger, per seed |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        by_size[(run["task"]["size"], run["config"]["workers"])].append(run)
+    rank = {s: i for i, s in enumerate(ledger.SIZES)}
+    order = sorted(by_size, key=lambda k: (rank.get(k[0], 99), k[0], k[1]))
+    lines = ["| size | W | seeds | K | baseline recall | baseline precision | swarm recall | "
+             "swarm precision | lost: never assigned | lost: assigned, unreached (reply cut off) | "
+             "lost: assigned, missed | assigned, missed: baseline also missed | "
+             "lost: dropped at merge | swarm FPs kept-invented by merger, per seed |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     notes = []
-    for size in order:
-        rs = sorted(by_size[size], key=lambda r: r["task"]["seed"])
+    for key in order:
+        size, workers = key
+        rs = sorted(by_size[key], key=lambda r: r["task"]["seed"])
         aa = [autopsy.autopsy(r) for r in rs]
         base = [a["baseline"] for a in aa]
         if all("score" in b for b in base):
@@ -133,11 +135,12 @@ def table(runs):
                                      f"requested {b.get('requested_tokens')})")
         sw = [a["swarm"] for a in aa]
         lines.append("| " + " | ".join([
-            size, ",".join(str(r["task"]["seed"]) for r in rs), str(sw[0]["key_count"]),
-            b_rec, b_pre,
+            size, str(workers), ",".join(str(r["task"]["seed"]) for r in rs),
+            str(sw[0]["key_count"]), b_rec, b_pre,
             _fmt_mean([s["score"]["recall"] for s in sw], True),
             _fmt_mean([s["score"]["precision"] for s in sw], True),
             _fmt_mean([s["buckets"]["never_assigned"] for s in sw]),
+            _fmt_mean([s["buckets"]["assigned_unreached"] for s in sw]),
             _fmt_mean([s["buckets"]["assigned_missed"] for s in sw]),
             _cross([a["cross"] for a in aa]),
             _fmt_mean([s["buckets"]["dropped_at_merge"] for s in sw]),
@@ -148,7 +151,9 @@ def table(runs):
             for f in a["swarm"]["flags"]:
                 notes.append(f"* {r['task']['task_id']}: {f}")
             if a["baseline"].get("status") not in ("ok", "rejected_too_large"):
-                notes.append(f"* {r['task']['task_id']}: baseline {a['baseline']['status']}")
+                extra = (f" ({a['baseline']['missed_unreached']} of its {a['baseline']['missed']} "
+                         "misses came after the cut)" if a["baseline"].get("missed_unreached") else "")
+                notes.append(f"* {r['task']['task_id']}: baseline {a['baseline']['status']}{extra}")
     return "\n".join(lines + ([""] + notes if notes else []))
 
 

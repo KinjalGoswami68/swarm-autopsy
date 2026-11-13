@@ -220,3 +220,17 @@ caused by the provider's output cap, not by the workers' judgement. Tracking thi
 bucket ("assigned, unreached: output cap") would change the scoring buckets, so it awaits the
 owner's decision. M seed 2 lost all 24 items because the planner's own reply (four long briefs)
 was cut off before its JSON closed, so no split existed.
+
+## D17. New bucket: "assigned, unreached (reply cut off)"
+
+**Choice (confirmed by owner):** a fifth bucket, checked after "dropped at merge" and before
+"assigned, missed". A key item is **assigned, unreached** when at least one worker had it in its
+slice and **every** such worker's reply was cut off (`status: truncated`) before reaching it.
+A worker "reached" an item when that item's id, or any id later in the worker's slice order,
+appears in the reply text as a whole token (entries dropped by D13 count as reached). If any
+holder was not cut off, or reached the item, it stays "assigned, missed". The rule needs
+only `slice` order and `call.raw_text`, both already in every run file, so the 9 qwen run files
+were re-scored without model calls and kept as the qwen results.
+
+The baseline has no buckets, but its autopsy now reports `missed_unreached` (misses after its
+own reply was cut off). This is information only; it does not change its score.

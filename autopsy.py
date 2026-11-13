@@ -3,11 +3,13 @@
 Reads only the generic fields of a run file (items, swarm, baseline), so it works for any task
 family that fills them (see SCHEMA.md).
 """
+import re
 from collections import Counter
 
-BUCKETS = ["never_assigned", "assigned_missed", "dropped_at_merge", "kept"]
-LOSS_BUCKETS = BUCKETS[:3]
+BUCKETS = ["never_assigned", "assigned_unreached", "assigned_missed", "dropped_at_merge", "kept"]
+LOSS_BUCKETS = BUCKETS[:4]
 BUCKET_LABEL = {"never_assigned": "never assigned (split)",
+                "assigned_unreached": "assigned, unreached (reply cut off)",
                 "assigned_missed": "assigned, missed (worker)",
                 "dropped_at_merge": "found, dropped at merge (merge)",
                 "kept": "found and kept"}
@@ -22,15 +24,35 @@ def _ids(items):
     return [_norm(i["id"]) for i in items]
 
 
-def bucket_of(item, slices, reported_sets, final_ids):
-    """Exactly one bucket, checked in order: kept, dropped at merge, assigned missed, never assigned."""
+def reached_ids(order, call, status):
+    """D17: the ids of `order` a reply reached. None = all of them (the reply was not cut off).
+
+    For a truncated reply: every id up to and including the last id of `order` that appears
+    anywhere in the reply text (dropped entries included, since the reply did reach them)."""
+    if status != "truncated":
+        return None
+    raw = ((call or {}).get("raw_text") or "").upper()
+    order = [_norm(i) for i in order]
+    # whole-token match: an id must not be part of a longer word ("A" is not found in "SHORTFALL")
+    tokens = set(re.findall(r"[A-Z0-9][A-Z0-9_-]*[A-Z0-9]|[A-Z0-9]", raw))
+    last = max((k for k, i in enumerate(order) if i in tokens), default=-1)
+    return set(order[:last + 1])
+
+
+def bucket_of(item, slices, reported_sets, final_ids, reached=None):
+    """Exactly one bucket, checked in order: kept, dropped at merge, assigned (unreached or missed),
+    never assigned. Unreached only when every worker holding the item was cut off before it."""
     if item in final_ids:
         return "kept"
     if any(item in rep for rep in reported_sets):
         return "dropped_at_merge"
-    if any(item in sl for sl in slices):
-        return "assigned_missed"
-    return "never_assigned"
+    reached = reached or [None] * len(slices)
+    holders = [r for sl, r in zip(slices, reached) if item in sl]
+    if not holders:
+        return "never_assigned"
+    if all(r is not None and item not in r for r in holders):
+        return "assigned_unreached"
+    return "assigned_missed"
 
 
 def _ratio(a, b):
@@ -74,9 +96,10 @@ def swarm_autopsy(run):
     final_items = sw["merger"]["final"]
     final_ids = set(_ids(final_items))
 
+    reached = [reached_ids(w["slice"], w.get("call"), w.get("status")) for w in workers]
     per_item = []
     for item in key_values:
-        b = bucket_of(item, slices, reported, final_ids)
+        b = bucket_of(item, slices, reported, final_ids, reached)
         per_item.append({
             "id": item, "bucket": b,
             "in_slices": [w["worker"] for w, sl in zip(workers, slices) if item in sl],
@@ -140,8 +163,13 @@ def baseline_autopsy(run):
     key_values = {_norm(k["id"]): k.get("value") for k in run["items"]["key"]}
     universe = {_norm(i) for i in run["items"].get("universe") or []}
     score = _score(b["final"], key_values, universe)
-    return {"status": b.get("status"), "score": score,
-            "missed": len(key_values) - score["true_positives"]}
+    found = set(_ids(b["final"]))
+    reached = reached_ids(run["items"].get("universe") or [], b.get("call"), b.get("status"))
+    missed = [i for i in key_values if i not in found]
+    unreached = [] if reached is None else [i for i in missed if i not in reached]
+    # missed_unreached: misses after the point where the reply was cut off (information only, D17)
+    return {"status": b.get("status"), "score": score, "missed": len(missed),
+            "missed_unreached": len(unreached)}
 
 
 def cross_check(s, b, run):
@@ -190,7 +218,9 @@ def render(run, a=None):
         out.append(f"baseline: recall {pct(bs['recall'])} ({bs['true_positives']}/{s['key_count']}), "
                    f"precision {pct(bs['precision'])} ({bs['true_positives']}/{bs['final_count']}), "
                    f"shortfall accurate {bs['value_accuracy']['accurate']}/{bs['value_accuracy']['found']}"
-                   + ("" if b["status"] == "ok" else f"  [{b['status']}]"))
+                   + ("" if b["status"] == "ok" else f"  [{b['status']}]")
+                   + (f"; {b['missed_unreached']} of its {b['missed']} misses came after its reply "
+                      "was cut off" if b.get("missed_unreached") else ""))
     else:
         out.append(f"baseline: not scored ({b['status']}): requested {b.get('requested_tokens')} "
                    f"{b.get('limit_kind')} tokens, limit {b.get('limit_tokens')}")
@@ -198,7 +228,7 @@ def render(run, a=None):
 
     out.append(f"## Where the {s['lost']} lost key items went")
     for bk in BUCKETS:
-        out.append(f"{BUCKET_LABEL[bk]:<34} {s['buckets'][bk]}")
+        out.append(f"{BUCKET_LABEL[bk]:<38} {s['buckets'][bk]}")
     out.append("")
 
     out.append("## The split")

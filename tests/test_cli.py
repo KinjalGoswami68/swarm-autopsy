@@ -19,7 +19,7 @@ def test_run_table_autopsy_end_to_end(monkeypatch, tmp_path, capsys):
     assert "skipped" in capsys.readouterr().out
     cli.main(["table", "--runs-dir", str(runs)])
     out = capsys.readouterr().out
-    assert "| S | 1,2 | 12 | 0% (0/0) | n/a | 100% (100/100) | 100% (100/100) | 0.0 (0/0) | 0.0 (0/0) | 0 of 0 |" in out
+    assert "| S | 4 | 1,2 | 12 | 0% (0/0) | n/a | 100% (100/100) | 100% (100/100) | 0.0 (0/0) | 0.0 (0/0) | 0.0 (0/0) | 0 of 0 |" in out
     assert "n/a (no baseline)" in out
     assert "did not fit in one call†" in out and "Not a score of zero" in out
     cli.main(["autopsy", str(next(runs.glob("ledger-S-s1*.json")))])

@@ -119,3 +119,39 @@ def test_cross_check_baseline_also_missed():
 def test_cross_check_none_without_baseline_score():
     run = make_run([(["B"], [])], final=[], baseline_final=None, baseline_status="rejected_too_large")
     assert autopsy.autopsy(run)["cross"]["baseline_also_missed"] is None
+
+
+def _truncate(run, worker_idx, raw):
+    w = run["swarm"]["workers"][worker_idx]
+    w["status"] = "truncated"
+    w["call"] = {"raw_text": raw}
+
+
+def test_unreached_when_cut_off_before_item():
+    # Worker slice order A,B,C,D. Reply cut off after mentioning B: C and D unreached, A missed.
+    run = make_run([(["A", "B", "C", "D"], [])], final=[])
+    _truncate(run, 0, '[{"line_id":"A","shortfall":0},{"line_id":"B","shortfall":0},{"line_')
+    by = {p["id"]: p["bucket"] for p in autopsy.swarm_autopsy(run)["per_item"]}
+    assert by == {"A": "assigned_missed", "B": "assigned_missed",
+                  "C": "assigned_unreached", "D": "assigned_unreached"}
+
+
+def test_unreached_needs_every_holder_cut_off_before_it():
+    # C is in two slices; worker 2 was not cut off, so C counts as missed, not unreached.
+    run = make_run([(["A", "B", "C"], []), (["C"], [])], final=[], key=("C",))
+    _truncate(run, 0, '[{"line_id":"A"')
+    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "assigned_missed"
+
+
+def test_not_truncated_never_unreached():
+    run = make_run([(["A", "B"], [])], final=[], key=("B",))
+    run["swarm"]["workers"][0]["call"] = {"raw_text": "[]"}
+    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "assigned_missed"
+
+
+def test_baseline_unreached_count():
+    run = make_run([], final=[], baseline_final=["A"])
+    run["baseline"]["status"] = "truncated"
+    run["baseline"]["call"] = {"raw_text": '[{"line_id":"A","shortfall":1},{"line_id":"B","sh'}
+    b = autopsy.baseline_autopsy(run)
+    assert b["missed"] == 3 and b["missed_unreached"] == 2  # C, D after the cut; B reached
