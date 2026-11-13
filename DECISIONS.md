@@ -256,3 +256,21 @@ and 200,000 tokens per day (owner). Reasoning tokens count as output.
 
 **Consequence:** with default reasoning, the M baseline cannot finish within the 8,000-token
 per-minute limit, whatever max_tokens is set to. Grid not started.
+
+## D19. gpt-oss-120b with reasoning_effort=low: probes; Gemini probe blocked
+
+**Probes (2026-11-13), seed 1 baselines, answer-only prompts, temperature 0,
+`reasoning_effort: low`** (would replace D4's provider-default reasoning; owner approved the probe only):
+
+| size | max_tokens | input | output incl. reasoning | finish | result |
+|---|---|---|---|---|---|
+| S | 6,500 | 1,351 | 1,687 | stop | only underpaid lines listed: 12/12 found, 0 false positives, 11/12 shortfalls exact |
+| M | 3,900 | 3,997 | 48 | stop | replied `[]`: 0/24 found. Reasoning text: "Hard to compute all. Might assume none? ... I'll output []" |
+
+The M call fit within the limits; the empty answer is the model giving up, not a cut-off, so
+it would score as a genuine miss.
+
+**Gemini probe blocked:** the owner's message said a Google AI Studio key was in `.env` as
+`LLM_API_KEY`. On 2026-11-13 `.env` held only `GROQ_API_KEY` (unchanged since it was copied
+in), and `LLM_API_KEY` in `.env.example` is empty. The OpenAI-compatible `/models` call
+without a key returned 404. No Gemini call has been made.
