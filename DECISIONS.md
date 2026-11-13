@@ -611,3 +611,50 @@ image (the image itself is not in the repo), with DESIGN.md and SITE_RULES.md.
   under its column name.
 - **Interaction:** slight lift on hover and a soft glow on press, done with transforms only (no
   layout shift); all transitions off under prefers-reduced-motion.
+
+## D32. Landing-page review fixes and the ASCII engine
+
+**Owner decisions (2026-11-13):**
+1. **Caveat on the landing page:** the full fixed sentence stays in the hero (anchor `#caveat`)
+   and in "How this was measured". Under the tables in between it is one short grey line, "Built
+   so that splitting can hurt. See the caveat.", linking to the hero box. The explorer and "try
+   your own run" keep the full sentence under every table.
+2. **"Lost at the merge" legend dot:** #8e6fa3, a muted plum-lavender: 4.7:1 on the page (a
+   graphic needs 3:1), and the most distinct of the candidates from the pink, grey and white parts.
+   It is always labelled; if a merge loss is ever non-zero it draws as its own bar segment.
+3. **ASCII engine (`site/js/ascii.js`):** one sticky canvas in the right column beside "The ledger"
+   through "The 3 no fix here recovers"; each section names a scene. **Every glyph is a real row of
+   the run** (row number and line id or rate code), placed where the run put it:
+   - ledger-whole: the 70 rows as one block;
+   - scatter: the block splits into the four workers' real ranges (scatter = split);
+   - dim: the workers that returned empty lists dim (dimming = empty-handed worker);
+   - reform: the columns reform into one block, and only the rows of kept items stay lit (reform = merge);
+   - rescatter: R4's real ranges, with the rate table copied to every worker, and R4's kept rows lit;
+   - apart: each far pair's two rows light up pink, in different columns.
+
+   Glyphs dissolve and scatter on the way (flickering through `·:;+=*#%`) and settle on their
+   targets; glyphs near the pointer drift away and re-form after it passes; a faint dot field
+   behind the canvas moves at 0.12 times the scroll speed (parallax), as a CSS layer.
+4. **SITE_RULES compliance:**
+   - The canvas sits in its own column and never over text.
+   - Below 1000 px the canvas is dropped (`display: none`) and the engine does no work.
+   - Under prefers-reduced-motion each scene is drawn once as a still frame; no transitions, no
+     pointer effect, no parallax. Measured: 0 animation frames run, even with the pointer over the stage.
+   - The loop runs only while something moves and the stage is on screen; it pauses when the tab
+     is hidden; scroll and pointer listeners are passive.
+5. **Performance (measured, headless Chrome with software rendering, pointer sweeping the stage and
+   the page scrolling through scene changes):**
+
+   | CPU speed | median frame | p95 frame | engine cost per frame |
+   |---|---|---|---|
+   | normal | 16.7 ms | 16.8 ms | 2.5 ms |
+   | 2x slower | 16.7 ms | 33.2 ms | 3.6 ms |
+   | 4x slower | 16.7 ms | 50.1 ms | 7.0 ms |
+
+   Settled rows are drawn as one cached image each (about 100 draws per frame instead of 1,020),
+   and the dot field is a compositor layer. **Lite mode:** if animation frames run long (median
+   over 24 ms across 40 frames), rows move as whole rows during transitions (no per-letter
+   scatter or flicker); the scenes and what they show do not change. With the engine turned off
+   (`?noascii`, diagnostics only), the same page holds 16.7 ms at 4x slower, so the engine is the cost.
+6. **Tools:** `tools/shoot.mjs` (viewport screenshots, reduced motion, CPU throttling, frame
+   timing) and `tools/check_mobile.mjs` (page width at 360 px and full-page captures).

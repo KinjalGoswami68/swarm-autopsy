@@ -4,6 +4,7 @@ import { autopsy, BUCKET_LABEL, LOSS_BUCKETS, pct, noSplit } from "./autopsy.js"
 import { loadAll, replaysByOriginal } from "./data.js";
 import { el, table, caveat, nav, footer } from "./ui.js";
 import { startMetal } from "./metal.js";
+import { startAscii } from "./ascii.js";
 
 const STORY_RUN = "runs/ledgerctx-S-s1__openai_gpt-oss-120b__w4__t0.0.json";
 const OLD_LEDGER_RUN = "runs/ledger-S-s1__gemini-3.8-flash__w4__t0.0.json";
@@ -15,9 +16,13 @@ const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
 const andList = (xs) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 
 function section(id, scene, heading, ...body) {
-  return el("section", { id, class: "story", "aria-labelledby": `${id}-h` },
-    el("div", { class: "ascii", "data-scene": scene, "aria-hidden": "true" }),
+  return el("section", { id, class: "story", "data-scene": scene, "aria-labelledby": `${id}-h` },
     el("h2", { id: `${id}-h` }, heading), ...body);
+}
+
+/** Owner (D32): between the hero and the method section, a short grey line replaces the caveat box. */
+function shortCaveat() {
+  return el("p", { class: "caveat-short" }, "Built so that splitting can hurt. ", el("a", { href: "#caveat" }, "See the caveat."));
 }
 
 function rowsText(w) {
@@ -33,6 +38,34 @@ const SHORT = {
   holder_answered_missed: "the worker holding it answered, but not with this item",
   dropped_at_merge: "a worker reported it and the merger left it out",
 };
+
+/** Everything the ASCII stage draws, read from the run (and its R4 replay). */
+function buildAsciiModel(run, a, r4run, r4a) {
+  const upper = (x) => String(x).toUpperCase();
+  const rows = run.task.rows.map((r) => {
+    const id = upper(r.line_id || r.id);
+    const rate = !r.line_id;
+    const text = rate ? `${String(r.row).padStart(2)} ${r.rate_code}` : `${String(r.row).padStart(2)} ${r.line_id}`;
+    return { id, rate, text };
+  });
+  const cols = (wk) => wk.map((w) => w.slice.map(upper));
+  const kept = (aa) => {
+    const ids = new Set();
+    for (const p of aa.swarm.per_item) if (p.bucket === "kept") for (const n of p.needs) if (!n.startsWith("RATE:")) ids.add(n);
+    return ids;
+  };
+  const farRows = new Set();
+  for (const p of a.swarm.per_item) if (p.type === "far pair") for (const n of p.needs) farRows.add(n);
+  return {
+    rows,
+    columns: cols(run.swarm.workers),
+    emptyWorkers: run.swarm.workers.map((w, i) => (w.reported.length === 0 ? i : -1)).filter((i) => i >= 0),
+    kept: kept(a),
+    columnsR4: r4run ? cols(r4run.swarm.workers) : null,
+    keptR4: r4a ? kept(r4a) : null,
+    farRows,
+  };
+}
 
 async function main() {
   document.body.prepend(nav("index.html"));
@@ -70,8 +103,9 @@ async function main() {
   const lostWorker = B.assigned_unreached + B.holder_returned_nothing + B.holder_answered_missed;
   const kept = B.kept;
   const share = (n, cls) => el("span", { class: cls, style: `flex:${n} 1 0` });
+  const heroCaveat = caveat(run);
+  if (heroCaveat) heroCaveat.id = "caveat";
   parts.push(el("section", { id: "hero", class: "story hero", "aria-labelledby": "hero-h" },
-    el("div", { class: "ascii", "data-scene": "ledger-whole", "aria-hidden": "true" }),
     el("div", { class: "hero-text" },
       el("p", { class: "badge-pill" }, el("span", { class: "tag" }, "One run"),
         `seed ${t.seed} · ${W} workers · ${run.config.model}`),
@@ -86,15 +120,16 @@ async function main() {
       el("div", { class: "sharebar", role: "img",
         "aria-label": `${lostSplit} lost in the split, ${lostWorker} lost in workers, ${B.dropped_at_merge} lost at the merge, ${kept} kept, of ${K}` },
         lostSplit ? share(lostSplit, "s-pink") : null, lostWorker ? share(lostWorker, "s-grey") : null,
-        kept ? share(kept, "s-white") : null),
+        B.dropped_at_merge ? share(B.dropped_at_merge, "s-lav") : null, kept ? share(kept, "s-white") : null),
       el("ul", { class: "sharelegend" },
         el("li", {}, el("i", { class: "s-pink" }), "lost in the split ", el("b", {}, String(lostSplit))),
         el("li", {}, el("i", { class: "s-grey" }), "lost in workers ", el("b", {}, String(lostWorker))),
-        el("li", {}, "lost at the merge ", el("b", {}, String(B.dropped_at_merge))),
+        el("li", {}, el("i", { class: "s-lav" }), "lost at the merge ", el("b", {}, String(B.dropped_at_merge))),
         el("li", {}, el("i", { class: "s-white" }), "kept ", el("b", {}, String(kept))))),
-    caveat(run)));
+    heroCaveat));
 
-  // 1. The task
+  // 1. The task (sections 1-6 go into the ASCII track, see below)
+  const trackStart = parts.length; // index the "task" section is about to take
   parts.push(section("task", "ledger-whole", `The ledger: ${t.n_lines} line items, a rate table of ${t.n_rate_codes}, ${K} planted problems`,
     el("p", {}, `A remittance ledger. Some lines carry their own unit rate; others carry only a rate code whose rate is in the table at the top. The task: find every underpaid line and every claim billed twice.`),
     el("ul", {},
@@ -122,7 +157,7 @@ async function main() {
   parts.push(section("lost", "dim", `Where the ${s.lost} went`,
     table(["Bucket", "Items", "What happened"], lostRows),
     el("p", {}, `Workers ${emptyWorkers.join(", ")} returned empty lists. ${s.buckets.dropped_at_merge === 0 ? "Nothing was lost at the merge." : ""}`),
-    caveat(run)));
+    shortCaveat()));
 
   // 4. The merge
   parts.push(section("merge", "reform", "The merge kept everything it was given",
@@ -158,7 +193,7 @@ async function main() {
             return `${autopsy(r).swarm.score.true_positives} of ${K}${noSplit(r) ? " (no split: a worker held every row)" : ""}`;
           })];
       }), { caption: "Replays of the other runs so far" }) : null,
-      caveat(run)));
+      shortCaveat()));
 
     // 6. The far pairs
     const far = (x) => x.a.swarm.score.by_type["far pair"];
@@ -171,6 +206,12 @@ async function main() {
         ["R1", "R2", "R3", "R4"].filter((l) => repA.has(l)).map((l) => `${far(repA.get(l)).found} in ${l}`).join(", ") + ". " +
         `R1 to R3 keep the planner's blocks of rows; in R4 the new planner again cut the line items into blocks, and ${r4Holders === 0 ? "no worker held both rows of any far pair" : `${r4Holders} far pair(s) had both rows with one worker`}.`)));
   }
+
+  // Sections 1-6 share one sticky ASCII stage on the right (D32). It draws the run's real rows.
+  const trackSections = parts.splice(trackStart, parts.length - trackStart);
+  const stage = el("div", { class: "track-stage", "aria-hidden": "true" }, el("canvas", { class: "ascii-canvas" }));
+  parts.push(el("div", { class: "track" }, el("div", { class: "track-text" }, trackSections), stage));
+  const asciiModel = buildAsciiModel(run, a, r4 ? r4.run : null, r4 ? r4.a : null);
 
   // 7. Nine runs
   const byW = new Map();
@@ -189,7 +230,7 @@ async function main() {
   parts.push(section("nine", "none", `Across ${word(fam2A.length)} runs`,
     el("p", {}, `Size ${[...new Set(fam2.map((r) => r.task.size))].join(", ")}; seeds ${andList([...new Set(fam2.map((r) => r.task.seed))].sort((p, q) => p - q))}; ${andList([...byW.keys()].sort((p, q) => p - q))} workers. Recall is the mean, with each seed in brackets; losses are the mean per run.`),
     table(["Workers", "Single agent recall", "Swarm recall", "Context not passed", "Evidence split", "Holder returned nothing", "Holder answered, missed", "Dropped at merge"], nineRows),
-    caveat(run)));
+    shortCaveat()));
 
   // 8. Independent lines
   const old = byPath.get(OLD_LEDGER_RUN);
@@ -212,6 +253,7 @@ async function main() {
   main.replaceChildren(...parts.filter(Boolean));
   document.body.append(footer());
   startMetal();
+  if (!new URLSearchParams(location.search).has("noascii")) startAscii(stage, asciiModel, trackSections); // ?noascii: diagnostics only
 }
 
 main();

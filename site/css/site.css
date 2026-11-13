@@ -177,3 +177,26 @@ select:active, .drop:active { transform: scale(1.01); box-shadow: 0 0 0 4px rgba
 #run-view > section > h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
 .run-head h1 { font-family: var(--mono); font-size: clamp(1.05rem, 2.2vw, 1.5rem); letter-spacing: 0; line-height: 1.35; }
 .annotation .label { text-transform: none; letter-spacing: .02em; font-weight: 500; font-size: .82rem; }
+
+/* ---------- ASCII track (D32): story text left, one sticky canvas right; never over text ---------- */
+.track { display: block; }
+.track-stage { display: none; }
+@media (min-width: 1000px) {
+  .track { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 3rem; align-items: start; }
+  .track-text { min-width: 0; }
+  .track-stage { display: block; position: sticky; top: 8vh; height: 84vh; border-radius: var(--radius); overflow: hidden; }
+  .ascii-canvas { display: block; width: 100%; height: 100%; }
+}
+
+/* short caveat line between the hero and the method section (D32) */
+.caveat-short { color: var(--sec); font-size: .9rem; margin-top: .8rem; }
+.caveat-short a { color: var(--sec); }
+#caveat { scroll-margin-top: 6rem; }
+
+/* lost-at-the-merge tint: #8e6fa3, 4.7:1 on the page (a graphic needs 3:1); always labelled */
+.s-lav { background: #8e6fa3; }
+@media (min-width: 1000px) { .track-text > section:last-child { min-height: 92vh; } } /* keep the far-pairs scene on screen */
+.track-stage { isolation: isolate; }
+.ascii-dots { position: absolute; inset: -26px 0 0 0; z-index: -1; pointer-events: none; will-change: transform;
+  background-image: radial-gradient(circle, rgba(242, 242, 242, .07) 1px, transparent 1.4px); background-size: 26px 26px; background-position: 13px 0; }
+.ascii-canvas { position: relative; }
