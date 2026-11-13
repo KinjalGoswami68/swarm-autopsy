@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Try your own run · swarm-autopsy</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <main id="main">
+    <h1>Try your own run</h1>
+    <p>Drop a run file from your own multi-agent run, or choose one. It is read and checked in this
+      browser tab: nothing is uploaded, there is no server, and no key is needed. The format is
+      described in <a href="https://github.com/KinjalGoswami68/swarm-autopsy/blob/main/SCHEMA.md">SCHEMA.md</a>;
+      any run that fills its generic fields (key items, each worker's slice and report, the final
+      answer) can be autopsied, whatever the task.</p>
+    <div id="drop" class="drop">
+      <label for="file">Choose a run file (.json)</label>
+      <input id="file" type="file" accept=".json,application/json">
+      <p class="muted">or drop it here</p>
+    </div>
+    <div id="try-status" aria-live="polite"></div>
+    <div id="run-view"></div>
+  </main>
+  <script type="module" src="js/try.js"></script>
+</body>
+</html>

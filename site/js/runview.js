@@ -186,13 +186,14 @@ function tracerSection(run, a) {
 
 export function renderRun(container, run, replays = []) {
   const a = autopsy(run);
-  container.replaceChildren(
+  container.replaceChildren(...[  // replaceChildren would turn a null into the text "null"
     el("header", { class: "run-head" },
       el("h1", {}, run.run_id),
       el("p", { class: "muted" }, `Model ${run.config.model} · temperature ${run.config.temperature} · reasoning ${run.config.reasoning_effort ?? "provider default"} · ${run.config.workers} workers`),
       caveat(run)),
     scoreSection(run, a), bucketSection(run, a), replaySection(run, a, replays),
-    workerSection(run, a), tracerSection(run, a));
+    workerSection(run, a), tracerSection(run, a),
+  ].filter(Boolean));
   return a;
 }
 

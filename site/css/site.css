@@ -48,3 +48,10 @@ mark { background: var(--mark); color: inherit; }
 .badge { display: inline-block; font-size: .8rem; border: 1px solid var(--line); padding: 0 .4rem; margin-left: .3rem; }
 .trace ol { padding-left: 1.3rem; }
 .trace li { margin: .25rem 0; overflow-wrap: anywhere; }
+.drop { border: 2px dashed var(--line); padding: 1.2rem 1rem; margin: 1rem 0; text-align: center; }
+.drop.over { border-color: var(--lost); }
+.drop label { display: block; font-weight: 600; margin-bottom: .5rem; }
+.drop input { max-width: 100%; min-height: 44px; }
+.error { color: var(--lost); font-weight: 600; }
+.ok { font-weight: 600; }
+.errors code { overflow-wrap: anywhere; }
