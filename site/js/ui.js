@@ -40,7 +40,7 @@ export function caveat(run) {
 export function footer() {
   return el("footer", { class: "site-footer" },
     el("p", {}, "Built by Kinjal Goswami · ", el("a", { href: REPO_URL, text: "source on GitHub" })),
-    el("p", {}, "An independent project, not affiliated with or endorsed by Acyclic Labs."));
+    el("p", {}, "An independent project. Not affiliated with Acyclic Labs."));
 }
 
 export function nav(current) {
