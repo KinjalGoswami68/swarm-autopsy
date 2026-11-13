@@ -234,3 +234,25 @@ were re-scored without model calls and kept as the qwen results.
 
 The baseline has no buckets, but its autopsy now reports `missed_unreached` (misses after its
 own reply was cut off). This is information only; it does not change its score.
+
+## D18. Model change to openai/gpt-oss-120b: probes (open: awaiting owner decision)
+
+**Why change model (owner, 2026-11-13):** the qwen/qwen3.8-27b free tier cannot carry this
+experiment: 7,000 input tokens per request, 1,000 output tokens per minute and a 1,000-token
+reply cap (D9, D12, D15) cut off most M and L replies (D16, D17).
+
+**Probes (2026-11-13), seed 1 baselines, answer-only prompts, temperature 0, reasoning at the
+provider default, no pacing.** Limits stated by Groq: 8,000 tokens per minute counting input
+and requested output together (headers `x-ratelimit-limit-tokens: 8000`, 1,000 requests),
+and 200,000 tokens per day (owner). Reasoning tokens count as output.
+
+| size | max_tokens | input | output incl. reasoning | finish | result |
+|---|---|---|---|---|---|
+| S | not sent (default cap 3,072) | 1,351 | 3,072 | length | no answer: reasoning used the whole cap |
+| M | not sent (default cap 3,072) | 3,997 | 3,072 | length | no answer: reasoning used the whole cap |
+| L | not sent | – | – | – | HTTP 413: TPM limit 8000, requested 14,662 |
+| S | 6,500 | 1,351 | 3,398 | stop | listed only underpaid lines: 12/12 found, 0 false positives |
+| M | 3,900 (= 8,000 − input − margin) | 3,997 | 3,900 | length | no answer: reasoning used the whole cap |
+
+**Consequence:** with default reasoning, the M baseline cannot finish within the 8,000-token
+per-minute limit, whatever max_tokens is set to. Grid not started.
