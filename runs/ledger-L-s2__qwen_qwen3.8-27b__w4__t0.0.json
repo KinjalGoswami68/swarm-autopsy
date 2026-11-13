@@ -1,0 +1,6018 @@
+{
+ "schema_version": 1,
+ "run_id": "ledger-L-s2__qwen_qwen3.8-27b__w4__t0.0",
+ "created_utc": "2026-11-13T04:01:28+00:00",
+ "config": {
+  "model": "qwen/qwen3.8-27b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": null,
+  "workers": 4,
+  "max_tokens": 1000,
+  "itpm": 7000,
+  "otpm": 1000
+ },
+ "task": {
+  "family": "remittance-ledger",
+  "task_id": "ledger-L-s2",
+  "size": "L",
+  "seed": 2,
+  "n_lines": 600,
+  "n_planted": 48,
+  "task_text": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.",
+  "columns": [
+   "row",
+   "line_id",
+   "qty",
+   "unit_rate",
+   "paid"
+  ],
+  "rows": [
+   {
+    "row": 1,
+    "line_id": "RX-WJZGH",
+    "qty": 16,
+    "unit_rate_cents": 44603,
+    "paid_cents": 713648
+   },
+   {
+    "row": 2,
+    "line_id": "RX-M42XT",
+    "qty": 40,
+    "unit_rate_cents": 10416,
+    "paid_cents": 416640
+   },
+   {
+    "row": 3,
+    "line_id": "RX-3RQE9",
+    "qty": 3,
+    "unit_rate_cents": 29113,
+    "paid_cents": 87339
+   },
+   {
+    "row": 4,
+    "line_id": "RX-4BUN5",
+    "qty": 15,
+    "unit_rate_cents": 20526,
+    "paid_cents": 307890
+   },
+   {
+    "row": 5,
+    "line_id": "RX-SG76H",
+    "qty": 7,
+    "unit_rate_cents": 41077,
+    "paid_cents": 287539
+   },
+   {
+    "row": 6,
+    "line_id": "RX-5UL5F",
+    "qty": 14,
+    "unit_rate_cents": 42395,
+    "paid_cents": 593530
+   },
+   {
+    "row": 7,
+    "line_id": "RX-3PDAS",
+    "qty": 9,
+    "unit_rate_cents": 30189,
+    "paid_cents": 348820
+   },
+   {
+    "row": 8,
+    "line_id": "RX-K83ST",
+    "qty": 32,
+    "unit_rate_cents": 32408,
+    "paid_cents": 1037056
+   },
+   {
+    "row": 9,
+    "line_id": "RX-5HDV5",
+    "qty": 9,
+    "unit_rate_cents": 32788,
+    "paid_cents": 295092
+   },
+   {
+    "row": 10,
+    "line_id": "RX-P3SX7",
+    "qty": 33,
+    "unit_rate_cents": 41203,
+    "paid_cents": 1359699
+   },
+   {
+    "row": 11,
+    "line_id": "RX-YRLTC",
+    "qty": 13,
+    "unit_rate_cents": 43236,
+    "paid_cents": 624450
+   },
+   {
+    "row": 12,
+    "line_id": "RX-JNNJT",
+    "qty": 34,
+    "unit_rate_cents": 15655,
+    "paid_cents": 417058
+   },
+   {
+    "row": 13,
+    "line_id": "RX-VCRLT",
+    "qty": 35,
+    "unit_rate_cents": 36163,
+    "paid_cents": 1265705
+   },
+   {
+    "row": 14,
+    "line_id": "RX-2QJJH",
+    "qty": 2,
+    "unit_rate_cents": 40204,
+    "paid_cents": 80408
+   },
+   {
+    "row": 15,
+    "line_id": "RX-MDPTW",
+    "qty": 10,
+    "unit_rate_cents": 28426,
+    "paid_cents": 284260
+   },
+   {
+    "row": 16,
+    "line_id": "RX-V7UV2",
+    "qty": 15,
+    "unit_rate_cents": 28596,
+    "paid_cents": 428940
+   },
+   {
+    "row": 17,
+    "line_id": "RX-Y8SAT",
+    "qty": 16,
+    "unit_rate_cents": 3645,
+    "paid_cents": 58320
+   },
+   {
+    "row": 18,
+    "line_id": "RX-DQYRT",
+    "qty": 18,
+    "unit_rate_cents": 28978,
+    "paid_cents": 521604
+   },
+   {
+    "row": 19,
+    "line_id": "RX-T8UAA",
+    "qty": 1,
+    "unit_rate_cents": 15182,
+    "paid_cents": 15182
+   },
+   {
+    "row": 20,
+    "line_id": "RX-W55JM",
+    "qty": 38,
+    "unit_rate_cents": 25219,
+    "paid_cents": 958322
+   },
+   {
+    "row": 21,
+    "line_id": "RX-7C4YL",
+    "qty": 21,
+    "unit_rate_cents": 16262,
+    "paid_cents": 341502
+   },
+   {
+    "row": 22,
+    "line_id": "RX-JYLZR",
+    "qty": 36,
+    "unit_rate_cents": 13287,
+    "paid_cents": 478332
+   },
+   {
+    "row": 23,
+    "line_id": "RX-2H5AK",
+    "qty": 1,
+    "unit_rate_cents": 8670,
+    "paid_cents": 8670
+   },
+   {
+    "row": 24,
+    "line_id": "RX-MQZTQ",
+    "qty": 7,
+    "unit_rate_cents": 28871,
+    "paid_cents": 202097
+   },
+   {
+    "row": 25,
+    "line_id": "RX-VA8KD",
+    "qty": 10,
+    "unit_rate_cents": 6769,
+    "paid_cents": 67690
+   },
+   {
+    "row": 26,
+    "line_id": "RX-CSR97",
+    "qty": 1,
+    "unit_rate_cents": 18551,
+    "paid_cents": 18551
+   },
+   {
+    "row": 27,
+    "line_id": "RX-5NX9P",
+    "qty": 9,
+    "unit_rate_cents": 1373,
+    "paid_cents": 12357
+   },
+   {
+    "row": 28,
+    "line_id": "RX-XKNDL",
+    "qty": 32,
+    "unit_rate_cents": 3454,
+    "paid_cents": 110528
+   },
+   {
+    "row": 29,
+    "line_id": "RX-NNXPK",
+    "qty": 6,
+    "unit_rate_cents": 2356,
+    "paid_cents": 13944
+   },
+   {
+    "row": 30,
+    "line_id": "RX-5S3ZZ",
+    "qty": 38,
+    "unit_rate_cents": 43193,
+    "paid_cents": 1641334
+   },
+   {
+    "row": 31,
+    "line_id": "RX-8MYC7",
+    "qty": 32,
+    "unit_rate_cents": 38183,
+    "paid_cents": 1221856
+   },
+   {
+    "row": 32,
+    "line_id": "RX-DWB7C",
+    "qty": 6,
+    "unit_rate_cents": 43142,
+    "paid_cents": 258852
+   },
+   {
+    "row": 33,
+    "line_id": "RX-38DCE",
+    "qty": 17,
+    "unit_rate_cents": 9478,
+    "paid_cents": 161126
+   },
+   {
+    "row": 34,
+    "line_id": "RX-NQYDK",
+    "qty": 1,
+    "unit_rate_cents": 1434,
+    "paid_cents": 1434
+   },
+   {
+    "row": 35,
+    "line_id": "RX-69348",
+    "qty": 24,
+    "unit_rate_cents": 3261,
+    "paid_cents": 78264
+   },
+   {
+    "row": 36,
+    "line_id": "RX-PZWYK",
+    "qty": 37,
+    "unit_rate_cents": 31358,
+    "paid_cents": 1160246
+   },
+   {
+    "row": 37,
+    "line_id": "RX-5Z7WH",
+    "qty": 17,
+    "unit_rate_cents": 24998,
+    "paid_cents": 424966
+   },
+   {
+    "row": 38,
+    "line_id": "RX-ECETM",
+    "qty": 31,
+    "unit_rate_cents": 15863,
+    "paid_cents": 491753
+   },
+   {
+    "row": 39,
+    "line_id": "RX-S9AAE",
+    "qty": 15,
+    "unit_rate_cents": 11137,
+    "paid_cents": 167055
+   },
+   {
+    "row": 40,
+    "line_id": "RX-WXRBC",
+    "qty": 6,
+    "unit_rate_cents": 20417,
+    "paid_cents": 122502
+   },
+   {
+    "row": 41,
+    "line_id": "RX-V8SRF",
+    "qty": 15,
+    "unit_rate_cents": 30009,
+    "paid_cents": 450135
+   },
+   {
+    "row": 42,
+    "line_id": "RX-GKFVM",
+    "qty": 12,
+    "unit_rate_cents": 27129,
+    "paid_cents": 325548
+   },
+   {
+    "row": 43,
+    "line_id": "RX-3CZAA",
+    "qty": 13,
+    "unit_rate_cents": 41304,
+    "paid_cents": 354105
+   },
+   {
+    "row": 44,
+    "line_id": "RX-38M2W",
+    "qty": 10,
+    "unit_rate_cents": 8528,
+    "paid_cents": 85280
+   },
+   {
+    "row": 45,
+    "line_id": "RX-Z4RAD",
+    "qty": 33,
+    "unit_rate_cents": 35317,
+    "paid_cents": 1165461
+   },
+   {
+    "row": 46,
+    "line_id": "RX-P2L6F",
+    "qty": 16,
+    "unit_rate_cents": 20021,
+    "paid_cents": 320336
+   },
+   {
+    "row": 47,
+    "line_id": "RX-TD364",
+    "qty": 38,
+    "unit_rate_cents": 47633,
+    "paid_cents": 1810054
+   },
+   {
+    "row": 48,
+    "line_id": "RX-HAHKN",
+    "qty": 29,
+    "unit_rate_cents": 13730,
+    "paid_cents": 398170
+   },
+   {
+    "row": 49,
+    "line_id": "RX-EPSPE",
+    "qty": 7,
+    "unit_rate_cents": 1354,
+    "paid_cents": 9478
+   },
+   {
+    "row": 50,
+    "line_id": "RX-AGV7X",
+    "qty": 27,
+    "unit_rate_cents": 18122,
+    "paid_cents": 489294
+   },
+   {
+    "row": 51,
+    "line_id": "RX-L8PZU",
+    "qty": 31,
+    "unit_rate_cents": 30118,
+    "paid_cents": 933658
+   },
+   {
+    "row": 52,
+    "line_id": "RX-K9FQZ",
+    "qty": 10,
+    "unit_rate_cents": 37921,
+    "paid_cents": 379210
+   },
+   {
+    "row": 53,
+    "line_id": "RX-25ZWH",
+    "qty": 9,
+    "unit_rate_cents": 30144,
+    "paid_cents": 271296
+   },
+   {
+    "row": 54,
+    "line_id": "RX-ZVHZZ",
+    "qty": 26,
+    "unit_rate_cents": 36707,
+    "paid_cents": 954382
+   },
+   {
+    "row": 55,
+    "line_id": "RX-8C6QY",
+    "qty": 36,
+    "unit_rate_cents": 11917,
+    "paid_cents": 429012
+   },
+   {
+    "row": 56,
+    "line_id": "RX-DWVGF",
+    "qty": 38,
+    "unit_rate_cents": 43416,
+    "paid_cents": 1649808
+   },
+   {
+    "row": 57,
+    "line_id": "RX-ERH9U",
+    "qty": 32,
+    "unit_rate_cents": 36474,
+    "paid_cents": 1167168
+   },
+   {
+    "row": 58,
+    "line_id": "RX-UXMNQ",
+    "qty": 39,
+    "unit_rate_cents": 29583,
+    "paid_cents": 1153737
+   },
+   {
+    "row": 59,
+    "line_id": "RX-SGKTH",
+    "qty": 20,
+    "unit_rate_cents": 23781,
+    "paid_cents": 317679
+   },
+   {
+    "row": 60,
+    "line_id": "RX-DPWP2",
+    "qty": 34,
+    "unit_rate_cents": 3447,
+    "paid_cents": 117198
+   },
+   {
+    "row": 61,
+    "line_id": "RX-YKMW8",
+    "qty": 15,
+    "unit_rate_cents": 34529,
+    "paid_cents": 517935
+   },
+   {
+    "row": 62,
+    "line_id": "RX-MDATN",
+    "qty": 15,
+    "unit_rate_cents": 3086,
+    "paid_cents": 46290
+   },
+   {
+    "row": 63,
+    "line_id": "RX-BVPRK",
+    "qty": 13,
+    "unit_rate_cents": 44325,
+    "paid_cents": 576225
+   },
+   {
+    "row": 64,
+    "line_id": "RX-KJYYV",
+    "qty": 13,
+    "unit_rate_cents": 20963,
+    "paid_cents": 272519
+   },
+   {
+    "row": 65,
+    "line_id": "RX-8HVE7",
+    "qty": 37,
+    "unit_rate_cents": 25852,
+    "paid_cents": 956524
+   },
+   {
+    "row": 66,
+    "line_id": "RX-96TL4",
+    "qty": 16,
+    "unit_rate_cents": 31736,
+    "paid_cents": 595909
+   },
+   {
+    "row": 67,
+    "line_id": "RX-7GTDL",
+    "qty": 10,
+    "unit_rate_cents": 31767,
+    "paid_cents": 317670
+   },
+   {
+    "row": 68,
+    "line_id": "RX-P2K2P",
+    "qty": 1,
+    "unit_rate_cents": 19050,
+    "paid_cents": 25313
+   },
+   {
+    "row": 69,
+    "line_id": "RX-ZJ9VX",
+    "qty": 23,
+    "unit_rate_cents": 7315,
+    "paid_cents": 168245
+   },
+   {
+    "row": 70,
+    "line_id": "RX-XEAZ8",
+    "qty": 28,
+    "unit_rate_cents": 27206,
+    "paid_cents": 886328
+   },
+   {
+    "row": 71,
+    "line_id": "RX-L5AY8",
+    "qty": 15,
+    "unit_rate_cents": 5474,
+    "paid_cents": 82110
+   },
+   {
+    "row": 72,
+    "line_id": "RX-WVPU5",
+    "qty": 23,
+    "unit_rate_cents": 27551,
+    "paid_cents": 633673
+   },
+   {
+    "row": 73,
+    "line_id": "RX-YFBQY",
+    "qty": 33,
+    "unit_rate_cents": 2332,
+    "paid_cents": 76956
+   },
+   {
+    "row": 74,
+    "line_id": "RX-MK8LD",
+    "qty": 34,
+    "unit_rate_cents": 32298,
+    "paid_cents": 1098132
+   },
+   {
+    "row": 75,
+    "line_id": "RX-3ACCU",
+    "qty": 27,
+    "unit_rate_cents": 16659,
+    "paid_cents": 449793
+   },
+   {
+    "row": 76,
+    "line_id": "RX-5YZUC",
+    "qty": 7,
+    "unit_rate_cents": 14292,
+    "paid_cents": 100044
+   },
+   {
+    "row": 77,
+    "line_id": "RX-F47DZ",
+    "qty": 25,
+    "unit_rate_cents": 3942,
+    "paid_cents": 98550
+   },
+   {
+    "row": 78,
+    "line_id": "RX-3DANZ",
+    "qty": 28,
+    "unit_rate_cents": 12828,
+    "paid_cents": 359184
+   },
+   {
+    "row": 79,
+    "line_id": "RX-KKUB8",
+    "qty": 39,
+    "unit_rate_cents": 34081,
+    "paid_cents": 1329159
+   },
+   {
+    "row": 80,
+    "line_id": "RX-JTFU7",
+    "qty": 31,
+    "unit_rate_cents": 21240,
+    "paid_cents": 658440
+   },
+   {
+    "row": 81,
+    "line_id": "RX-6U773",
+    "qty": 10,
+    "unit_rate_cents": 24219,
+    "paid_cents": 242190
+   },
+   {
+    "row": 82,
+    "line_id": "RX-Q37Z2",
+    "qty": 7,
+    "unit_rate_cents": 29958,
+    "paid_cents": 278895
+   },
+   {
+    "row": 83,
+    "line_id": "RX-ZX8J7",
+    "qty": 15,
+    "unit_rate_cents": 33039,
+    "paid_cents": 495585
+   },
+   {
+    "row": 84,
+    "line_id": "RX-RW8AC",
+    "qty": 2,
+    "unit_rate_cents": 31042,
+    "paid_cents": 62084
+   },
+   {
+    "row": 85,
+    "line_id": "RX-NLMKP",
+    "qty": 26,
+    "unit_rate_cents": 1942,
+    "paid_cents": 50492
+   },
+   {
+    "row": 86,
+    "line_id": "RX-BSU6V",
+    "qty": 7,
+    "unit_rate_cents": 37520,
+    "paid_cents": 262640
+   },
+   {
+    "row": 87,
+    "line_id": "RX-L9WW7",
+    "qty": 5,
+    "unit_rate_cents": 41424,
+    "paid_cents": 207120
+   },
+   {
+    "row": 88,
+    "line_id": "RX-GRLLU",
+    "qty": 3,
+    "unit_rate_cents": 32468,
+    "paid_cents": 97404
+   },
+   {
+    "row": 89,
+    "line_id": "RX-SUR3R",
+    "qty": 20,
+    "unit_rate_cents": 40248,
+    "paid_cents": 804960
+   },
+   {
+    "row": 90,
+    "line_id": "RX-VTRRL",
+    "qty": 4,
+    "unit_rate_cents": 31221,
+    "paid_cents": 124884
+   },
+   {
+    "row": 91,
+    "line_id": "RX-7NKMV",
+    "qty": 2,
+    "unit_rate_cents": 5465,
+    "paid_cents": 10930
+   },
+   {
+    "row": 92,
+    "line_id": "RX-XUM43",
+    "qty": 35,
+    "unit_rate_cents": 15494,
+    "paid_cents": 521071
+   },
+   {
+    "row": 93,
+    "line_id": "RX-3TR6Q",
+    "qty": 4,
+    "unit_rate_cents": 35049,
+    "paid_cents": 140196
+   },
+   {
+    "row": 94,
+    "line_id": "RX-TFL6F",
+    "qty": 8,
+    "unit_rate_cents": 24933,
+    "paid_cents": 156805
+   },
+   {
+    "row": 95,
+    "line_id": "RX-AKDVN",
+    "qty": 5,
+    "unit_rate_cents": 29823,
+    "paid_cents": 149115
+   },
+   {
+    "row": 96,
+    "line_id": "RX-WTU87",
+    "qty": 17,
+    "unit_rate_cents": 7746,
+    "paid_cents": 131682
+   },
+   {
+    "row": 97,
+    "line_id": "RX-NQM8X",
+    "qty": 20,
+    "unit_rate_cents": 7355,
+    "paid_cents": 132435
+   },
+   {
+    "row": 98,
+    "line_id": "RX-JAWRB",
+    "qty": 19,
+    "unit_rate_cents": 46482,
+    "paid_cents": 883158
+   },
+   {
+    "row": 99,
+    "line_id": "RX-TCDS3",
+    "qty": 34,
+    "unit_rate_cents": 30173,
+    "paid_cents": 1025882
+   },
+   {
+    "row": 100,
+    "line_id": "RX-RHYJ7",
+    "qty": 15,
+    "unit_rate_cents": 38477,
+    "paid_cents": 577155
+   },
+   {
+    "row": 101,
+    "line_id": "RX-8JTKK",
+    "qty": 37,
+    "unit_rate_cents": 16361,
+    "paid_cents": 605357
+   },
+   {
+    "row": 102,
+    "line_id": "RX-V3J5U",
+    "qty": 22,
+    "unit_rate_cents": 27132,
+    "paid_cents": 596904
+   },
+   {
+    "row": 103,
+    "line_id": "RX-9T976",
+    "qty": 11,
+    "unit_rate_cents": 38251,
+    "paid_cents": 420761
+   },
+   {
+    "row": 104,
+    "line_id": "RX-74DLC",
+    "qty": 14,
+    "unit_rate_cents": 35859,
+    "paid_cents": 502026
+   },
+   {
+    "row": 105,
+    "line_id": "RX-YY4M8",
+    "qty": 19,
+    "unit_rate_cents": 11859,
+    "paid_cents": 225321
+   },
+   {
+    "row": 106,
+    "line_id": "RX-5MKD5",
+    "qty": 33,
+    "unit_rate_cents": 41647,
+    "paid_cents": 1374351
+   },
+   {
+    "row": 107,
+    "line_id": "RX-2H3VJ",
+    "qty": 1,
+    "unit_rate_cents": 31007,
+    "paid_cents": 31007
+   },
+   {
+    "row": 108,
+    "line_id": "RX-S65JE",
+    "qty": 32,
+    "unit_rate_cents": 47046,
+    "paid_cents": 1505472
+   },
+   {
+    "row": 109,
+    "line_id": "RX-43SA9",
+    "qty": 24,
+    "unit_rate_cents": 14143,
+    "paid_cents": 339432
+   },
+   {
+    "row": 110,
+    "line_id": "RX-C3QSW",
+    "qty": 22,
+    "unit_rate_cents": 45094,
+    "paid_cents": 992068
+   },
+   {
+    "row": 111,
+    "line_id": "RX-E5GVK",
+    "qty": 31,
+    "unit_rate_cents": 3194,
+    "paid_cents": 99014
+   },
+   {
+    "row": 112,
+    "line_id": "RX-6NUNK",
+    "qty": 3,
+    "unit_rate_cents": 2645,
+    "paid_cents": 7935
+   },
+   {
+    "row": 113,
+    "line_id": "RX-BSECY",
+    "qty": 8,
+    "unit_rate_cents": 23159,
+    "paid_cents": 149482
+   },
+   {
+    "row": 114,
+    "line_id": "RX-EGTBZ",
+    "qty": 17,
+    "unit_rate_cents": 22311,
+    "paid_cents": 379287
+   },
+   {
+    "row": 115,
+    "line_id": "RX-79ZUL",
+    "qty": 7,
+    "unit_rate_cents": 34150,
+    "paid_cents": 239050
+   },
+   {
+    "row": 116,
+    "line_id": "RX-LLMWW",
+    "qty": 2,
+    "unit_rate_cents": 5095,
+    "paid_cents": 10190
+   },
+   {
+    "row": 117,
+    "line_id": "RX-75ZEJ",
+    "qty": 22,
+    "unit_rate_cents": 31118,
+    "paid_cents": 684596
+   },
+   {
+    "row": 118,
+    "line_id": "RX-EKAM5",
+    "qty": 3,
+    "unit_rate_cents": 8996,
+    "paid_cents": 26308
+   },
+   {
+    "row": 119,
+    "line_id": "RX-Z7KS6",
+    "qty": 20,
+    "unit_rate_cents": 14094,
+    "paid_cents": 281880
+   },
+   {
+    "row": 120,
+    "line_id": "RX-CBLM4",
+    "qty": 22,
+    "unit_rate_cents": 15080,
+    "paid_cents": 331760
+   },
+   {
+    "row": 121,
+    "line_id": "RX-ANFDL",
+    "qty": 10,
+    "unit_rate_cents": 9752,
+    "paid_cents": 86305
+   },
+   {
+    "row": 122,
+    "line_id": "RX-G7RZ4",
+    "qty": 19,
+    "unit_rate_cents": 25309,
+    "paid_cents": 480871
+   },
+   {
+    "row": 123,
+    "line_id": "RX-AGCJ3",
+    "qty": 18,
+    "unit_rate_cents": 5884,
+    "paid_cents": 105912
+   },
+   {
+    "row": 124,
+    "line_id": "RX-H4LD6",
+    "qty": 18,
+    "unit_rate_cents": 25440,
+    "paid_cents": 457920
+   },
+   {
+    "row": 125,
+    "line_id": "RX-9MFBL",
+    "qty": 20,
+    "unit_rate_cents": 46322,
+    "paid_cents": 926440
+   },
+   {
+    "row": 126,
+    "line_id": "RX-2XYMR",
+    "qty": 38,
+    "unit_rate_cents": 32287,
+    "paid_cents": 1226906
+   },
+   {
+    "row": 127,
+    "line_id": "RX-K76KA",
+    "qty": 35,
+    "unit_rate_cents": 15157,
+    "paid_cents": 550410
+   },
+   {
+    "row": 128,
+    "line_id": "RX-XMHRP",
+    "qty": 32,
+    "unit_rate_cents": 5798,
+    "paid_cents": 185536
+   },
+   {
+    "row": 129,
+    "line_id": "RX-AJUDQ",
+    "qty": 13,
+    "unit_rate_cents": 33435,
+    "paid_cents": 434655
+   },
+   {
+    "row": 130,
+    "line_id": "RX-VNXDJ",
+    "qty": 27,
+    "unit_rate_cents": 39791,
+    "paid_cents": 1074357
+   },
+   {
+    "row": 131,
+    "line_id": "RX-Y6UQ5",
+    "qty": 4,
+    "unit_rate_cents": 47862,
+    "paid_cents": 191448
+   },
+   {
+    "row": 132,
+    "line_id": "RX-R7LC5",
+    "qty": 16,
+    "unit_rate_cents": 37087,
+    "paid_cents": 593392
+   },
+   {
+    "row": 133,
+    "line_id": "RX-2DQ5E",
+    "qty": 9,
+    "unit_rate_cents": 35839,
+    "paid_cents": 322551
+   },
+   {
+    "row": 134,
+    "line_id": "RX-H66FZ",
+    "qty": 1,
+    "unit_rate_cents": 33223,
+    "paid_cents": 33223
+   },
+   {
+    "row": 135,
+    "line_id": "RX-ZHLJY",
+    "qty": 25,
+    "unit_rate_cents": 10445,
+    "paid_cents": 261125
+   },
+   {
+    "row": 136,
+    "line_id": "RX-TK65R",
+    "qty": 5,
+    "unit_rate_cents": 16439,
+    "paid_cents": 82195
+   },
+   {
+    "row": 137,
+    "line_id": "RX-LJ52U",
+    "qty": 27,
+    "unit_rate_cents": 3142,
+    "paid_cents": 103020
+   },
+   {
+    "row": 138,
+    "line_id": "RX-6U333",
+    "qty": 13,
+    "unit_rate_cents": 4422,
+    "paid_cents": 57486
+   },
+   {
+    "row": 139,
+    "line_id": "RX-CGVAQ",
+    "qty": 32,
+    "unit_rate_cents": 28403,
+    "paid_cents": 908896
+   },
+   {
+    "row": 140,
+    "line_id": "RX-CF6QH",
+    "qty": 22,
+    "unit_rate_cents": 2137,
+    "paid_cents": 56446
+   },
+   {
+    "row": 141,
+    "line_id": "RX-ULGBF",
+    "qty": 22,
+    "unit_rate_cents": 4454,
+    "paid_cents": 97988
+   },
+   {
+    "row": 142,
+    "line_id": "RX-K9BVZ",
+    "qty": 39,
+    "unit_rate_cents": 12874,
+    "paid_cents": 502086
+   },
+   {
+    "row": 143,
+    "line_id": "RX-FT46E",
+    "qty": 28,
+    "unit_rate_cents": 21416,
+    "paid_cents": 599648
+   },
+   {
+    "row": 144,
+    "line_id": "RX-ZA5M6",
+    "qty": 18,
+    "unit_rate_cents": 42153,
+    "paid_cents": 758754
+   },
+   {
+    "row": 145,
+    "line_id": "RX-26HX8",
+    "qty": 24,
+    "unit_rate_cents": 39586,
+    "paid_cents": 950064
+   },
+   {
+    "row": 146,
+    "line_id": "RX-K9HNQ",
+    "qty": 34,
+    "unit_rate_cents": 40595,
+    "paid_cents": 1380230
+   },
+   {
+    "row": 147,
+    "line_id": "RX-QL6UZ",
+    "qty": 37,
+    "unit_rate_cents": 24196,
+    "paid_cents": 895252
+   },
+   {
+    "row": 148,
+    "line_id": "RX-TKLPY",
+    "qty": 11,
+    "unit_rate_cents": 40494,
+    "paid_cents": 445434
+   },
+   {
+    "row": 149,
+    "line_id": "RX-4JWCY",
+    "qty": 29,
+    "unit_rate_cents": 28373,
+    "paid_cents": 822817
+   },
+   {
+    "row": 150,
+    "line_id": "RX-VY9DA",
+    "qty": 13,
+    "unit_rate_cents": 3278,
+    "paid_cents": 38845
+   },
+   {
+    "row": 151,
+    "line_id": "RX-HGGRS",
+    "qty": 37,
+    "unit_rate_cents": 34300,
+    "paid_cents": 1269100
+   },
+   {
+    "row": 152,
+    "line_id": "RX-K9A37",
+    "qty": 8,
+    "unit_rate_cents": 42057,
+    "paid_cents": 361188
+   },
+   {
+    "row": 153,
+    "line_id": "RX-C3K5G",
+    "qty": 15,
+    "unit_rate_cents": 33795,
+    "paid_cents": 380991
+   },
+   {
+    "row": 154,
+    "line_id": "RX-VG74W",
+    "qty": 26,
+    "unit_rate_cents": 31741,
+    "paid_cents": 825266
+   },
+   {
+    "row": 155,
+    "line_id": "RX-9LVG4",
+    "qty": 11,
+    "unit_rate_cents": 42534,
+    "paid_cents": 467874
+   },
+   {
+    "row": 156,
+    "line_id": "RX-PKFBN",
+    "qty": 30,
+    "unit_rate_cents": 27829,
+    "paid_cents": 834870
+   },
+   {
+    "row": 157,
+    "line_id": "RX-ZKBJV",
+    "qty": 1,
+    "unit_rate_cents": 10893,
+    "paid_cents": 11720
+   },
+   {
+    "row": 158,
+    "line_id": "RX-ADXBL",
+    "qty": 21,
+    "unit_rate_cents": 17541,
+    "paid_cents": 368361
+   },
+   {
+    "row": 159,
+    "line_id": "RX-2W44G",
+    "qty": 2,
+    "unit_rate_cents": 16023,
+    "paid_cents": 32046
+   },
+   {
+    "row": 160,
+    "line_id": "RX-C3WA7",
+    "qty": 31,
+    "unit_rate_cents": 23502,
+    "paid_cents": 728562
+   },
+   {
+    "row": 161,
+    "line_id": "RX-CHVP8",
+    "qty": 40,
+    "unit_rate_cents": 33487,
+    "paid_cents": 1339480
+   },
+   {
+    "row": 162,
+    "line_id": "RX-QUUHS",
+    "qty": 5,
+    "unit_rate_cents": 29153,
+    "paid_cents": 145765
+   },
+   {
+    "row": 163,
+    "line_id": "RX-LKBWF",
+    "qty": 18,
+    "unit_rate_cents": 24541,
+    "paid_cents": 441738
+   },
+   {
+    "row": 164,
+    "line_id": "RX-FGRHT",
+    "qty": 5,
+    "unit_rate_cents": 28274,
+    "paid_cents": 141370
+   },
+   {
+    "row": 165,
+    "line_id": "RX-JVSNR",
+    "qty": 22,
+    "unit_rate_cents": 43899,
+    "paid_cents": 965778
+   },
+   {
+    "row": 166,
+    "line_id": "RX-28E7W",
+    "qty": 35,
+    "unit_rate_cents": 47773,
+    "paid_cents": 1672055
+   },
+   {
+    "row": 167,
+    "line_id": "RX-QGHD5",
+    "qty": 7,
+    "unit_rate_cents": 12745,
+    "paid_cents": 89215
+   },
+   {
+    "row": 168,
+    "line_id": "RX-SNMHS",
+    "qty": 20,
+    "unit_rate_cents": 6877,
+    "paid_cents": 137540
+   },
+   {
+    "row": 169,
+    "line_id": "RX-Y3379",
+    "qty": 40,
+    "unit_rate_cents": 4501,
+    "paid_cents": 180040
+   },
+   {
+    "row": 170,
+    "line_id": "RX-SAUJD",
+    "qty": 30,
+    "unit_rate_cents": 19442,
+    "paid_cents": 583260
+   },
+   {
+    "row": 171,
+    "line_id": "RX-CHHMC",
+    "qty": 36,
+    "unit_rate_cents": 2752,
+    "paid_cents": 99072
+   },
+   {
+    "row": 172,
+    "line_id": "RX-B2AAE",
+    "qty": 11,
+    "unit_rate_cents": 26489,
+    "paid_cents": 291379
+   },
+   {
+    "row": 173,
+    "line_id": "RX-DJ27R",
+    "qty": 34,
+    "unit_rate_cents": 3324,
+    "paid_cents": 81305
+   },
+   {
+    "row": 174,
+    "line_id": "RX-MDJAA",
+    "qty": 31,
+    "unit_rate_cents": 25416,
+    "paid_cents": 787896
+   },
+   {
+    "row": 175,
+    "line_id": "RX-RXH72",
+    "qty": 3,
+    "unit_rate_cents": 47439,
+    "paid_cents": 140433
+   },
+   {
+    "row": 176,
+    "line_id": "RX-NSHUH",
+    "qty": 18,
+    "unit_rate_cents": 44158,
+    "paid_cents": 642686
+   },
+   {
+    "row": 177,
+    "line_id": "RX-X745G",
+    "qty": 18,
+    "unit_rate_cents": 16645,
+    "paid_cents": 273255
+   },
+   {
+    "row": 178,
+    "line_id": "RX-J6L46",
+    "qty": 12,
+    "unit_rate_cents": 33774,
+    "paid_cents": 405288
+   },
+   {
+    "row": 179,
+    "line_id": "RX-93MET",
+    "qty": 8,
+    "unit_rate_cents": 4347,
+    "paid_cents": 39683
+   },
+   {
+    "row": 180,
+    "line_id": "RX-BNJ2K",
+    "qty": 16,
+    "unit_rate_cents": 6142,
+    "paid_cents": 98272
+   },
+   {
+    "row": 181,
+    "line_id": "RX-MEUP6",
+    "qty": 37,
+    "unit_rate_cents": 22063,
+    "paid_cents": 816331
+   },
+   {
+    "row": 182,
+    "line_id": "RX-DU5FY",
+    "qty": 20,
+    "unit_rate_cents": 32355,
+    "paid_cents": 647100
+   },
+   {
+    "row": 183,
+    "line_id": "RX-FXFZE",
+    "qty": 30,
+    "unit_rate_cents": 19614,
+    "paid_cents": 721727
+   },
+   {
+    "row": 184,
+    "line_id": "RX-94XWR",
+    "qty": 15,
+    "unit_rate_cents": 18189,
+    "paid_cents": 272835
+   },
+   {
+    "row": 185,
+    "line_id": "RX-599KK",
+    "qty": 16,
+    "unit_rate_cents": 34312,
+    "paid_cents": 548992
+   },
+   {
+    "row": 186,
+    "line_id": "RX-XMXBB",
+    "qty": 37,
+    "unit_rate_cents": 26354,
+    "paid_cents": 797278
+   },
+   {
+    "row": 187,
+    "line_id": "RX-34EJP",
+    "qty": 30,
+    "unit_rate_cents": 19966,
+    "paid_cents": 598980
+   },
+   {
+    "row": 188,
+    "line_id": "RX-C2NB7",
+    "qty": 32,
+    "unit_rate_cents": 33092,
+    "paid_cents": 1058944
+   },
+   {
+    "row": 189,
+    "line_id": "RX-NGHF6",
+    "qty": 20,
+    "unit_rate_cents": 22551,
+    "paid_cents": 451020
+   },
+   {
+    "row": 190,
+    "line_id": "RX-UACUE",
+    "qty": 13,
+    "unit_rate_cents": 30755,
+    "paid_cents": 399815
+   },
+   {
+    "row": 191,
+    "line_id": "RX-MKNMD",
+    "qty": 26,
+    "unit_rate_cents": 26856,
+    "paid_cents": 698256
+   },
+   {
+    "row": 192,
+    "line_id": "RX-3AWWD",
+    "qty": 5,
+    "unit_rate_cents": 2819,
+    "paid_cents": 14095
+   },
+   {
+    "row": 193,
+    "line_id": "RX-HY4FF",
+    "qty": 32,
+    "unit_rate_cents": 40978,
+    "paid_cents": 1459958
+   },
+   {
+    "row": 194,
+    "line_id": "RX-RWGDJ",
+    "qty": 33,
+    "unit_rate_cents": 32571,
+    "paid_cents": 1074843
+   },
+   {
+    "row": 195,
+    "line_id": "RX-QHP5K",
+    "qty": 5,
+    "unit_rate_cents": 32160,
+    "paid_cents": 160800
+   },
+   {
+    "row": 196,
+    "line_id": "RX-QADE3",
+    "qty": 26,
+    "unit_rate_cents": 28113,
+    "paid_cents": 730938
+   },
+   {
+    "row": 197,
+    "line_id": "RX-5KHCU",
+    "qty": 2,
+    "unit_rate_cents": 41600,
+    "paid_cents": 75207
+   },
+   {
+    "row": 198,
+    "line_id": "RX-GE2L2",
+    "qty": 20,
+    "unit_rate_cents": 36033,
+    "paid_cents": 932361
+   },
+   {
+    "row": 199,
+    "line_id": "RX-U39FQ",
+    "qty": 36,
+    "unit_rate_cents": 26735,
+    "paid_cents": 962460
+   },
+   {
+    "row": 200,
+    "line_id": "RX-T9RZY",
+    "qty": 5,
+    "unit_rate_cents": 26522,
+    "paid_cents": 132610
+   },
+   {
+    "row": 201,
+    "line_id": "RX-3JWR2",
+    "qty": 39,
+    "unit_rate_cents": 38738,
+    "paid_cents": 1510782
+   },
+   {
+    "row": 202,
+    "line_id": "RX-N5FZ7",
+    "qty": 31,
+    "unit_rate_cents": 21161,
+    "paid_cents": 655991
+   },
+   {
+    "row": 203,
+    "line_id": "RX-5VH82",
+    "qty": 6,
+    "unit_rate_cents": 23268,
+    "paid_cents": 139608
+   },
+   {
+    "row": 204,
+    "line_id": "RX-9JCPQ",
+    "qty": 13,
+    "unit_rate_cents": 39204,
+    "paid_cents": 509652
+   },
+   {
+    "row": 205,
+    "line_id": "RX-K9QDL",
+    "qty": 35,
+    "unit_rate_cents": 32820,
+    "paid_cents": 1148700
+   },
+   {
+    "row": 206,
+    "line_id": "RX-EPZHM",
+    "qty": 1,
+    "unit_rate_cents": 8514,
+    "paid_cents": 8514
+   },
+   {
+    "row": 207,
+    "line_id": "RX-PMKV6",
+    "qty": 18,
+    "unit_rate_cents": 27840,
+    "paid_cents": 501120
+   },
+   {
+    "row": 208,
+    "line_id": "RX-386YK",
+    "qty": 7,
+    "unit_rate_cents": 46438,
+    "paid_cents": 325066
+   },
+   {
+    "row": 209,
+    "line_id": "RX-SFYV7",
+    "qty": 12,
+    "unit_rate_cents": 39293,
+    "paid_cents": 471516
+   },
+   {
+    "row": 210,
+    "line_id": "RX-8AVZ8",
+    "qty": 4,
+    "unit_rate_cents": 5287,
+    "paid_cents": 21148
+   },
+   {
+    "row": 211,
+    "line_id": "RX-SL43F",
+    "qty": 20,
+    "unit_rate_cents": 21745,
+    "paid_cents": 434900
+   },
+   {
+    "row": 212,
+    "line_id": "RX-QTUW3",
+    "qty": 34,
+    "unit_rate_cents": 26310,
+    "paid_cents": 894540
+   },
+   {
+    "row": 213,
+    "line_id": "RX-UUC73",
+    "qty": 2,
+    "unit_rate_cents": 18146,
+    "paid_cents": 36292
+   },
+   {
+    "row": 214,
+    "line_id": "RX-Y8BKM",
+    "qty": 5,
+    "unit_rate_cents": 20796,
+    "paid_cents": 100466
+   },
+   {
+    "row": 215,
+    "line_id": "RX-HC8ND",
+    "qty": 28,
+    "unit_rate_cents": 13709,
+    "paid_cents": 383852
+   },
+   {
+    "row": 216,
+    "line_id": "RX-LSH6X",
+    "qty": 10,
+    "unit_rate_cents": 45883,
+    "paid_cents": 618129
+   },
+   {
+    "row": 217,
+    "line_id": "RX-4BHCC",
+    "qty": 1,
+    "unit_rate_cents": 45515,
+    "paid_cents": 45515
+   },
+   {
+    "row": 218,
+    "line_id": "RX-B3WVJ",
+    "qty": 31,
+    "unit_rate_cents": 5786,
+    "paid_cents": 179366
+   },
+   {
+    "row": 219,
+    "line_id": "RX-TJ5YD",
+    "qty": 21,
+    "unit_rate_cents": 15992,
+    "paid_cents": 335832
+   },
+   {
+    "row": 220,
+    "line_id": "RX-GGAPX",
+    "qty": 21,
+    "unit_rate_cents": 12371,
+    "paid_cents": 259791
+   },
+   {
+    "row": 221,
+    "line_id": "RX-PR9ZC",
+    "qty": 40,
+    "unit_rate_cents": 39477,
+    "paid_cents": 1579080
+   },
+   {
+    "row": 222,
+    "line_id": "RX-3LMYY",
+    "qty": 13,
+    "unit_rate_cents": 28219,
+    "paid_cents": 317750
+   },
+   {
+    "row": 223,
+    "line_id": "RX-V2YNC",
+    "qty": 1,
+    "unit_rate_cents": 45593,
+    "paid_cents": 45593
+   },
+   {
+    "row": 224,
+    "line_id": "RX-FUYZ3",
+    "qty": 28,
+    "unit_rate_cents": 5194,
+    "paid_cents": 179936
+   },
+   {
+    "row": 225,
+    "line_id": "RX-VGV3R",
+    "qty": 39,
+    "unit_rate_cents": 10670,
+    "paid_cents": 416130
+   },
+   {
+    "row": 226,
+    "line_id": "RX-PRRU2",
+    "qty": 4,
+    "unit_rate_cents": 27718,
+    "paid_cents": 110872
+   },
+   {
+    "row": 227,
+    "line_id": "RX-USMXQ",
+    "qty": 21,
+    "unit_rate_cents": 35822,
+    "paid_cents": 752262
+   },
+   {
+    "row": 228,
+    "line_id": "RX-6RN8Y",
+    "qty": 13,
+    "unit_rate_cents": 11520,
+    "paid_cents": 149760
+   },
+   {
+    "row": 229,
+    "line_id": "RX-S2LDZ",
+    "qty": 10,
+    "unit_rate_cents": 44299,
+    "paid_cents": 442990
+   },
+   {
+    "row": 230,
+    "line_id": "RX-DE24B",
+    "qty": 10,
+    "unit_rate_cents": 2743,
+    "paid_cents": 27430
+   },
+   {
+    "row": 231,
+    "line_id": "RX-MP4D4",
+    "qty": 8,
+    "unit_rate_cents": 20437,
+    "paid_cents": 163496
+   },
+   {
+    "row": 232,
+    "line_id": "RX-XZFNX",
+    "qty": 24,
+    "unit_rate_cents": 37398,
+    "paid_cents": 897552
+   },
+   {
+    "row": 233,
+    "line_id": "RX-9XN69",
+    "qty": 2,
+    "unit_rate_cents": 36560,
+    "paid_cents": 97302
+   },
+   {
+    "row": 234,
+    "line_id": "RX-3NAUG",
+    "qty": 23,
+    "unit_rate_cents": 45000,
+    "paid_cents": 1080138
+   },
+   {
+    "row": 235,
+    "line_id": "RX-62LD9",
+    "qty": 22,
+    "unit_rate_cents": 17263,
+    "paid_cents": 409570
+   },
+   {
+    "row": 236,
+    "line_id": "RX-TXPA8",
+    "qty": 20,
+    "unit_rate_cents": 33756,
+    "paid_cents": 675120
+   },
+   {
+    "row": 237,
+    "line_id": "RX-6QYYX",
+    "qty": 33,
+    "unit_rate_cents": 43492,
+    "paid_cents": 1435236
+   },
+   {
+    "row": 238,
+    "line_id": "RX-AA3U2",
+    "qty": 33,
+    "unit_rate_cents": 40982,
+    "paid_cents": 1432301
+   },
+   {
+    "row": 239,
+    "line_id": "RX-HBTVC",
+    "qty": 25,
+    "unit_rate_cents": 41618,
+    "paid_cents": 1040450
+   },
+   {
+    "row": 240,
+    "line_id": "RX-7M8B7",
+    "qty": 32,
+    "unit_rate_cents": 45559,
+    "paid_cents": 1457888
+   },
+   {
+    "row": 241,
+    "line_id": "RX-7LPFJ",
+    "qty": 15,
+    "unit_rate_cents": 37924,
+    "paid_cents": 568860
+   },
+   {
+    "row": 242,
+    "line_id": "RX-NSHN2",
+    "qty": 2,
+    "unit_rate_cents": 42771,
+    "paid_cents": 85542
+   },
+   {
+    "row": 243,
+    "line_id": "RX-CVYLD",
+    "qty": 20,
+    "unit_rate_cents": 4724,
+    "paid_cents": 94480
+   },
+   {
+    "row": 244,
+    "line_id": "RX-W74J9",
+    "qty": 11,
+    "unit_rate_cents": 46192,
+    "paid_cents": 508112
+   },
+   {
+    "row": 245,
+    "line_id": "RX-8BWTW",
+    "qty": 28,
+    "unit_rate_cents": 9168,
+    "paid_cents": 304603
+   },
+   {
+    "row": 246,
+    "line_id": "RX-4S4BB",
+    "qty": 16,
+    "unit_rate_cents": 33075,
+    "paid_cents": 529200
+   },
+   {
+    "row": 247,
+    "line_id": "RX-2HWQ9",
+    "qty": 32,
+    "unit_rate_cents": 37442,
+    "paid_cents": 1198144
+   },
+   {
+    "row": 248,
+    "line_id": "RX-UTDDU",
+    "qty": 15,
+    "unit_rate_cents": 19719,
+    "paid_cents": 295785
+   },
+   {
+    "row": 249,
+    "line_id": "RX-33QGA",
+    "qty": 7,
+    "unit_rate_cents": 18417,
+    "paid_cents": 128919
+   },
+   {
+    "row": 250,
+    "line_id": "RX-7APQD",
+    "qty": 40,
+    "unit_rate_cents": 40000,
+    "paid_cents": 1600000
+   },
+   {
+    "row": 251,
+    "line_id": "RX-AHGET",
+    "qty": 14,
+    "unit_rate_cents": 20244,
+    "paid_cents": 283416
+   },
+   {
+    "row": 252,
+    "line_id": "RX-PCE38",
+    "qty": 17,
+    "unit_rate_cents": 14256,
+    "paid_cents": 242352
+   },
+   {
+    "row": 253,
+    "line_id": "RX-TQNPB",
+    "qty": 30,
+    "unit_rate_cents": 39664,
+    "paid_cents": 1454490
+   },
+   {
+    "row": 254,
+    "line_id": "RX-FDX8P",
+    "qty": 21,
+    "unit_rate_cents": 31566,
+    "paid_cents": 662886
+   },
+   {
+    "row": 255,
+    "line_id": "RX-C65CM",
+    "qty": 8,
+    "unit_rate_cents": 14907,
+    "paid_cents": 119256
+   },
+   {
+    "row": 256,
+    "line_id": "RX-TTEZ7",
+    "qty": 7,
+    "unit_rate_cents": 28539,
+    "paid_cents": 244751
+   },
+   {
+    "row": 257,
+    "line_id": "RX-NFHJE",
+    "qty": 14,
+    "unit_rate_cents": 19291,
+    "paid_cents": 270074
+   },
+   {
+    "row": 258,
+    "line_id": "RX-6LJC2",
+    "qty": 26,
+    "unit_rate_cents": 11958,
+    "paid_cents": 347713
+   },
+   {
+    "row": 259,
+    "line_id": "RX-2PP5W",
+    "qty": 4,
+    "unit_rate_cents": 47035,
+    "paid_cents": 188140
+   },
+   {
+    "row": 260,
+    "line_id": "RX-JKSZX",
+    "qty": 19,
+    "unit_rate_cents": 13005,
+    "paid_cents": 247095
+   },
+   {
+    "row": 261,
+    "line_id": "RX-BAHJE",
+    "qty": 2,
+    "unit_rate_cents": 4026,
+    "paid_cents": 8052
+   },
+   {
+    "row": 262,
+    "line_id": "RX-PLHXX",
+    "qty": 12,
+    "unit_rate_cents": 33460,
+    "paid_cents": 401520
+   },
+   {
+    "row": 263,
+    "line_id": "RX-BUQ5X",
+    "qty": 34,
+    "unit_rate_cents": 28916,
+    "paid_cents": 983144
+   },
+   {
+    "row": 264,
+    "line_id": "RX-YKXH3",
+    "qty": 38,
+    "unit_rate_cents": 46199,
+    "paid_cents": 1755562
+   },
+   {
+    "row": 265,
+    "line_id": "RX-42UNY",
+    "qty": 2,
+    "unit_rate_cents": 15576,
+    "paid_cents": 28283
+   },
+   {
+    "row": 266,
+    "line_id": "RX-3H5LF",
+    "qty": 11,
+    "unit_rate_cents": 43807,
+    "paid_cents": 595585
+   },
+   {
+    "row": 267,
+    "line_id": "RX-2Q3BK",
+    "qty": 5,
+    "unit_rate_cents": 23482,
+    "paid_cents": 117410
+   },
+   {
+    "row": 268,
+    "line_id": "RX-JBLVW",
+    "qty": 14,
+    "unit_rate_cents": 13437,
+    "paid_cents": 242653
+   },
+   {
+    "row": 269,
+    "line_id": "RX-JDXKK",
+    "qty": 31,
+    "unit_rate_cents": 26157,
+    "paid_cents": 810867
+   },
+   {
+    "row": 270,
+    "line_id": "RX-XY8VR",
+    "qty": 37,
+    "unit_rate_cents": 27007,
+    "paid_cents": 999259
+   },
+   {
+    "row": 271,
+    "line_id": "RX-4CNKX",
+    "qty": 7,
+    "unit_rate_cents": 42349,
+    "paid_cents": 296443
+   },
+   {
+    "row": 272,
+    "line_id": "RX-5B3Y3",
+    "qty": 3,
+    "unit_rate_cents": 24268,
+    "paid_cents": 72804
+   },
+   {
+    "row": 273,
+    "line_id": "RX-BL9GT",
+    "qty": 12,
+    "unit_rate_cents": 44913,
+    "paid_cents": 604780
+   },
+   {
+    "row": 274,
+    "line_id": "RX-KFQZZ",
+    "qty": 40,
+    "unit_rate_cents": 42371,
+    "paid_cents": 1694840
+   },
+   {
+    "row": 275,
+    "line_id": "RX-KZQU2",
+    "qty": 34,
+    "unit_rate_cents": 15738,
+    "paid_cents": 535092
+   },
+   {
+    "row": 276,
+    "line_id": "RX-TESW2",
+    "qty": 7,
+    "unit_rate_cents": 24815,
+    "paid_cents": 173705
+   },
+   {
+    "row": 277,
+    "line_id": "RX-5J2UY",
+    "qty": 8,
+    "unit_rate_cents": 37605,
+    "paid_cents": 300840
+   },
+   {
+    "row": 278,
+    "line_id": "RX-CKYBC",
+    "qty": 4,
+    "unit_rate_cents": 46233,
+    "paid_cents": 184932
+   },
+   {
+    "row": 279,
+    "line_id": "RX-SLAWZ",
+    "qty": 29,
+    "unit_rate_cents": 3627,
+    "paid_cents": 105183
+   },
+   {
+    "row": 280,
+    "line_id": "RX-GATTF",
+    "qty": 3,
+    "unit_rate_cents": 39523,
+    "paid_cents": 118569
+   },
+   {
+    "row": 281,
+    "line_id": "RX-2FZLZ",
+    "qty": 13,
+    "unit_rate_cents": 7764,
+    "paid_cents": 100932
+   },
+   {
+    "row": 282,
+    "line_id": "RX-Y2NB4",
+    "qty": 38,
+    "unit_rate_cents": 41345,
+    "paid_cents": 1571110
+   },
+   {
+    "row": 283,
+    "line_id": "RX-DGZS7",
+    "qty": 32,
+    "unit_rate_cents": 6962,
+    "paid_cents": 222784
+   },
+   {
+    "row": 284,
+    "line_id": "RX-GXYFU",
+    "qty": 32,
+    "unit_rate_cents": 17903,
+    "paid_cents": 572896
+   },
+   {
+    "row": 285,
+    "line_id": "RX-AS5U5",
+    "qty": 39,
+    "unit_rate_cents": 21390,
+    "paid_cents": 834210
+   },
+   {
+    "row": 286,
+    "line_id": "RX-KANLL",
+    "qty": 15,
+    "unit_rate_cents": 45300,
+    "paid_cents": 679500
+   },
+   {
+    "row": 287,
+    "line_id": "RX-V38AV",
+    "qty": 24,
+    "unit_rate_cents": 9768,
+    "paid_cents": 203339
+   },
+   {
+    "row": 288,
+    "line_id": "RX-LUBLV",
+    "qty": 24,
+    "unit_rate_cents": 3756,
+    "paid_cents": 90144
+   },
+   {
+    "row": 289,
+    "line_id": "RX-MUWQN",
+    "qty": 38,
+    "unit_rate_cents": 3226,
+    "paid_cents": 122588
+   },
+   {
+    "row": 290,
+    "line_id": "RX-VSXAN",
+    "qty": 8,
+    "unit_rate_cents": 33195,
+    "paid_cents": 176586
+   },
+   {
+    "row": 291,
+    "line_id": "RX-KKJQA",
+    "qty": 23,
+    "unit_rate_cents": 33154,
+    "paid_cents": 762542
+   },
+   {
+    "row": 292,
+    "line_id": "RX-RU7KX",
+    "qty": 23,
+    "unit_rate_cents": 18036,
+    "paid_cents": 414828
+   },
+   {
+    "row": 293,
+    "line_id": "RX-M3DWC",
+    "qty": 12,
+    "unit_rate_cents": 34009,
+    "paid_cents": 408108
+   },
+   {
+    "row": 294,
+    "line_id": "RX-7T5TH",
+    "qty": 14,
+    "unit_rate_cents": 37493,
+    "paid_cents": 524902
+   },
+   {
+    "row": 295,
+    "line_id": "RX-ADPF7",
+    "qty": 28,
+    "unit_rate_cents": 3221,
+    "paid_cents": 118878
+   },
+   {
+    "row": 296,
+    "line_id": "RX-7T6PK",
+    "qty": 4,
+    "unit_rate_cents": 24249,
+    "paid_cents": 80273
+   },
+   {
+    "row": 297,
+    "line_id": "RX-E6JNM",
+    "qty": 6,
+    "unit_rate_cents": 23253,
+    "paid_cents": 139518
+   },
+   {
+    "row": 298,
+    "line_id": "RX-3FNUE",
+    "qty": 36,
+    "unit_rate_cents": 3090,
+    "paid_cents": 111240
+   },
+   {
+    "row": 299,
+    "line_id": "RX-Q3YTM",
+    "qty": 17,
+    "unit_rate_cents": 27699,
+    "paid_cents": 563654
+   },
+   {
+    "row": 300,
+    "line_id": "RX-HJTYR",
+    "qty": 16,
+    "unit_rate_cents": 39432,
+    "paid_cents": 630912
+   },
+   {
+    "row": 301,
+    "line_id": "RX-BGFBR",
+    "qty": 10,
+    "unit_rate_cents": 11500,
+    "paid_cents": 115000
+   },
+   {
+    "row": 302,
+    "line_id": "RX-YJJ9C",
+    "qty": 19,
+    "unit_rate_cents": 33657,
+    "paid_cents": 639483
+   },
+   {
+    "row": 303,
+    "line_id": "RX-8F7F8",
+    "qty": 36,
+    "unit_rate_cents": 36855,
+    "paid_cents": 1326780
+   },
+   {
+    "row": 304,
+    "line_id": "RX-KGNQQ",
+    "qty": 38,
+    "unit_rate_cents": 1572,
+    "paid_cents": 59736
+   },
+   {
+    "row": 305,
+    "line_id": "RX-X895W",
+    "qty": 28,
+    "unit_rate_cents": 19307,
+    "paid_cents": 540596
+   },
+   {
+    "row": 306,
+    "line_id": "RX-6G7NE",
+    "qty": 20,
+    "unit_rate_cents": 39449,
+    "paid_cents": 788980
+   },
+   {
+    "row": 307,
+    "line_id": "RX-PB4UL",
+    "qty": 16,
+    "unit_rate_cents": 31890,
+    "paid_cents": 510240
+   },
+   {
+    "row": 308,
+    "line_id": "RX-GTF8G",
+    "qty": 25,
+    "unit_rate_cents": 25060,
+    "paid_cents": 626500
+   },
+   {
+    "row": 309,
+    "line_id": "RX-UMSYS",
+    "qty": 28,
+    "unit_rate_cents": 3899,
+    "paid_cents": 72434
+   },
+   {
+    "row": 310,
+    "line_id": "RX-3HR75",
+    "qty": 29,
+    "unit_rate_cents": 7859,
+    "paid_cents": 227911
+   },
+   {
+    "row": 311,
+    "line_id": "RX-T8RGN",
+    "qty": 9,
+    "unit_rate_cents": 43312,
+    "paid_cents": 389808
+   },
+   {
+    "row": 312,
+    "line_id": "RX-7XHYA",
+    "qty": 19,
+    "unit_rate_cents": 42604,
+    "paid_cents": 809476
+   },
+   {
+    "row": 313,
+    "line_id": "RX-DPRNZ",
+    "qty": 26,
+    "unit_rate_cents": 31272,
+    "paid_cents": 813072
+   },
+   {
+    "row": 314,
+    "line_id": "RX-YFTR8",
+    "qty": 27,
+    "unit_rate_cents": 31170,
+    "paid_cents": 841590
+   },
+   {
+    "row": 315,
+    "line_id": "RX-3R8L9",
+    "qty": 33,
+    "unit_rate_cents": 44142,
+    "paid_cents": 1456686
+   },
+   {
+    "row": 316,
+    "line_id": "RX-Z23W9",
+    "qty": 40,
+    "unit_rate_cents": 15986,
+    "paid_cents": 541413
+   },
+   {
+    "row": 317,
+    "line_id": "RX-6Q9CL",
+    "qty": 25,
+    "unit_rate_cents": 9979,
+    "paid_cents": 249475
+   },
+   {
+    "row": 318,
+    "line_id": "RX-HLT8M",
+    "qty": 26,
+    "unit_rate_cents": 3557,
+    "paid_cents": 92482
+   },
+   {
+    "row": 319,
+    "line_id": "RX-5Y3YA",
+    "qty": 33,
+    "unit_rate_cents": 7686,
+    "paid_cents": 253638
+   },
+   {
+    "row": 320,
+    "line_id": "RX-PXFAC",
+    "qty": 36,
+    "unit_rate_cents": 10876,
+    "paid_cents": 391536
+   },
+   {
+    "row": 321,
+    "line_id": "RX-ZDJ3M",
+    "qty": 29,
+    "unit_rate_cents": 43330,
+    "paid_cents": 1256570
+   },
+   {
+    "row": 322,
+    "line_id": "RX-P9UAL",
+    "qty": 34,
+    "unit_rate_cents": 40861,
+    "paid_cents": 1602147
+   },
+   {
+    "row": 323,
+    "line_id": "RX-NK8FR",
+    "qty": 10,
+    "unit_rate_cents": 2755,
+    "paid_cents": 27550
+   },
+   {
+    "row": 324,
+    "line_id": "RX-SZ3GJ",
+    "qty": 6,
+    "unit_rate_cents": 21710,
+    "paid_cents": 130260
+   },
+   {
+    "row": 325,
+    "line_id": "RX-2UQV6",
+    "qty": 4,
+    "unit_rate_cents": 23490,
+    "paid_cents": 93960
+   },
+   {
+    "row": 326,
+    "line_id": "RX-CUC5K",
+    "qty": 22,
+    "unit_rate_cents": 4735,
+    "paid_cents": 104170
+   },
+   {
+    "row": 327,
+    "line_id": "RX-S46U7",
+    "qty": 26,
+    "unit_rate_cents": 5205,
+    "paid_cents": 135330
+   },
+   {
+    "row": 328,
+    "line_id": "RX-CFY3R",
+    "qty": 17,
+    "unit_rate_cents": 33028,
+    "paid_cents": 561476
+   },
+   {
+    "row": 329,
+    "line_id": "RX-LDH4R",
+    "qty": 6,
+    "unit_rate_cents": 44592,
+    "paid_cents": 267552
+   },
+   {
+    "row": 330,
+    "line_id": "RX-WVGCL",
+    "qty": 29,
+    "unit_rate_cents": 26996,
+    "paid_cents": 782884
+   },
+   {
+    "row": 331,
+    "line_id": "RX-G7SFW",
+    "qty": 7,
+    "unit_rate_cents": 31229,
+    "paid_cents": 218603
+   },
+   {
+    "row": 332,
+    "line_id": "RX-E48RD",
+    "qty": 3,
+    "unit_rate_cents": 37266,
+    "paid_cents": 111798
+   },
+   {
+    "row": 333,
+    "line_id": "RX-3GPTY",
+    "qty": 33,
+    "unit_rate_cents": 4526,
+    "paid_cents": 149358
+   },
+   {
+    "row": 334,
+    "line_id": "RX-KCAKE",
+    "qty": 17,
+    "unit_rate_cents": 4369,
+    "paid_cents": 74273
+   },
+   {
+    "row": 335,
+    "line_id": "RX-3645D",
+    "qty": 23,
+    "unit_rate_cents": 31044,
+    "paid_cents": 714012
+   },
+   {
+    "row": 336,
+    "line_id": "RX-CSPQN",
+    "qty": 7,
+    "unit_rate_cents": 43219,
+    "paid_cents": 302533
+   },
+   {
+    "row": 337,
+    "line_id": "RX-S2TYW",
+    "qty": 28,
+    "unit_rate_cents": 40897,
+    "paid_cents": 1145116
+   },
+   {
+    "row": 338,
+    "line_id": "RX-Y5HME",
+    "qty": 9,
+    "unit_rate_cents": 9966,
+    "paid_cents": 89694
+   },
+   {
+    "row": 339,
+    "line_id": "RX-JHJ9A",
+    "qty": 23,
+    "unit_rate_cents": 28852,
+    "paid_cents": 663596
+   },
+   {
+    "row": 340,
+    "line_id": "RX-9KUDB",
+    "qty": 37,
+    "unit_rate_cents": 46506,
+    "paid_cents": 1720722
+   },
+   {
+    "row": 341,
+    "line_id": "RX-SS7WY",
+    "qty": 4,
+    "unit_rate_cents": 29364,
+    "paid_cents": 117456
+   },
+   {
+    "row": 342,
+    "line_id": "RX-ASRSY",
+    "qty": 9,
+    "unit_rate_cents": 34186,
+    "paid_cents": 307674
+   },
+   {
+    "row": 343,
+    "line_id": "RX-W5BAU",
+    "qty": 2,
+    "unit_rate_cents": 28684,
+    "paid_cents": 57368
+   },
+   {
+    "row": 344,
+    "line_id": "RX-TPJ2G",
+    "qty": 33,
+    "unit_rate_cents": 11615,
+    "paid_cents": 341568
+   },
+   {
+    "row": 345,
+    "line_id": "RX-853D9",
+    "qty": 5,
+    "unit_rate_cents": 4400,
+    "paid_cents": 22000
+   },
+   {
+    "row": 346,
+    "line_id": "RX-TKN46",
+    "qty": 17,
+    "unit_rate_cents": 28395,
+    "paid_cents": 482715
+   },
+   {
+    "row": 347,
+    "line_id": "RX-6NMPR",
+    "qty": 19,
+    "unit_rate_cents": 28499,
+    "paid_cents": 541481
+   },
+   {
+    "row": 348,
+    "line_id": "RX-E73EV",
+    "qty": 33,
+    "unit_rate_cents": 16076,
+    "paid_cents": 530508
+   },
+   {
+    "row": 349,
+    "line_id": "RX-ZBYQS",
+    "qty": 9,
+    "unit_rate_cents": 28448,
+    "paid_cents": 256032
+   },
+   {
+    "row": 350,
+    "line_id": "RX-8GMFQ",
+    "qty": 11,
+    "unit_rate_cents": 39063,
+    "paid_cents": 429693
+   },
+   {
+    "row": 351,
+    "line_id": "RX-LCJJN",
+    "qty": 32,
+    "unit_rate_cents": 36455,
+    "paid_cents": 1166560
+   },
+   {
+    "row": 352,
+    "line_id": "RX-Q6EWP",
+    "qty": 4,
+    "unit_rate_cents": 31878,
+    "paid_cents": 127512
+   },
+   {
+    "row": 353,
+    "line_id": "RX-VFQ6M",
+    "qty": 10,
+    "unit_rate_cents": 30249,
+    "paid_cents": 302490
+   },
+   {
+    "row": 354,
+    "line_id": "RX-BABDY",
+    "qty": 27,
+    "unit_rate_cents": 6886,
+    "paid_cents": 185922
+   },
+   {
+    "row": 355,
+    "line_id": "RX-7J89K",
+    "qty": 2,
+    "unit_rate_cents": 44732,
+    "paid_cents": 89464
+   },
+   {
+    "row": 356,
+    "line_id": "RX-DCMSN",
+    "qty": 4,
+    "unit_rate_cents": 37479,
+    "paid_cents": 149916
+   },
+   {
+    "row": 357,
+    "line_id": "RX-SJDVN",
+    "qty": 5,
+    "unit_rate_cents": 40341,
+    "paid_cents": 182645
+   },
+   {
+    "row": 358,
+    "line_id": "RX-2G4EA",
+    "qty": 3,
+    "unit_rate_cents": 34549,
+    "paid_cents": 103647
+   },
+   {
+    "row": 359,
+    "line_id": "RX-FRT8M",
+    "qty": 31,
+    "unit_rate_cents": 11489,
+    "paid_cents": 356159
+   },
+   {
+    "row": 360,
+    "line_id": "RX-K9V2E",
+    "qty": 3,
+    "unit_rate_cents": 1942,
+    "paid_cents": 6130
+   },
+   {
+    "row": 361,
+    "line_id": "RX-XC7SJ",
+    "qty": 7,
+    "unit_rate_cents": 32935,
+    "paid_cents": 230545
+   },
+   {
+    "row": 362,
+    "line_id": "RX-J3ZHM",
+    "qty": 5,
+    "unit_rate_cents": 36221,
+    "paid_cents": 181105
+   },
+   {
+    "row": 363,
+    "line_id": "RX-8KPYA",
+    "qty": 22,
+    "unit_rate_cents": 18499,
+    "paid_cents": 406978
+   },
+   {
+    "row": 364,
+    "line_id": "RX-6W9RF",
+    "qty": 17,
+    "unit_rate_cents": 13927,
+    "paid_cents": 236759
+   },
+   {
+    "row": 365,
+    "line_id": "RX-UUXHQ",
+    "qty": 16,
+    "unit_rate_cents": 29095,
+    "paid_cents": 465520
+   },
+   {
+    "row": 366,
+    "line_id": "RX-ZNZKL",
+    "qty": 37,
+    "unit_rate_cents": 21864,
+    "paid_cents": 808968
+   },
+   {
+    "row": 367,
+    "line_id": "RX-YVLN9",
+    "qty": 11,
+    "unit_rate_cents": 20960,
+    "paid_cents": 230560
+   },
+   {
+    "row": 368,
+    "line_id": "RX-3JWK6",
+    "qty": 29,
+    "unit_rate_cents": 32971,
+    "paid_cents": 956159
+   },
+   {
+    "row": 369,
+    "line_id": "RX-SEZEN",
+    "qty": 5,
+    "unit_rate_cents": 1527,
+    "paid_cents": 5493
+   },
+   {
+    "row": 370,
+    "line_id": "RX-JBS57",
+    "qty": 35,
+    "unit_rate_cents": 4831,
+    "paid_cents": 169085
+   },
+   {
+    "row": 371,
+    "line_id": "RX-7G2GF",
+    "qty": 21,
+    "unit_rate_cents": 16746,
+    "paid_cents": 351666
+   },
+   {
+    "row": 372,
+    "line_id": "RX-KRP6G",
+    "qty": 2,
+    "unit_rate_cents": 25200,
+    "paid_cents": 45803
+   },
+   {
+    "row": 373,
+    "line_id": "RX-93GVM",
+    "qty": 8,
+    "unit_rate_cents": 32279,
+    "paid_cents": 346826
+   },
+   {
+    "row": 374,
+    "line_id": "RX-5W57X",
+    "qty": 10,
+    "unit_rate_cents": 37496,
+    "paid_cents": 303311
+   },
+   {
+    "row": 375,
+    "line_id": "RX-F8NPS",
+    "qty": 16,
+    "unit_rate_cents": 43284,
+    "paid_cents": 692544
+   },
+   {
+    "row": 376,
+    "line_id": "RX-F3WE4",
+    "qty": 7,
+    "unit_rate_cents": 32340,
+    "paid_cents": 226380
+   },
+   {
+    "row": 377,
+    "line_id": "RX-62L2T",
+    "qty": 34,
+    "unit_rate_cents": 41068,
+    "paid_cents": 1396312
+   },
+   {
+    "row": 378,
+    "line_id": "RX-SE8K4",
+    "qty": 2,
+    "unit_rate_cents": 23929,
+    "paid_cents": 47858
+   },
+   {
+    "row": 379,
+    "line_id": "RX-EB3Z4",
+    "qty": 16,
+    "unit_rate_cents": 11157,
+    "paid_cents": 178512
+   },
+   {
+    "row": 380,
+    "line_id": "RX-UKKUU",
+    "qty": 33,
+    "unit_rate_cents": 38117,
+    "paid_cents": 1257861
+   },
+   {
+    "row": 381,
+    "line_id": "RX-GT5BG",
+    "qty": 17,
+    "unit_rate_cents": 37175,
+    "paid_cents": 631975
+   },
+   {
+    "row": 382,
+    "line_id": "RX-3G6MB",
+    "qty": 34,
+    "unit_rate_cents": 15575,
+    "paid_cents": 529550
+   },
+   {
+    "row": 383,
+    "line_id": "RX-WWUYK",
+    "qty": 32,
+    "unit_rate_cents": 6478,
+    "paid_cents": 270417
+   },
+   {
+    "row": 384,
+    "line_id": "RX-5RAWG",
+    "qty": 27,
+    "unit_rate_cents": 9476,
+    "paid_cents": 255852
+   },
+   {
+    "row": 385,
+    "line_id": "RX-2ARUX",
+    "qty": 5,
+    "unit_rate_cents": 20699,
+    "paid_cents": 103495
+   },
+   {
+    "row": 386,
+    "line_id": "RX-BXTNJ",
+    "qty": 32,
+    "unit_rate_cents": 32747,
+    "paid_cents": 1047904
+   },
+   {
+    "row": 387,
+    "line_id": "RX-JDU48",
+    "qty": 22,
+    "unit_rate_cents": 8071,
+    "paid_cents": 165007
+   },
+   {
+    "row": 388,
+    "line_id": "RX-VVLP9",
+    "qty": 7,
+    "unit_rate_cents": 4538,
+    "paid_cents": 31766
+   },
+   {
+    "row": 389,
+    "line_id": "RX-G7XSQ",
+    "qty": 28,
+    "unit_rate_cents": 3780,
+    "paid_cents": 76007
+   },
+   {
+    "row": 390,
+    "line_id": "RX-CTS2J",
+    "qty": 35,
+    "unit_rate_cents": 21901,
+    "paid_cents": 826728
+   },
+   {
+    "row": 391,
+    "line_id": "RX-L54X4",
+    "qty": 18,
+    "unit_rate_cents": 23272,
+    "paid_cents": 418896
+   },
+   {
+    "row": 392,
+    "line_id": "RX-3NM5S",
+    "qty": 19,
+    "unit_rate_cents": 19732,
+    "paid_cents": 374908
+   },
+   {
+    "row": 393,
+    "line_id": "RX-EH339",
+    "qty": 33,
+    "unit_rate_cents": 41818,
+    "paid_cents": 1379994
+   },
+   {
+    "row": 394,
+    "line_id": "RX-XXPYY",
+    "qty": 18,
+    "unit_rate_cents": 23706,
+    "paid_cents": 426708
+   },
+   {
+    "row": 395,
+    "line_id": "RX-ENUM3",
+    "qty": 29,
+    "unit_rate_cents": 25838,
+    "paid_cents": 749302
+   },
+   {
+    "row": 396,
+    "line_id": "RX-UUXMD",
+    "qty": 30,
+    "unit_rate_cents": 5527,
+    "paid_cents": 165810
+   },
+   {
+    "row": 397,
+    "line_id": "RX-V4CZV",
+    "qty": 12,
+    "unit_rate_cents": 10751,
+    "paid_cents": 129012
+   },
+   {
+    "row": 398,
+    "line_id": "RX-Y9JK8",
+    "qty": 4,
+    "unit_rate_cents": 17749,
+    "paid_cents": 70996
+   },
+   {
+    "row": 399,
+    "line_id": "RX-RNR7W",
+    "qty": 17,
+    "unit_rate_cents": 44340,
+    "paid_cents": 753780
+   },
+   {
+    "row": 400,
+    "line_id": "RX-VBPJE",
+    "qty": 14,
+    "unit_rate_cents": 28043,
+    "paid_cents": 392602
+   },
+   {
+    "row": 401,
+    "line_id": "RX-6Z8ZF",
+    "qty": 40,
+    "unit_rate_cents": 20134,
+    "paid_cents": 805360
+   },
+   {
+    "row": 402,
+    "line_id": "RX-QV8VM",
+    "qty": 25,
+    "unit_rate_cents": 45963,
+    "paid_cents": 1149075
+   },
+   {
+    "row": 403,
+    "line_id": "RX-F6WY3",
+    "qty": 32,
+    "unit_rate_cents": 41483,
+    "paid_cents": 919770
+   },
+   {
+    "row": 404,
+    "line_id": "RX-889E7",
+    "qty": 36,
+    "unit_rate_cents": 36651,
+    "paid_cents": 1319436
+   },
+   {
+    "row": 405,
+    "line_id": "RX-HUBJK",
+    "qty": 4,
+    "unit_rate_cents": 3394,
+    "paid_cents": 13576
+   },
+   {
+    "row": 406,
+    "line_id": "RX-NWZQ5",
+    "qty": 18,
+    "unit_rate_cents": 3529,
+    "paid_cents": 63522
+   },
+   {
+    "row": 407,
+    "line_id": "RX-WCYMN",
+    "qty": 1,
+    "unit_rate_cents": 39875,
+    "paid_cents": 39875
+   },
+   {
+    "row": 408,
+    "line_id": "RX-FGJK2",
+    "qty": 7,
+    "unit_rate_cents": 6824,
+    "paid_cents": 47768
+   },
+   {
+    "row": 409,
+    "line_id": "RX-YC8VA",
+    "qty": 26,
+    "unit_rate_cents": 21222,
+    "paid_cents": 551772
+   },
+   {
+    "row": 410,
+    "line_id": "RX-94N5E",
+    "qty": 25,
+    "unit_rate_cents": 32552,
+    "paid_cents": 813800
+   },
+   {
+    "row": 411,
+    "line_id": "RX-MNLJZ",
+    "qty": 34,
+    "unit_rate_cents": 45151,
+    "paid_cents": 1535134
+   },
+   {
+    "row": 412,
+    "line_id": "RX-MNQP3",
+    "qty": 39,
+    "unit_rate_cents": 7298,
+    "paid_cents": 284622
+   },
+   {
+    "row": 413,
+    "line_id": "RX-Y4BEQ",
+    "qty": 12,
+    "unit_rate_cents": 36444,
+    "paid_cents": 437328
+   },
+   {
+    "row": 414,
+    "line_id": "RX-JS5RN",
+    "qty": 36,
+    "unit_rate_cents": 31800,
+    "paid_cents": 1144800
+   },
+   {
+    "row": 415,
+    "line_id": "RX-7TGVV",
+    "qty": 19,
+    "unit_rate_cents": 7169,
+    "paid_cents": 136211
+   },
+   {
+    "row": 416,
+    "line_id": "RX-CW2BA",
+    "qty": 32,
+    "unit_rate_cents": 43398,
+    "paid_cents": 1388736
+   },
+   {
+    "row": 417,
+    "line_id": "RX-QRVNE",
+    "qty": 26,
+    "unit_rate_cents": 35901,
+    "paid_cents": 933426
+   },
+   {
+    "row": 418,
+    "line_id": "RX-QNPTE",
+    "qty": 24,
+    "unit_rate_cents": 12006,
+    "paid_cents": 288144
+   },
+   {
+    "row": 419,
+    "line_id": "RX-PL5B9",
+    "qty": 34,
+    "unit_rate_cents": 22600,
+    "paid_cents": 768400
+   },
+   {
+    "row": 420,
+    "line_id": "RX-HEPPY",
+    "qty": 32,
+    "unit_rate_cents": 11887,
+    "paid_cents": 380384
+   },
+   {
+    "row": 421,
+    "line_id": "RX-9HVUL",
+    "qty": 29,
+    "unit_rate_cents": 32464,
+    "paid_cents": 941456
+   },
+   {
+    "row": 422,
+    "line_id": "RX-JQVUG",
+    "qty": 29,
+    "unit_rate_cents": 37445,
+    "paid_cents": 1085905
+   },
+   {
+    "row": 423,
+    "line_id": "RX-MH366",
+    "qty": 33,
+    "unit_rate_cents": 39704,
+    "paid_cents": 1310232
+   },
+   {
+    "row": 424,
+    "line_id": "RX-GA5JH",
+    "qty": 4,
+    "unit_rate_cents": 20387,
+    "paid_cents": 81548
+   },
+   {
+    "row": 425,
+    "line_id": "RX-5L66X",
+    "qty": 20,
+    "unit_rate_cents": 8141,
+    "paid_cents": 162820
+   },
+   {
+    "row": 426,
+    "line_id": "RX-N8CRN",
+    "qty": 39,
+    "unit_rate_cents": 33467,
+    "paid_cents": 1305213
+   },
+   {
+    "row": 427,
+    "line_id": "RX-BLNQW",
+    "qty": 36,
+    "unit_rate_cents": 11299,
+    "paid_cents": 406764
+   },
+   {
+    "row": 428,
+    "line_id": "RX-YU45V",
+    "qty": 25,
+    "unit_rate_cents": 10699,
+    "paid_cents": 267475
+   },
+   {
+    "row": 429,
+    "line_id": "RX-7M9GW",
+    "qty": 3,
+    "unit_rate_cents": 44788,
+    "paid_cents": 134364
+   },
+   {
+    "row": 430,
+    "line_id": "RX-DYZJE",
+    "qty": 16,
+    "unit_rate_cents": 3295,
+    "paid_cents": 52720
+   },
+   {
+    "row": 431,
+    "line_id": "RX-KYH3D",
+    "qty": 40,
+    "unit_rate_cents": 44396,
+    "paid_cents": 1775840
+   },
+   {
+    "row": 432,
+    "line_id": "RX-SMDVT",
+    "qty": 38,
+    "unit_rate_cents": 23309,
+    "paid_cents": 885742
+   },
+   {
+    "row": 433,
+    "line_id": "RX-552NU",
+    "qty": 15,
+    "unit_rate_cents": 9252,
+    "paid_cents": 138780
+   },
+   {
+    "row": 434,
+    "line_id": "RX-6YEWM",
+    "qty": 32,
+    "unit_rate_cents": 46018,
+    "paid_cents": 1039548
+   },
+   {
+    "row": 435,
+    "line_id": "RX-7FBEH",
+    "qty": 28,
+    "unit_rate_cents": 38755,
+    "paid_cents": 901339
+   },
+   {
+    "row": 436,
+    "line_id": "RX-4NU2E",
+    "qty": 39,
+    "unit_rate_cents": 28968,
+    "paid_cents": 1129752
+   },
+   {
+    "row": 437,
+    "line_id": "RX-TJVTP",
+    "qty": 30,
+    "unit_rate_cents": 19850,
+    "paid_cents": 595500
+   },
+   {
+    "row": 438,
+    "line_id": "RX-22DJS",
+    "qty": 7,
+    "unit_rate_cents": 34322,
+    "paid_cents": 240254
+   },
+   {
+    "row": 439,
+    "line_id": "RX-PSA8Y",
+    "qty": 32,
+    "unit_rate_cents": 41164,
+    "paid_cents": 1469530
+   },
+   {
+    "row": 440,
+    "line_id": "RX-97YHK",
+    "qty": 36,
+    "unit_rate_cents": 7104,
+    "paid_cents": 255744
+   },
+   {
+    "row": 441,
+    "line_id": "RX-PTBC2",
+    "qty": 8,
+    "unit_rate_cents": 19086,
+    "paid_cents": 152688
+   },
+   {
+    "row": 442,
+    "line_id": "RX-ZH999",
+    "qty": 36,
+    "unit_rate_cents": 33209,
+    "paid_cents": 1195524
+   },
+   {
+    "row": 443,
+    "line_id": "RX-NZZAQ",
+    "qty": 38,
+    "unit_rate_cents": 22815,
+    "paid_cents": 866970
+   },
+   {
+    "row": 444,
+    "line_id": "RX-YSV5V",
+    "qty": 23,
+    "unit_rate_cents": 36914,
+    "paid_cents": 849022
+   },
+   {
+    "row": 445,
+    "line_id": "RX-QP4N8",
+    "qty": 36,
+    "unit_rate_cents": 2557,
+    "paid_cents": 92052
+   },
+   {
+    "row": 446,
+    "line_id": "RX-G8W9Z",
+    "qty": 39,
+    "unit_rate_cents": 21642,
+    "paid_cents": 844038
+   },
+   {
+    "row": 447,
+    "line_id": "RX-PUA7J",
+    "qty": 36,
+    "unit_rate_cents": 47047,
+    "paid_cents": 1693692
+   },
+   {
+    "row": 448,
+    "line_id": "RX-6K235",
+    "qty": 12,
+    "unit_rate_cents": 44512,
+    "paid_cents": 534144
+   },
+   {
+    "row": 449,
+    "line_id": "RX-L76H8",
+    "qty": 38,
+    "unit_rate_cents": 8553,
+    "paid_cents": 325014
+   },
+   {
+    "row": 450,
+    "line_id": "RX-JRJ7G",
+    "qty": 11,
+    "unit_rate_cents": 19241,
+    "paid_cents": 211651
+   },
+   {
+    "row": 451,
+    "line_id": "RX-4NBKZ",
+    "qty": 38,
+    "unit_rate_cents": 17154,
+    "paid_cents": 651852
+   },
+   {
+    "row": 452,
+    "line_id": "RX-CTMWH",
+    "qty": 23,
+    "unit_rate_cents": 43940,
+    "paid_cents": 1010620
+   },
+   {
+    "row": 453,
+    "line_id": "RX-C5GPV",
+    "qty": 34,
+    "unit_rate_cents": 29204,
+    "paid_cents": 992936
+   },
+   {
+    "row": 454,
+    "line_id": "RX-SDAMS",
+    "qty": 14,
+    "unit_rate_cents": 32638,
+    "paid_cents": 456932
+   },
+   {
+    "row": 455,
+    "line_id": "RX-7AHJP",
+    "qty": 3,
+    "unit_rate_cents": 19111,
+    "paid_cents": 57333
+   },
+   {
+    "row": 456,
+    "line_id": "RX-A7FH2",
+    "qty": 21,
+    "unit_rate_cents": 10851,
+    "paid_cents": 227871
+   },
+   {
+    "row": 457,
+    "line_id": "RX-FTY9D",
+    "qty": 35,
+    "unit_rate_cents": 35076,
+    "paid_cents": 1227660
+   },
+   {
+    "row": 458,
+    "line_id": "RX-URGGN",
+    "qty": 39,
+    "unit_rate_cents": 40619,
+    "paid_cents": 1584141
+   },
+   {
+    "row": 459,
+    "line_id": "RX-TBK9Y",
+    "qty": 28,
+    "unit_rate_cents": 6711,
+    "paid_cents": 187908
+   },
+   {
+    "row": 460,
+    "line_id": "RX-VRRZL",
+    "qty": 24,
+    "unit_rate_cents": 24541,
+    "paid_cents": 588984
+   },
+   {
+    "row": 461,
+    "line_id": "RX-JWRDY",
+    "qty": 26,
+    "unit_rate_cents": 5987,
+    "paid_cents": 155662
+   },
+   {
+    "row": 462,
+    "line_id": "RX-LVZJR",
+    "qty": 5,
+    "unit_rate_cents": 32596,
+    "paid_cents": 162980
+   },
+   {
+    "row": 463,
+    "line_id": "RX-ZCZ8R",
+    "qty": 9,
+    "unit_rate_cents": 24695,
+    "paid_cents": 222255
+   },
+   {
+    "row": 464,
+    "line_id": "RX-7JQVQ",
+    "qty": 25,
+    "unit_rate_cents": 14285,
+    "paid_cents": 357125
+   },
+   {
+    "row": 465,
+    "line_id": "RX-2L5NG",
+    "qty": 22,
+    "unit_rate_cents": 9482,
+    "paid_cents": 208604
+   },
+   {
+    "row": 466,
+    "line_id": "RX-LPF66",
+    "qty": 4,
+    "unit_rate_cents": 39611,
+    "paid_cents": 158444
+   },
+   {
+    "row": 467,
+    "line_id": "RX-RKK75",
+    "qty": 22,
+    "unit_rate_cents": 23888,
+    "paid_cents": 525536
+   },
+   {
+    "row": 468,
+    "line_id": "RX-HFT4L",
+    "qty": 2,
+    "unit_rate_cents": 44464,
+    "paid_cents": 88928
+   },
+   {
+    "row": 469,
+    "line_id": "RX-NBXZF",
+    "qty": 38,
+    "unit_rate_cents": 4563,
+    "paid_cents": 173394
+   },
+   {
+    "row": 470,
+    "line_id": "RX-JTEJC",
+    "qty": 25,
+    "unit_rate_cents": 11978,
+    "paid_cents": 326248
+   },
+   {
+    "row": 471,
+    "line_id": "RX-E25SM",
+    "qty": 33,
+    "unit_rate_cents": 23258,
+    "paid_cents": 767514
+   },
+   {
+    "row": 472,
+    "line_id": "RX-2GYZ5",
+    "qty": 27,
+    "unit_rate_cents": 2064,
+    "paid_cents": 55728
+   },
+   {
+    "row": 473,
+    "line_id": "RX-FGU9G",
+    "qty": 9,
+    "unit_rate_cents": 32599,
+    "paid_cents": 330486
+   },
+   {
+    "row": 474,
+    "line_id": "RX-PRUWP",
+    "qty": 23,
+    "unit_rate_cents": 2363,
+    "paid_cents": 54349
+   },
+   {
+    "row": 475,
+    "line_id": "RX-2DR2W",
+    "qty": 32,
+    "unit_rate_cents": 19383,
+    "paid_cents": 620256
+   },
+   {
+    "row": 476,
+    "line_id": "RX-V36FJ",
+    "qty": 34,
+    "unit_rate_cents": 3055,
+    "paid_cents": 103870
+   },
+   {
+    "row": 477,
+    "line_id": "RX-K3EA8",
+    "qty": 12,
+    "unit_rate_cents": 10377,
+    "paid_cents": 141477
+   },
+   {
+    "row": 478,
+    "line_id": "RX-BZ5PH",
+    "qty": 8,
+    "unit_rate_cents": 24893,
+    "paid_cents": 199144
+   },
+   {
+    "row": 479,
+    "line_id": "RX-Q6BC9",
+    "qty": 7,
+    "unit_rate_cents": 45324,
+    "paid_cents": 317268
+   },
+   {
+    "row": 480,
+    "line_id": "RX-A7HEA",
+    "qty": 9,
+    "unit_rate_cents": 5746,
+    "paid_cents": 51714
+   },
+   {
+    "row": 481,
+    "line_id": "RX-7UJD5",
+    "qty": 27,
+    "unit_rate_cents": 21224,
+    "paid_cents": 573048
+   },
+   {
+    "row": 482,
+    "line_id": "RX-ASFPD",
+    "qty": 38,
+    "unit_rate_cents": 44360,
+    "paid_cents": 1685680
+   },
+   {
+    "row": 483,
+    "line_id": "RX-3DL6Y",
+    "qty": 12,
+    "unit_rate_cents": 8957,
+    "paid_cents": 107484
+   },
+   {
+    "row": 484,
+    "line_id": "RX-KEK5Z",
+    "qty": 24,
+    "unit_rate_cents": 16990,
+    "paid_cents": 407760
+   },
+   {
+    "row": 485,
+    "line_id": "RX-PCVDM",
+    "qty": 19,
+    "unit_rate_cents": 46427,
+    "paid_cents": 882113
+   },
+   {
+    "row": 486,
+    "line_id": "RX-YEJBX",
+    "qty": 14,
+    "unit_rate_cents": 11233,
+    "paid_cents": 157262
+   },
+   {
+    "row": 487,
+    "line_id": "RX-ZKFQH",
+    "qty": 22,
+    "unit_rate_cents": 28612,
+    "paid_cents": 629464
+   },
+   {
+    "row": 488,
+    "line_id": "RX-BRPE3",
+    "qty": 6,
+    "unit_rate_cents": 44819,
+    "paid_cents": 268914
+   },
+   {
+    "row": 489,
+    "line_id": "RX-MSH4T",
+    "qty": 21,
+    "unit_rate_cents": 37888,
+    "paid_cents": 1027178
+   },
+   {
+    "row": 490,
+    "line_id": "RX-XZ7X4",
+    "qty": 23,
+    "unit_rate_cents": 38316,
+    "paid_cents": 778560
+   },
+   {
+    "row": 491,
+    "line_id": "RX-E7G6J",
+    "qty": 30,
+    "unit_rate_cents": 5703,
+    "paid_cents": 171090
+   },
+   {
+    "row": 492,
+    "line_id": "RX-J3MBQ",
+    "qty": 18,
+    "unit_rate_cents": 32955,
+    "paid_cents": 593190
+   },
+   {
+    "row": 493,
+    "line_id": "RX-JLFZX",
+    "qty": 4,
+    "unit_rate_cents": 24252,
+    "paid_cents": 97008
+   },
+   {
+    "row": 494,
+    "line_id": "RX-A5F35",
+    "qty": 22,
+    "unit_rate_cents": 35384,
+    "paid_cents": 778448
+   },
+   {
+    "row": 495,
+    "line_id": "RX-F9YPG",
+    "qty": 7,
+    "unit_rate_cents": 16664,
+    "paid_cents": 116648
+   },
+   {
+    "row": 496,
+    "line_id": "RX-YD6UD",
+    "qty": 25,
+    "unit_rate_cents": 44691,
+    "paid_cents": 1117275
+   },
+   {
+    "row": 497,
+    "line_id": "RX-D3V8K",
+    "qty": 5,
+    "unit_rate_cents": 23257,
+    "paid_cents": 116285
+   },
+   {
+    "row": 498,
+    "line_id": "RX-JRELJ",
+    "qty": 11,
+    "unit_rate_cents": 35703,
+    "paid_cents": 392733
+   },
+   {
+    "row": 499,
+    "line_id": "RX-38HKN",
+    "qty": 6,
+    "unit_rate_cents": 2281,
+    "paid_cents": 13686
+   },
+   {
+    "row": 500,
+    "line_id": "RX-QGH4Z",
+    "qty": 26,
+    "unit_rate_cents": 45604,
+    "paid_cents": 1342877
+   },
+   {
+    "row": 501,
+    "line_id": "RX-EDNKY",
+    "qty": 26,
+    "unit_rate_cents": 8092,
+    "paid_cents": 167058
+   },
+   {
+    "row": 502,
+    "line_id": "RX-WECNX",
+    "qty": 3,
+    "unit_rate_cents": 22252,
+    "paid_cents": 66756
+   },
+   {
+    "row": 503,
+    "line_id": "RX-LZBXG",
+    "qty": 20,
+    "unit_rate_cents": 23246,
+    "paid_cents": 604451
+   },
+   {
+    "row": 504,
+    "line_id": "RX-478NP",
+    "qty": 12,
+    "unit_rate_cents": 18903,
+    "paid_cents": 302647
+   },
+   {
+    "row": 505,
+    "line_id": "RX-Q5G5L",
+    "qty": 15,
+    "unit_rate_cents": 3317,
+    "paid_cents": 49755
+   },
+   {
+    "row": 506,
+    "line_id": "RX-UPJ6P",
+    "qty": 8,
+    "unit_rate_cents": 5856,
+    "paid_cents": 46848
+   },
+   {
+    "row": 507,
+    "line_id": "RX-JRN55",
+    "qty": 31,
+    "unit_rate_cents": 16846,
+    "paid_cents": 522226
+   },
+   {
+    "row": 508,
+    "line_id": "RX-G78DJ",
+    "qty": 21,
+    "unit_rate_cents": 38994,
+    "paid_cents": 818874
+   },
+   {
+    "row": 509,
+    "line_id": "RX-U873X",
+    "qty": 40,
+    "unit_rate_cents": 1356,
+    "paid_cents": 54240
+   },
+   {
+    "row": 510,
+    "line_id": "RX-W6QFJ",
+    "qty": 13,
+    "unit_rate_cents": 6904,
+    "paid_cents": 89752
+   },
+   {
+    "row": 511,
+    "line_id": "RX-KKDK9",
+    "qty": 18,
+    "unit_rate_cents": 38220,
+    "paid_cents": 625659
+   },
+   {
+    "row": 512,
+    "line_id": "RX-FPPW4",
+    "qty": 38,
+    "unit_rate_cents": 7665,
+    "paid_cents": 291270
+   },
+   {
+    "row": 513,
+    "line_id": "RX-HY6QC",
+    "qty": 31,
+    "unit_rate_cents": 39044,
+    "paid_cents": 1210364
+   },
+   {
+    "row": 514,
+    "line_id": "RX-5PCTQ",
+    "qty": 1,
+    "unit_rate_cents": 46713,
+    "paid_cents": 46713
+   },
+   {
+    "row": 515,
+    "line_id": "RX-78JB7",
+    "qty": 19,
+    "unit_rate_cents": 25555,
+    "paid_cents": 451273
+   },
+   {
+    "row": 516,
+    "line_id": "RX-6CZ6D",
+    "qty": 16,
+    "unit_rate_cents": 11099,
+    "paid_cents": 177584
+   },
+   {
+    "row": 517,
+    "line_id": "RX-9VK6B",
+    "qty": 20,
+    "unit_rate_cents": 4219,
+    "paid_cents": 84380
+   },
+   {
+    "row": 518,
+    "line_id": "RX-Z2YMF",
+    "qty": 18,
+    "unit_rate_cents": 26422,
+    "paid_cents": 475596
+   },
+   {
+    "row": 519,
+    "line_id": "RX-KDRCQ",
+    "qty": 6,
+    "unit_rate_cents": 31687,
+    "paid_cents": 190122
+   },
+   {
+    "row": 520,
+    "line_id": "RX-AHPTF",
+    "qty": 29,
+    "unit_rate_cents": 16528,
+    "paid_cents": 479312
+   },
+   {
+    "row": 521,
+    "line_id": "RX-CD499",
+    "qty": 5,
+    "unit_rate_cents": 6825,
+    "paid_cents": 34125
+   },
+   {
+    "row": 522,
+    "line_id": "RX-RNKAH",
+    "qty": 31,
+    "unit_rate_cents": 22639,
+    "paid_cents": 754667
+   },
+   {
+    "row": 523,
+    "line_id": "RX-9SSFV",
+    "qty": 39,
+    "unit_rate_cents": 20440,
+    "paid_cents": 797160
+   },
+   {
+    "row": 524,
+    "line_id": "RX-CDHA8",
+    "qty": 40,
+    "unit_rate_cents": 47433,
+    "paid_cents": 1897320
+   },
+   {
+    "row": 525,
+    "line_id": "RX-L8PQM",
+    "qty": 26,
+    "unit_rate_cents": 5673,
+    "paid_cents": 147498
+   },
+   {
+    "row": 526,
+    "line_id": "RX-NBR33",
+    "qty": 16,
+    "unit_rate_cents": 39171,
+    "paid_cents": 626736
+   },
+   {
+    "row": 527,
+    "line_id": "RX-Z38BU",
+    "qty": 21,
+    "unit_rate_cents": 36687,
+    "paid_cents": 770427
+   },
+   {
+    "row": 528,
+    "line_id": "RX-VWFGC",
+    "qty": 27,
+    "unit_rate_cents": 15450,
+    "paid_cents": 417150
+   },
+   {
+    "row": 529,
+    "line_id": "RX-6T498",
+    "qty": 1,
+    "unit_rate_cents": 5532,
+    "paid_cents": 5844
+   },
+   {
+    "row": 530,
+    "line_id": "RX-L87AJ",
+    "qty": 11,
+    "unit_rate_cents": 32911,
+    "paid_cents": 362021
+   },
+   {
+    "row": 531,
+    "line_id": "RX-GUCKR",
+    "qty": 8,
+    "unit_rate_cents": 47069,
+    "paid_cents": 376552
+   },
+   {
+    "row": 532,
+    "line_id": "RX-89XR6",
+    "qty": 11,
+    "unit_rate_cents": 36373,
+    "paid_cents": 400103
+   },
+   {
+    "row": 533,
+    "line_id": "RX-2VWVC",
+    "qty": 20,
+    "unit_rate_cents": 27589,
+    "paid_cents": 658184
+   },
+   {
+    "row": 534,
+    "line_id": "RX-MZAV5",
+    "qty": 27,
+    "unit_rate_cents": 40800,
+    "paid_cents": 1101600
+   },
+   {
+    "row": 535,
+    "line_id": "RX-RVWFK",
+    "qty": 1,
+    "unit_rate_cents": 18249,
+    "paid_cents": 18249
+   },
+   {
+    "row": 536,
+    "line_id": "RX-UYNJ4",
+    "qty": 27,
+    "unit_rate_cents": 25059,
+    "paid_cents": 676593
+   },
+   {
+    "row": 537,
+    "line_id": "RX-HP25W",
+    "qty": 4,
+    "unit_rate_cents": 13461,
+    "paid_cents": 60407
+   },
+   {
+    "row": 538,
+    "line_id": "RX-A4SF9",
+    "qty": 2,
+    "unit_rate_cents": 40545,
+    "paid_cents": 81090
+   },
+   {
+    "row": 539,
+    "line_id": "RX-347HN",
+    "qty": 9,
+    "unit_rate_cents": 20501,
+    "paid_cents": 184509
+   },
+   {
+    "row": 540,
+    "line_id": "RX-GKLGP",
+    "qty": 36,
+    "unit_rate_cents": 17982,
+    "paid_cents": 588417
+   },
+   {
+    "row": 541,
+    "line_id": "RX-AT6E7",
+    "qty": 30,
+    "unit_rate_cents": 36099,
+    "paid_cents": 1082970
+   },
+   {
+    "row": 542,
+    "line_id": "RX-7DSCK",
+    "qty": 35,
+    "unit_rate_cents": 38292,
+    "paid_cents": 1340220
+   },
+   {
+    "row": 543,
+    "line_id": "RX-TQ4PA",
+    "qty": 5,
+    "unit_rate_cents": 19823,
+    "paid_cents": 99115
+   },
+   {
+    "row": 544,
+    "line_id": "RX-EXTPN",
+    "qty": 34,
+    "unit_rate_cents": 13048,
+    "paid_cents": 392653
+   },
+   {
+    "row": 545,
+    "line_id": "RX-L9TWM",
+    "qty": 36,
+    "unit_rate_cents": 18920,
+    "paid_cents": 681120
+   },
+   {
+    "row": 546,
+    "line_id": "RX-ZK3UP",
+    "qty": 24,
+    "unit_rate_cents": 16865,
+    "paid_cents": 404760
+   },
+   {
+    "row": 547,
+    "line_id": "RX-XPWZY",
+    "qty": 14,
+    "unit_rate_cents": 9568,
+    "paid_cents": 133952
+   },
+   {
+    "row": 548,
+    "line_id": "RX-XVS5T",
+    "qty": 26,
+    "unit_rate_cents": 14516,
+    "paid_cents": 377416
+   },
+   {
+    "row": 549,
+    "line_id": "RX-XMVUD",
+    "qty": 23,
+    "unit_rate_cents": 16489,
+    "paid_cents": 295451
+   },
+   {
+    "row": 550,
+    "line_id": "RX-DJ7RV",
+    "qty": 34,
+    "unit_rate_cents": 43049,
+    "paid_cents": 1463666
+   },
+   {
+    "row": 551,
+    "line_id": "RX-PC7D8",
+    "qty": 34,
+    "unit_rate_cents": 37902,
+    "paid_cents": 1288668
+   },
+   {
+    "row": 552,
+    "line_id": "RX-N26YK",
+    "qty": 2,
+    "unit_rate_cents": 17222,
+    "paid_cents": 34444
+   },
+   {
+    "row": 553,
+    "line_id": "RX-5QEWR",
+    "qty": 22,
+    "unit_rate_cents": 30539,
+    "paid_cents": 671858
+   },
+   {
+    "row": 554,
+    "line_id": "RX-4D4BA",
+    "qty": 17,
+    "unit_rate_cents": 37668,
+    "paid_cents": 484128
+   },
+   {
+    "row": 555,
+    "line_id": "RX-7M4NB",
+    "qty": 40,
+    "unit_rate_cents": 2002,
+    "paid_cents": 64870
+   },
+   {
+    "row": 556,
+    "line_id": "RX-5JKKT",
+    "qty": 14,
+    "unit_rate_cents": 46276,
+    "paid_cents": 647864
+   },
+   {
+    "row": 557,
+    "line_id": "RX-JWA6R",
+    "qty": 12,
+    "unit_rate_cents": 8015,
+    "paid_cents": 96180
+   },
+   {
+    "row": 558,
+    "line_id": "RX-QJ7NV",
+    "qty": 13,
+    "unit_rate_cents": 36513,
+    "paid_cents": 474669
+   },
+   {
+    "row": 559,
+    "line_id": "RX-HK39K",
+    "qty": 40,
+    "unit_rate_cents": 14679,
+    "paid_cents": 587160
+   },
+   {
+    "row": 560,
+    "line_id": "RX-ESBPQ",
+    "qty": 29,
+    "unit_rate_cents": 1372,
+    "paid_cents": 39788
+   },
+   {
+    "row": 561,
+    "line_id": "RX-5NHJR",
+    "qty": 14,
+    "unit_rate_cents": 17165,
+    "paid_cents": 240310
+   },
+   {
+    "row": 562,
+    "line_id": "RX-K3W66",
+    "qty": 4,
+    "unit_rate_cents": 42013,
+    "paid_cents": 195059
+   },
+   {
+    "row": 563,
+    "line_id": "RX-P3DEE",
+    "qty": 32,
+    "unit_rate_cents": 11626,
+    "paid_cents": 372032
+   },
+   {
+    "row": 564,
+    "line_id": "RX-JGN4M",
+    "qty": 37,
+    "unit_rate_cents": 10628,
+    "paid_cents": 393236
+   },
+   {
+    "row": 565,
+    "line_id": "RX-CWCDM",
+    "qty": 4,
+    "unit_rate_cents": 17565,
+    "paid_cents": 70260
+   },
+   {
+    "row": 566,
+    "line_id": "RX-U9YQX",
+    "qty": 6,
+    "unit_rate_cents": 17244,
+    "paid_cents": 103464
+   },
+   {
+    "row": 567,
+    "line_id": "RX-RQYWL",
+    "qty": 8,
+    "unit_rate_cents": 37773,
+    "paid_cents": 302184
+   },
+   {
+    "row": 568,
+    "line_id": "RX-RTVZR",
+    "qty": 9,
+    "unit_rate_cents": 35800,
+    "paid_cents": 322200
+   },
+   {
+    "row": 569,
+    "line_id": "RX-N8YF9",
+    "qty": 30,
+    "unit_rate_cents": 22977,
+    "paid_cents": 689310
+   },
+   {
+    "row": 570,
+    "line_id": "RX-42FSD",
+    "qty": 17,
+    "unit_rate_cents": 24550,
+    "paid_cents": 373704
+   },
+   {
+    "row": 571,
+    "line_id": "RX-378NS",
+    "qty": 1,
+    "unit_rate_cents": 12021,
+    "paid_cents": 12021
+   },
+   {
+    "row": 572,
+    "line_id": "RX-VHX8T",
+    "qty": 5,
+    "unit_rate_cents": 10243,
+    "paid_cents": 51215
+   },
+   {
+    "row": 573,
+    "line_id": "RX-AR7Q5",
+    "qty": 2,
+    "unit_rate_cents": 28653,
+    "paid_cents": 57306
+   },
+   {
+    "row": 574,
+    "line_id": "RX-4EMTU",
+    "qty": 35,
+    "unit_rate_cents": 21812,
+    "paid_cents": 523918
+   },
+   {
+    "row": 575,
+    "line_id": "RX-7S7QJ",
+    "qty": 22,
+    "unit_rate_cents": 26526,
+    "paid_cents": 583572
+   },
+   {
+    "row": 576,
+    "line_id": "RX-B2YSA",
+    "qty": 28,
+    "unit_rate_cents": 29079,
+    "paid_cents": 814212
+   },
+   {
+    "row": 577,
+    "line_id": "RX-9TMZ9",
+    "qty": 33,
+    "unit_rate_cents": 3218,
+    "paid_cents": 106194
+   },
+   {
+    "row": 578,
+    "line_id": "RX-W9RS5",
+    "qty": 2,
+    "unit_rate_cents": 18054,
+    "paid_cents": 36108
+   },
+   {
+    "row": 579,
+    "line_id": "RX-J63TN",
+    "qty": 6,
+    "unit_rate_cents": 14897,
+    "paid_cents": 89382
+   },
+   {
+    "row": 580,
+    "line_id": "RX-4KPR5",
+    "qty": 26,
+    "unit_rate_cents": 40362,
+    "paid_cents": 1049412
+   },
+   {
+    "row": 581,
+    "line_id": "RX-PDMA2",
+    "qty": 31,
+    "unit_rate_cents": 7785,
+    "paid_cents": 241335
+   },
+   {
+    "row": 582,
+    "line_id": "RX-MS6VG",
+    "qty": 15,
+    "unit_rate_cents": 6778,
+    "paid_cents": 101670
+   },
+   {
+    "row": 583,
+    "line_id": "RX-LFJP2",
+    "qty": 39,
+    "unit_rate_cents": 11656,
+    "paid_cents": 454584
+   },
+   {
+    "row": 584,
+    "line_id": "RX-3SMQ2",
+    "qty": 35,
+    "unit_rate_cents": 28894,
+    "paid_cents": 1011290
+   },
+   {
+    "row": 585,
+    "line_id": "RX-VS96K",
+    "qty": 37,
+    "unit_rate_cents": 38102,
+    "paid_cents": 1409774
+   },
+   {
+    "row": 586,
+    "line_id": "RX-X8EWC",
+    "qty": 24,
+    "unit_rate_cents": 39671,
+    "paid_cents": 952104
+   },
+   {
+    "row": 587,
+    "line_id": "RX-M6LW7",
+    "qty": 6,
+    "unit_rate_cents": 40697,
+    "paid_cents": 244182
+   },
+   {
+    "row": 588,
+    "line_id": "RX-9HNVS",
+    "qty": 20,
+    "unit_rate_cents": 11358,
+    "paid_cents": 227160
+   },
+   {
+    "row": 589,
+    "line_id": "RX-H5FG8",
+    "qty": 13,
+    "unit_rate_cents": 44405,
+    "paid_cents": 577265
+   },
+   {
+    "row": 590,
+    "line_id": "RX-P8HJS",
+    "qty": 12,
+    "unit_rate_cents": 43405,
+    "paid_cents": 520860
+   },
+   {
+    "row": 591,
+    "line_id": "RX-UNG4U",
+    "qty": 1,
+    "unit_rate_cents": 29370,
+    "paid_cents": 29370
+   },
+   {
+    "row": 592,
+    "line_id": "RX-RQ3PD",
+    "qty": 37,
+    "unit_rate_cents": 20885,
+    "paid_cents": 772745
+   },
+   {
+    "row": 593,
+    "line_id": "RX-9XC2Z",
+    "qty": 21,
+    "unit_rate_cents": 20114,
+    "paid_cents": 422394
+   },
+   {
+    "row": 594,
+    "line_id": "RX-AX6NT",
+    "qty": 30,
+    "unit_rate_cents": 1953,
+    "paid_cents": 58590
+   },
+   {
+    "row": 595,
+    "line_id": "RX-5GCXK",
+    "qty": 35,
+    "unit_rate_cents": 40493,
+    "paid_cents": 1417255
+   },
+   {
+    "row": 596,
+    "line_id": "RX-7KAXF",
+    "qty": 17,
+    "unit_rate_cents": 22498,
+    "paid_cents": 382466
+   },
+   {
+    "row": 597,
+    "line_id": "RX-4BX4M",
+    "qty": 20,
+    "unit_rate_cents": 22619,
+    "paid_cents": 452380
+   },
+   {
+    "row": 598,
+    "line_id": "RX-XGRQF",
+    "qty": 27,
+    "unit_rate_cents": 10547,
+    "paid_cents": 247260
+   },
+   {
+    "row": 599,
+    "line_id": "RX-5PH9U",
+    "qty": 30,
+    "unit_rate_cents": 9735,
+    "paid_cents": 292050
+   },
+   {
+    "row": 600,
+    "line_id": "RX-NNHRQ",
+    "qty": 15,
+    "unit_rate_cents": 9020,
+    "paid_cents": 135300
+   }
+  ]
+ },
+ "items": {
+  "universe": [
+   "RX-WJZGH",
+   "RX-M42XT",
+   "RX-3RQE9",
+   "RX-4BUN5",
+   "RX-SG76H",
+   "RX-5UL5F",
+   "RX-3PDAS",
+   "RX-K83ST",
+   "RX-5HDV5",
+   "RX-P3SX7",
+   "RX-YRLTC",
+   "RX-JNNJT",
+   "RX-VCRLT",
+   "RX-2QJJH",
+   "RX-MDPTW",
+   "RX-V7UV2",
+   "RX-Y8SAT",
+   "RX-DQYRT",
+   "RX-T8UAA",
+   "RX-W55JM",
+   "RX-7C4YL",
+   "RX-JYLZR",
+   "RX-2H5AK",
+   "RX-MQZTQ",
+   "RX-VA8KD",
+   "RX-CSR97",
+   "RX-5NX9P",
+   "RX-XKNDL",
+   "RX-NNXPK",
+   "RX-5S3ZZ",
+   "RX-8MYC7",
+   "RX-DWB7C",
+   "RX-38DCE",
+   "RX-NQYDK",
+   "RX-69348",
+   "RX-PZWYK",
+   "RX-5Z7WH",
+   "RX-ECETM",
+   "RX-S9AAE",
+   "RX-WXRBC",
+   "RX-V8SRF",
+   "RX-GKFVM",
+   "RX-3CZAA",
+   "RX-38M2W",
+   "RX-Z4RAD",
+   "RX-P2L6F",
+   "RX-TD364",
+   "RX-HAHKN",
+   "RX-EPSPE",
+   "RX-AGV7X",
+   "RX-L8PZU",
+   "RX-K9FQZ",
+   "RX-25ZWH",
+   "RX-ZVHZZ",
+   "RX-8C6QY",
+   "RX-DWVGF",
+   "RX-ERH9U",
+   "RX-UXMNQ",
+   "RX-SGKTH",
+   "RX-DPWP2",
+   "RX-YKMW8",
+   "RX-MDATN",
+   "RX-BVPRK",
+   "RX-KJYYV",
+   "RX-8HVE7",
+   "RX-96TL4",
+   "RX-7GTDL",
+   "RX-P2K2P",
+   "RX-ZJ9VX",
+   "RX-XEAZ8",
+   "RX-L5AY8",
+   "RX-WVPU5",
+   "RX-YFBQY",
+   "RX-MK8LD",
+   "RX-3ACCU",
+   "RX-5YZUC",
+   "RX-F47DZ",
+   "RX-3DANZ",
+   "RX-KKUB8",
+   "RX-JTFU7",
+   "RX-6U773",
+   "RX-Q37Z2",
+   "RX-ZX8J7",
+   "RX-RW8AC",
+   "RX-NLMKP",
+   "RX-BSU6V",
+   "RX-L9WW7",
+   "RX-GRLLU",
+   "RX-SUR3R",
+   "RX-VTRRL",
+   "RX-7NKMV",
+   "RX-XUM43",
+   "RX-3TR6Q",
+   "RX-TFL6F",
+   "RX-AKDVN",
+   "RX-WTU87",
+   "RX-NQM8X",
+   "RX-JAWRB",
+   "RX-TCDS3",
+   "RX-RHYJ7",
+   "RX-8JTKK",
+   "RX-V3J5U",
+   "RX-9T976",
+   "RX-74DLC",
+   "RX-YY4M8",
+   "RX-5MKD5",
+   "RX-2H3VJ",
+   "RX-S65JE",
+   "RX-43SA9",
+   "RX-C3QSW",
+   "RX-E5GVK",
+   "RX-6NUNK",
+   "RX-BSECY",
+   "RX-EGTBZ",
+   "RX-79ZUL",
+   "RX-LLMWW",
+   "RX-75ZEJ",
+   "RX-EKAM5",
+   "RX-Z7KS6",
+   "RX-CBLM4",
+   "RX-ANFDL",
+   "RX-G7RZ4",
+   "RX-AGCJ3",
+   "RX-H4LD6",
+   "RX-9MFBL",
+   "RX-2XYMR",
+   "RX-K76KA",
+   "RX-XMHRP",
+   "RX-AJUDQ",
+   "RX-VNXDJ",
+   "RX-Y6UQ5",
+   "RX-R7LC5",
+   "RX-2DQ5E",
+   "RX-H66FZ",
+   "RX-ZHLJY",
+   "RX-TK65R",
+   "RX-LJ52U",
+   "RX-6U333",
+   "RX-CGVAQ",
+   "RX-CF6QH",
+   "RX-ULGBF",
+   "RX-K9BVZ",
+   "RX-FT46E",
+   "RX-ZA5M6",
+   "RX-26HX8",
+   "RX-K9HNQ",
+   "RX-QL6UZ",
+   "RX-TKLPY",
+   "RX-4JWCY",
+   "RX-VY9DA",
+   "RX-HGGRS",
+   "RX-K9A37",
+   "RX-C3K5G",
+   "RX-VG74W",
+   "RX-9LVG4",
+   "RX-PKFBN",
+   "RX-ZKBJV",
+   "RX-ADXBL",
+   "RX-2W44G",
+   "RX-C3WA7",
+   "RX-CHVP8",
+   "RX-QUUHS",
+   "RX-LKBWF",
+   "RX-FGRHT",
+   "RX-JVSNR",
+   "RX-28E7W",
+   "RX-QGHD5",
+   "RX-SNMHS",
+   "RX-Y3379",
+   "RX-SAUJD",
+   "RX-CHHMC",
+   "RX-B2AAE",
+   "RX-DJ27R",
+   "RX-MDJAA",
+   "RX-RXH72",
+   "RX-NSHUH",
+   "RX-X745G",
+   "RX-J6L46",
+   "RX-93MET",
+   "RX-BNJ2K",
+   "RX-MEUP6",
+   "RX-DU5FY",
+   "RX-FXFZE",
+   "RX-94XWR",
+   "RX-599KK",
+   "RX-XMXBB",
+   "RX-34EJP",
+   "RX-C2NB7",
+   "RX-NGHF6",
+   "RX-UACUE",
+   "RX-MKNMD",
+   "RX-3AWWD",
+   "RX-HY4FF",
+   "RX-RWGDJ",
+   "RX-QHP5K",
+   "RX-QADE3",
+   "RX-5KHCU",
+   "RX-GE2L2",
+   "RX-U39FQ",
+   "RX-T9RZY",
+   "RX-3JWR2",
+   "RX-N5FZ7",
+   "RX-5VH82",
+   "RX-9JCPQ",
+   "RX-K9QDL",
+   "RX-EPZHM",
+   "RX-PMKV6",
+   "RX-386YK",
+   "RX-SFYV7",
+   "RX-8AVZ8",
+   "RX-SL43F",
+   "RX-QTUW3",
+   "RX-UUC73",
+   "RX-Y8BKM",
+   "RX-HC8ND",
+   "RX-LSH6X",
+   "RX-4BHCC",
+   "RX-B3WVJ",
+   "RX-TJ5YD",
+   "RX-GGAPX",
+   "RX-PR9ZC",
+   "RX-3LMYY",
+   "RX-V2YNC",
+   "RX-FUYZ3",
+   "RX-VGV3R",
+   "RX-PRRU2",
+   "RX-USMXQ",
+   "RX-6RN8Y",
+   "RX-S2LDZ",
+   "RX-DE24B",
+   "RX-MP4D4",
+   "RX-XZFNX",
+   "RX-9XN69",
+   "RX-3NAUG",
+   "RX-62LD9",
+   "RX-TXPA8",
+   "RX-6QYYX",
+   "RX-AA3U2",
+   "RX-HBTVC",
+   "RX-7M8B7",
+   "RX-7LPFJ",
+   "RX-NSHN2",
+   "RX-CVYLD",
+   "RX-W74J9",
+   "RX-8BWTW",
+   "RX-4S4BB",
+   "RX-2HWQ9",
+   "RX-UTDDU",
+   "RX-33QGA",
+   "RX-7APQD",
+   "RX-AHGET",
+   "RX-PCE38",
+   "RX-TQNPB",
+   "RX-FDX8P",
+   "RX-C65CM",
+   "RX-TTEZ7",
+   "RX-NFHJE",
+   "RX-6LJC2",
+   "RX-2PP5W",
+   "RX-JKSZX",
+   "RX-BAHJE",
+   "RX-PLHXX",
+   "RX-BUQ5X",
+   "RX-YKXH3",
+   "RX-42UNY",
+   "RX-3H5LF",
+   "RX-2Q3BK",
+   "RX-JBLVW",
+   "RX-JDXKK",
+   "RX-XY8VR",
+   "RX-4CNKX",
+   "RX-5B3Y3",
+   "RX-BL9GT",
+   "RX-KFQZZ",
+   "RX-KZQU2",
+   "RX-TESW2",
+   "RX-5J2UY",
+   "RX-CKYBC",
+   "RX-SLAWZ",
+   "RX-GATTF",
+   "RX-2FZLZ",
+   "RX-Y2NB4",
+   "RX-DGZS7",
+   "RX-GXYFU",
+   "RX-AS5U5",
+   "RX-KANLL",
+   "RX-V38AV",
+   "RX-LUBLV",
+   "RX-MUWQN",
+   "RX-VSXAN",
+   "RX-KKJQA",
+   "RX-RU7KX",
+   "RX-M3DWC",
+   "RX-7T5TH",
+   "RX-ADPF7",
+   "RX-7T6PK",
+   "RX-E6JNM",
+   "RX-3FNUE",
+   "RX-Q3YTM",
+   "RX-HJTYR",
+   "RX-BGFBR",
+   "RX-YJJ9C",
+   "RX-8F7F8",
+   "RX-KGNQQ",
+   "RX-X895W",
+   "RX-6G7NE",
+   "RX-PB4UL",
+   "RX-GTF8G",
+   "RX-UMSYS",
+   "RX-3HR75",
+   "RX-T8RGN",
+   "RX-7XHYA",
+   "RX-DPRNZ",
+   "RX-YFTR8",
+   "RX-3R8L9",
+   "RX-Z23W9",
+   "RX-6Q9CL",
+   "RX-HLT8M",
+   "RX-5Y3YA",
+   "RX-PXFAC",
+   "RX-ZDJ3M",
+   "RX-P9UAL",
+   "RX-NK8FR",
+   "RX-SZ3GJ",
+   "RX-2UQV6",
+   "RX-CUC5K",
+   "RX-S46U7",
+   "RX-CFY3R",
+   "RX-LDH4R",
+   "RX-WVGCL",
+   "RX-G7SFW",
+   "RX-E48RD",
+   "RX-3GPTY",
+   "RX-KCAKE",
+   "RX-3645D",
+   "RX-CSPQN",
+   "RX-S2TYW",
+   "RX-Y5HME",
+   "RX-JHJ9A",
+   "RX-9KUDB",
+   "RX-SS7WY",
+   "RX-ASRSY",
+   "RX-W5BAU",
+   "RX-TPJ2G",
+   "RX-853D9",
+   "RX-TKN46",
+   "RX-6NMPR",
+   "RX-E73EV",
+   "RX-ZBYQS",
+   "RX-8GMFQ",
+   "RX-LCJJN",
+   "RX-Q6EWP",
+   "RX-VFQ6M",
+   "RX-BABDY",
+   "RX-7J89K",
+   "RX-DCMSN",
+   "RX-SJDVN",
+   "RX-2G4EA",
+   "RX-FRT8M",
+   "RX-K9V2E",
+   "RX-XC7SJ",
+   "RX-J3ZHM",
+   "RX-8KPYA",
+   "RX-6W9RF",
+   "RX-UUXHQ",
+   "RX-ZNZKL",
+   "RX-YVLN9",
+   "RX-3JWK6",
+   "RX-SEZEN",
+   "RX-JBS57",
+   "RX-7G2GF",
+   "RX-KRP6G",
+   "RX-93GVM",
+   "RX-5W57X",
+   "RX-F8NPS",
+   "RX-F3WE4",
+   "RX-62L2T",
+   "RX-SE8K4",
+   "RX-EB3Z4",
+   "RX-UKKUU",
+   "RX-GT5BG",
+   "RX-3G6MB",
+   "RX-WWUYK",
+   "RX-5RAWG",
+   "RX-2ARUX",
+   "RX-BXTNJ",
+   "RX-JDU48",
+   "RX-VVLP9",
+   "RX-G7XSQ",
+   "RX-CTS2J",
+   "RX-L54X4",
+   "RX-3NM5S",
+   "RX-EH339",
+   "RX-XXPYY",
+   "RX-ENUM3",
+   "RX-UUXMD",
+   "RX-V4CZV",
+   "RX-Y9JK8",
+   "RX-RNR7W",
+   "RX-VBPJE",
+   "RX-6Z8ZF",
+   "RX-QV8VM",
+   "RX-F6WY3",
+   "RX-889E7",
+   "RX-HUBJK",
+   "RX-NWZQ5",
+   "RX-WCYMN",
+   "RX-FGJK2",
+   "RX-YC8VA",
+   "RX-94N5E",
+   "RX-MNLJZ",
+   "RX-MNQP3",
+   "RX-Y4BEQ",
+   "RX-JS5RN",
+   "RX-7TGVV",
+   "RX-CW2BA",
+   "RX-QRVNE",
+   "RX-QNPTE",
+   "RX-PL5B9",
+   "RX-HEPPY",
+   "RX-9HVUL",
+   "RX-JQVUG",
+   "RX-MH366",
+   "RX-GA5JH",
+   "RX-5L66X",
+   "RX-N8CRN",
+   "RX-BLNQW",
+   "RX-YU45V",
+   "RX-7M9GW",
+   "RX-DYZJE",
+   "RX-KYH3D",
+   "RX-SMDVT",
+   "RX-552NU",
+   "RX-6YEWM",
+   "RX-7FBEH",
+   "RX-4NU2E",
+   "RX-TJVTP",
+   "RX-22DJS",
+   "RX-PSA8Y",
+   "RX-97YHK",
+   "RX-PTBC2",
+   "RX-ZH999",
+   "RX-NZZAQ",
+   "RX-YSV5V",
+   "RX-QP4N8",
+   "RX-G8W9Z",
+   "RX-PUA7J",
+   "RX-6K235",
+   "RX-L76H8",
+   "RX-JRJ7G",
+   "RX-4NBKZ",
+   "RX-CTMWH",
+   "RX-C5GPV",
+   "RX-SDAMS",
+   "RX-7AHJP",
+   "RX-A7FH2",
+   "RX-FTY9D",
+   "RX-URGGN",
+   "RX-TBK9Y",
+   "RX-VRRZL",
+   "RX-JWRDY",
+   "RX-LVZJR",
+   "RX-ZCZ8R",
+   "RX-7JQVQ",
+   "RX-2L5NG",
+   "RX-LPF66",
+   "RX-RKK75",
+   "RX-HFT4L",
+   "RX-NBXZF",
+   "RX-JTEJC",
+   "RX-E25SM",
+   "RX-2GYZ5",
+   "RX-FGU9G",
+   "RX-PRUWP",
+   "RX-2DR2W",
+   "RX-V36FJ",
+   "RX-K3EA8",
+   "RX-BZ5PH",
+   "RX-Q6BC9",
+   "RX-A7HEA",
+   "RX-7UJD5",
+   "RX-ASFPD",
+   "RX-3DL6Y",
+   "RX-KEK5Z",
+   "RX-PCVDM",
+   "RX-YEJBX",
+   "RX-ZKFQH",
+   "RX-BRPE3",
+   "RX-MSH4T",
+   "RX-XZ7X4",
+   "RX-E7G6J",
+   "RX-J3MBQ",
+   "RX-JLFZX",
+   "RX-A5F35",
+   "RX-F9YPG",
+   "RX-YD6UD",
+   "RX-D3V8K",
+   "RX-JRELJ",
+   "RX-38HKN",
+   "RX-QGH4Z",
+   "RX-EDNKY",
+   "RX-WECNX",
+   "RX-LZBXG",
+   "RX-478NP",
+   "RX-Q5G5L",
+   "RX-UPJ6P",
+   "RX-JRN55",
+   "RX-G78DJ",
+   "RX-U873X",
+   "RX-W6QFJ",
+   "RX-KKDK9",
+   "RX-FPPW4",
+   "RX-HY6QC",
+   "RX-5PCTQ",
+   "RX-78JB7",
+   "RX-6CZ6D",
+   "RX-9VK6B",
+   "RX-Z2YMF",
+   "RX-KDRCQ",
+   "RX-AHPTF",
+   "RX-CD499",
+   "RX-RNKAH",
+   "RX-9SSFV",
+   "RX-CDHA8",
+   "RX-L8PQM",
+   "RX-NBR33",
+   "RX-Z38BU",
+   "RX-VWFGC",
+   "RX-6T498",
+   "RX-L87AJ",
+   "RX-GUCKR",
+   "RX-89XR6",
+   "RX-2VWVC",
+   "RX-MZAV5",
+   "RX-RVWFK",
+   "RX-UYNJ4",
+   "RX-HP25W",
+   "RX-A4SF9",
+   "RX-347HN",
+   "RX-GKLGP",
+   "RX-AT6E7",
+   "RX-7DSCK",
+   "RX-TQ4PA",
+   "RX-EXTPN",
+   "RX-L9TWM",
+   "RX-ZK3UP",
+   "RX-XPWZY",
+   "RX-XVS5T",
+   "RX-XMVUD",
+   "RX-DJ7RV",
+   "RX-PC7D8",
+   "RX-N26YK",
+   "RX-5QEWR",
+   "RX-4D4BA",
+   "RX-7M4NB",
+   "RX-5JKKT",
+   "RX-JWA6R",
+   "RX-QJ7NV",
+   "RX-HK39K",
+   "RX-ESBPQ",
+   "RX-5NHJR",
+   "RX-K3W66",
+   "RX-P3DEE",
+   "RX-JGN4M",
+   "RX-CWCDM",
+   "RX-U9YQX",
+   "RX-RQYWL",
+   "RX-RTVZR",
+   "RX-N8YF9",
+   "RX-42FSD",
+   "RX-378NS",
+   "RX-VHX8T",
+   "RX-AR7Q5",
+   "RX-4EMTU",
+   "RX-7S7QJ",
+   "RX-B2YSA",
+   "RX-9TMZ9",
+   "RX-W9RS5",
+   "RX-J63TN",
+   "RX-4KPR5",
+   "RX-PDMA2",
+   "RX-MS6VG",
+   "RX-LFJP2",
+   "RX-3SMQ2",
+   "RX-VS96K",
+   "RX-X8EWC",
+   "RX-M6LW7",
+   "RX-9HNVS",
+   "RX-H5FG8",
+   "RX-P8HJS",
+   "RX-UNG4U",
+   "RX-RQ3PD",
+   "RX-9XC2Z",
+   "RX-AX6NT",
+   "RX-5GCXK",
+   "RX-7KAXF",
+   "RX-4BX4M",
+   "RX-XGRQF",
+   "RX-5PH9U",
+   "RX-NNHRQ"
+  ],
+  "key": [
+   {
+    "id": "RX-JNNJT",
+    "value": 115212
+   },
+   {
+    "id": "RX-NNXPK",
+    "value": 192
+   },
+   {
+    "id": "RX-3CZAA",
+    "value": 182847
+   },
+   {
+    "id": "RX-SGKTH",
+    "value": 157941
+   },
+   {
+    "id": "RX-XUM43",
+    "value": 21219
+   },
+   {
+    "id": "RX-TFL6F",
+    "value": 42659
+   },
+   {
+    "id": "RX-NQM8X",
+    "value": 14665
+   },
+   {
+    "id": "RX-BSECY",
+    "value": 35790
+   },
+   {
+    "id": "RX-EKAM5",
+    "value": 680
+   },
+   {
+    "id": "RX-ANFDL",
+    "value": 11215
+   },
+   {
+    "id": "RX-VY9DA",
+    "value": 3769
+   },
+   {
+    "id": "RX-C3K5G",
+    "value": 125934
+   },
+   {
+    "id": "RX-DJ27R",
+    "value": 31711
+   },
+   {
+    "id": "RX-RXH72",
+    "value": 1884
+   },
+   {
+    "id": "RX-NSHUH",
+    "value": 152158
+   },
+   {
+    "id": "RX-X745G",
+    "value": 26355
+   },
+   {
+    "id": "RX-XMXBB",
+    "value": 177820
+   },
+   {
+    "id": "RX-5KHCU",
+    "value": 7993
+   },
+   {
+    "id": "RX-Y8BKM",
+    "value": 3514
+   },
+   {
+    "id": "RX-3LMYY",
+    "value": 49097
+   },
+   {
+    "id": "RX-42UNY",
+    "value": 2869
+   },
+   {
+    "id": "RX-V38AV",
+    "value": 31093
+   },
+   {
+    "id": "RX-VSXAN",
+    "value": 88974
+   },
+   {
+    "id": "RX-7T6PK",
+    "value": 16723
+   },
+   {
+    "id": "RX-UMSYS",
+    "value": 36738
+   },
+   {
+    "id": "RX-Z23W9",
+    "value": 98027
+   },
+   {
+    "id": "RX-TPJ2G",
+    "value": 41727
+   },
+   {
+    "id": "RX-SJDVN",
+    "value": 19060
+   },
+   {
+    "id": "RX-SEZEN",
+    "value": 2142
+   },
+   {
+    "id": "RX-KRP6G",
+    "value": 4597
+   },
+   {
+    "id": "RX-5W57X",
+    "value": 71649
+   },
+   {
+    "id": "RX-JDU48",
+    "value": 12555
+   },
+   {
+    "id": "RX-G7XSQ",
+    "value": 29833
+   },
+   {
+    "id": "RX-F6WY3",
+    "value": 407686
+   },
+   {
+    "id": "RX-6YEWM",
+    "value": 433028
+   },
+   {
+    "id": "RX-7FBEH",
+    "value": 183801
+   },
+   {
+    "id": "RX-XZ7X4",
+    "value": 102708
+   },
+   {
+    "id": "RX-EDNKY",
+    "value": 43334
+   },
+   {
+    "id": "RX-KKDK9",
+    "value": 62301
+   },
+   {
+    "id": "RX-78JB7",
+    "value": 34272
+   },
+   {
+    "id": "RX-GKLGP",
+    "value": 58935
+   },
+   {
+    "id": "RX-EXTPN",
+    "value": 50979
+   },
+   {
+    "id": "RX-XMVUD",
+    "value": 83796
+   },
+   {
+    "id": "RX-4D4BA",
+    "value": 156228
+   },
+   {
+    "id": "RX-7M4NB",
+    "value": 15210
+   },
+   {
+    "id": "RX-42FSD",
+    "value": 43646
+   },
+   {
+    "id": "RX-4EMTU",
+    "value": 239502
+   },
+   {
+    "id": "RX-XGRQF",
+    "value": 37509
+   }
+  ],
+  "value_unit": "cents"
+ },
+ "swarm": {
+  "planner": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\nThe ledger has 600 lines, numbered row 1 to row 600. Its columns are:\nrow,line_id,qty,unit_rate,paid\nYou will not see the rows themselves.\n\nYou coordinate 4 workers. Each worker receives only the brief you write for it and the ledger rows you assign to it, given as inclusive row ranges. Workers cannot see the task description above, each other, or any rows you do not assign to them. Their reports will then be combined into one final answer.\n\nWrite a brief for each of the 4 workers. Do not show your working or any explanation. Reply with only a JSON object:\n{\"workers\": [{\"worker\": 1, \"brief\": \"<instructions>\", \"ranges\": [[<first row>, <last row>]]}, ...]}",
+    "raw_text": "{\n  \"workers\": [\n    {\n      \"worker\": 1,\n      \"brief\": \"You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\",\n      \"ranges\": [\n        [\n          1,\n          150\n        ]\n      ]\n    },\n    {\n      \"worker\": 2,\n      \"brief\": \"You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\",\n      \"ranges\": [\n        [\n          151,\n          300\n        ]\n      ]\n    },\n    {\n      \"worker\": 3,\n      \"brief\": \"You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\",\n      \"ranges\": [\n        [\n          301,\n          450\n        ]\n      ]\n    },\n    {\n      \"worker\": 4,\n      \"brief\": \"You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\",\n      \"ranges\": [\n        [\n          451,\n          600\n        ]\n      ]\n    }\n  ]\n}",
+    "reasoning": null,
+    "finish_reason": "stop",
+    "prompt_tokens": 267,
+    "completion_tokens": 627,
+    "latency_ms": 1605,
+    "retries": 0,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "briefs_used": 4
+  },
+  "workers": [
+   {
+    "worker": 1,
+    "brief": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.",
+    "ranges": [
+     [
+      1,
+      150
+     ]
+    ],
+    "slice": [
+     "RX-WJZGH",
+     "RX-M42XT",
+     "RX-3RQE9",
+     "RX-4BUN5",
+     "RX-SG76H",
+     "RX-5UL5F",
+     "RX-3PDAS",
+     "RX-K83ST",
+     "RX-5HDV5",
+     "RX-P3SX7",
+     "RX-YRLTC",
+     "RX-JNNJT",
+     "RX-VCRLT",
+     "RX-2QJJH",
+     "RX-MDPTW",
+     "RX-V7UV2",
+     "RX-Y8SAT",
+     "RX-DQYRT",
+     "RX-T8UAA",
+     "RX-W55JM",
+     "RX-7C4YL",
+     "RX-JYLZR",
+     "RX-2H5AK",
+     "RX-MQZTQ",
+     "RX-VA8KD",
+     "RX-CSR97",
+     "RX-5NX9P",
+     "RX-XKNDL",
+     "RX-NNXPK",
+     "RX-5S3ZZ",
+     "RX-8MYC7",
+     "RX-DWB7C",
+     "RX-38DCE",
+     "RX-NQYDK",
+     "RX-69348",
+     "RX-PZWYK",
+     "RX-5Z7WH",
+     "RX-ECETM",
+     "RX-S9AAE",
+     "RX-WXRBC",
+     "RX-V8SRF",
+     "RX-GKFVM",
+     "RX-3CZAA",
+     "RX-38M2W",
+     "RX-Z4RAD",
+     "RX-P2L6F",
+     "RX-TD364",
+     "RX-HAHKN",
+     "RX-EPSPE",
+     "RX-AGV7X",
+     "RX-L8PZU",
+     "RX-K9FQZ",
+     "RX-25ZWH",
+     "RX-ZVHZZ",
+     "RX-8C6QY",
+     "RX-DWVGF",
+     "RX-ERH9U",
+     "RX-UXMNQ",
+     "RX-SGKTH",
+     "RX-DPWP2",
+     "RX-YKMW8",
+     "RX-MDATN",
+     "RX-BVPRK",
+     "RX-KJYYV",
+     "RX-8HVE7",
+     "RX-96TL4",
+     "RX-7GTDL",
+     "RX-P2K2P",
+     "RX-ZJ9VX",
+     "RX-XEAZ8",
+     "RX-L5AY8",
+     "RX-WVPU5",
+     "RX-YFBQY",
+     "RX-MK8LD",
+     "RX-3ACCU",
+     "RX-5YZUC",
+     "RX-F47DZ",
+     "RX-3DANZ",
+     "RX-KKUB8",
+     "RX-JTFU7",
+     "RX-6U773",
+     "RX-Q37Z2",
+     "RX-ZX8J7",
+     "RX-RW8AC",
+     "RX-NLMKP",
+     "RX-BSU6V",
+     "RX-L9WW7",
+     "RX-GRLLU",
+     "RX-SUR3R",
+     "RX-VTRRL",
+     "RX-7NKMV",
+     "RX-XUM43",
+     "RX-3TR6Q",
+     "RX-TFL6F",
+     "RX-AKDVN",
+     "RX-WTU87",
+     "RX-NQM8X",
+     "RX-JAWRB",
+     "RX-TCDS3",
+     "RX-RHYJ7",
+     "RX-8JTKK",
+     "RX-V3J5U",
+     "RX-9T976",
+     "RX-74DLC",
+     "RX-YY4M8",
+     "RX-5MKD5",
+     "RX-2H3VJ",
+     "RX-S65JE",
+     "RX-43SA9",
+     "RX-C3QSW",
+     "RX-E5GVK",
+     "RX-6NUNK",
+     "RX-BSECY",
+     "RX-EGTBZ",
+     "RX-79ZUL",
+     "RX-LLMWW",
+     "RX-75ZEJ",
+     "RX-EKAM5",
+     "RX-Z7KS6",
+     "RX-CBLM4",
+     "RX-ANFDL",
+     "RX-G7RZ4",
+     "RX-AGCJ3",
+     "RX-H4LD6",
+     "RX-9MFBL",
+     "RX-2XYMR",
+     "RX-K76KA",
+     "RX-XMHRP",
+     "RX-AJUDQ",
+     "RX-VNXDJ",
+     "RX-Y6UQ5",
+     "RX-R7LC5",
+     "RX-2DQ5E",
+     "RX-H66FZ",
+     "RX-ZHLJY",
+     "RX-TK65R",
+     "RX-LJ52U",
+     "RX-6U333",
+     "RX-CGVAQ",
+     "RX-CF6QH",
+     "RX-ULGBF",
+     "RX-K9BVZ",
+     "RX-FT46E",
+     "RX-ZA5M6",
+     "RX-26HX8",
+     "RX-K9HNQ",
+     "RX-QL6UZ",
+     "RX-TKLPY",
+     "RX-4JWCY",
+     "RX-VY9DA"
+    ],
+    "call": {
+     "prompt": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n1,RX-WJZGH,16,446.03,7136.48\n2,RX-M42XT,40,104.16,4166.40\n3,RX-3RQE9,3,291.13,873.39\n4,RX-4BUN5,15,205.26,3078.90\n5,RX-SG76H,7,410.77,2875.39\n6,RX-5UL5F,14,423.95,5935.30\n7,RX-3PDAS,9,301.89,3488.20\n8,RX-K83ST,32,324.08,10370.56\n9,RX-5HDV5,9,327.88,2950.92\n10,RX-P3SX7,33,412.03,13596.99\n11,RX-YRLTC,13,432.36,6244.50\n12,RX-JNNJT,34,156.55,4170.58\n13,RX-VCRLT,35,361.63,12657.05\n14,RX-2QJJH,2,402.04,804.08\n15,RX-MDPTW,10,284.26,2842.60\n16,RX-V7UV2,15,285.96,4289.40\n17,RX-Y8SAT,16,36.45,583.20\n18,RX-DQYRT,18,289.78,5216.04\n19,RX-T8UAA,1,151.82,151.82\n20,RX-W55JM,38,252.19,9583.22\n21,RX-7C4YL,21,162.62,3415.02\n22,RX-JYLZR,36,132.87,4783.32\n23,RX-2H5AK,1,86.70,86.70\n24,RX-MQZTQ,7,288.71,2020.97\n25,RX-VA8KD,10,67.69,676.90\n26,RX-CSR97,1,185.51,185.51\n27,RX-5NX9P,9,13.73,123.57\n28,RX-XKNDL,32,34.54,1105.28\n29,RX-NNXPK,6,23.56,139.44\n30,RX-5S3ZZ,38,431.93,16413.34\n31,RX-8MYC7,32,381.83,12218.56\n32,RX-DWB7C,6,431.42,2588.52\n33,RX-38DCE,17,94.78,1611.26\n34,RX-NQYDK,1,14.34,14.34\n35,RX-69348,24,32.61,782.64\n36,RX-PZWYK,37,313.58,11602.46\n37,RX-5Z7WH,17,249.98,4249.66\n38,RX-ECETM,31,158.63,4917.53\n39,RX-S9AAE,15,111.37,1670.55\n40,RX-WXRBC,6,204.17,1225.02\n41,RX-V8SRF,15,300.09,4501.35\n42,RX-GKFVM,12,271.29,3255.48\n43,RX-3CZAA,13,413.04,3541.05\n44,RX-38M2W,10,85.28,852.80\n45,RX-Z4RAD,33,353.17,11654.61\n46,RX-P2L6F,16,200.21,3203.36\n47,RX-TD364,38,476.33,18100.54\n48,RX-HAHKN,29,137.30,3981.70\n49,RX-EPSPE,7,13.54,94.78\n50,RX-AGV7X,27,181.22,4892.94\n51,RX-L8PZU,31,301.18,9336.58\n52,RX-K9FQZ,10,379.21,3792.10\n53,RX-25ZWH,9,301.44,2712.96\n54,RX-ZVHZZ,26,367.07,9543.82\n55,RX-8C6QY,36,119.17,4290.12\n56,RX-DWVGF,38,434.16,16498.08\n57,RX-ERH9U,32,364.74,11671.68\n58,RX-UXMNQ,39,295.83,11537.37\n59,RX-SGKTH,20,237.81,3176.79\n60,RX-DPWP2,34,34.47,1171.98\n61,RX-YKMW8,15,345.29,5179.35\n62,RX-MDATN,15,30.86,462.90\n63,RX-BVPRK,13,443.25,5762.25\n64,RX-KJYYV,13,209.63,2725.19\n65,RX-8HVE7,37,258.52,9565.24\n66,RX-96TL4,16,317.36,5959.09\n67,RX-7GTDL,10,317.67,3176.70\n68,RX-P2K2P,1,190.50,253.13\n69,RX-ZJ9VX,23,73.15,1682.45\n70,RX-XEAZ8,28,272.06,8863.28\n71,RX-L5AY8,15,54.74,821.10\n72,RX-WVPU5,23,275.51,6336.73\n73,RX-YFBQY,33,23.32,769.56\n74,RX-MK8LD,34,322.98,10981.32\n75,RX-3ACCU,27,166.59,4497.93\n76,RX-5YZUC,7,142.92,1000.44\n77,RX-F47DZ,25,39.42,985.50\n78,RX-3DANZ,28,128.28,3591.84\n79,RX-KKUB8,39,340.81,13291.59\n80,RX-JTFU7,31,212.40,6584.40\n81,RX-6U773,10,242.19,2421.90\n82,RX-Q37Z2,7,299.58,2788.95\n83,RX-ZX8J7,15,330.39,4955.85\n84,RX-RW8AC,2,310.42,620.84\n85,RX-NLMKP,26,19.42,504.92\n86,RX-BSU6V,7,375.20,2626.40\n87,RX-L9WW7,5,414.24,2071.20\n88,RX-GRLLU,3,324.68,974.04\n89,RX-SUR3R,20,402.48,8049.60\n90,RX-VTRRL,4,312.21,1248.84\n91,RX-7NKMV,2,54.65,109.30\n92,RX-XUM43,35,154.94,5210.71\n93,RX-3TR6Q,4,350.49,1401.96\n94,RX-TFL6F,8,249.33,1568.05\n95,RX-AKDVN,5,298.23,1491.15\n96,RX-WTU87,17,77.46,1316.82\n97,RX-NQM8X,20,73.55,1324.35\n98,RX-JAWRB,19,464.82,8831.58\n99,RX-TCDS3,34,301.73,10258.82\n100,RX-RHYJ7,15,384.77,5771.55\n101,RX-8JTKK,37,163.61,6053.57\n102,RX-V3J5U,22,271.32,5969.04\n103,RX-9T976,11,382.51,4207.61\n104,RX-74DLC,14,358.59,5020.26\n105,RX-YY4M8,19,118.59,2253.21\n106,RX-5MKD5,33,416.47,13743.51\n107,RX-2H3VJ,1,310.07,310.07\n108,RX-S65JE,32,470.46,15054.72\n109,RX-43SA9,24,141.43,3394.32\n110,RX-C3QSW,22,450.94,9920.68\n111,RX-E5GVK,31,31.94,990.14\n112,RX-6NUNK,3,26.45,79.35\n113,RX-BSECY,8,231.59,1494.82\n114,RX-EGTBZ,17,223.11,3792.87\n115,RX-79ZUL,7,341.50,2390.50\n116,RX-LLMWW,2,50.95,101.90\n117,RX-75ZEJ,22,311.18,6845.96\n118,RX-EKAM5,3,89.96,263.08\n119,RX-Z7KS6,20,140.94,2818.80\n120,RX-CBLM4,22,150.80,3317.60\n121,RX-ANFDL,10,97.52,863.05\n122,RX-G7RZ4,19,253.09,4808.71\n123,RX-AGCJ3,18,58.84,1059.12\n124,RX-H4LD6,18,254.40,4579.20\n125,RX-9MFBL,20,463.22,9264.40\n126,RX-2XYMR,38,322.87,12269.06\n127,RX-K76KA,35,151.57,5504.10\n128,RX-XMHRP,32,57.98,1855.36\n129,RX-AJUDQ,13,334.35,4346.55\n130,RX-VNXDJ,27,397.91,10743.57\n131,RX-Y6UQ5,4,478.62,1914.48\n132,RX-R7LC5,16,370.87,5933.92\n133,RX-2DQ5E,9,358.39,3225.51\n134,RX-H66FZ,1,332.23,332.23\n135,RX-ZHLJY,25,104.45,2611.25\n136,RX-TK65R,5,164.39,821.95\n137,RX-LJ52U,27,31.42,1030.20\n138,RX-6U333,13,44.22,574.86\n139,RX-CGVAQ,32,284.03,9088.96\n140,RX-CF6QH,22,21.37,564.46\n141,RX-ULGBF,22,44.54,979.88\n142,RX-K9BVZ,39,128.74,5020.86\n143,RX-FT46E,28,214.16,5996.48\n144,RX-ZA5M6,18,421.53,7587.54\n145,RX-26HX8,24,395.86,9500.64\n146,RX-K9HNQ,34,405.95,13802.30\n147,RX-QL6UZ,37,241.96,8952.52\n148,RX-TKLPY,11,404.94,4454.34\n149,RX-4JWCY,29,283.73,8228.17\n150,RX-VY9DA,13,32.78,388.45\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[\n  {\"line_id\": \"RX-M42XT\", \"shortfall\": 49.60},\n  {\"line_id\": \"RX-3RQE9\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-4BUN5\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SG76H\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-5UL5F\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3PDAS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-K83ST\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-5HDV5\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-P3SX7\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-YRLTC\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JNNJT\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-VCRLT\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2QJJH\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MDPTW\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-V7UV2\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-Y8SAT\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-DQYRT\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-T8UAA\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-W55JM\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7C4YL\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JYLZR\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2H5AK\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MQZTQ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-VA8KD\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-CSR97\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-5NX9P\", \"shortfal\": 0.00},\n  {\"line_id\": \"RX-XKMDL\", \"shorrtfall\": 0.00},\n  {\"line_id\": \"RX-5S3ZZ\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-8MYC7\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-38DCE\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-69348\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-5Z7WH\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-3CZ4A\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-38M2W\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-P2L6F\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-TD364\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-AGV7X\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-L8PZU\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-K9FQZ\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-25ZWH\", \"shorrtall\": 0.00},\n  {\"line_id\": \"RX-ZVHZZ\", \"shorrtall\": 0.00},\n  {\"",
+     "reasoning": null,
+     "finish_reason": "length",
+     "prompt_tokens": 4244,
+     "completion_tokens": 1000,
+     "latency_ms": 5555,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "truncated",
+    "parsed_ok": true,
+    "parse_notes": [
+     "reply cut off by output cap; 41 complete entries before the cut used (D14)",
+     "24 entries with shortfall <= 0 counted as not reported (D13)"
+    ],
+    "nonpositive_dropped": 24,
+    "reported": [
+     {
+      "id": "RX-M42XT",
+      "value": 4960
+     },
+     {
+      "id": "RX-5NX9P",
+      "value": null
+     },
+     {
+      "id": "RX-XKMDL",
+      "value": null
+     },
+     {
+      "id": "RX-5S3ZZ",
+      "value": null
+     },
+     {
+      "id": "RX-8MYC7",
+      "value": null
+     },
+     {
+      "id": "RX-38DCE",
+      "value": null
+     },
+     {
+      "id": "RX-69348",
+      "value": null
+     },
+     {
+      "id": "RX-5Z7WH",
+      "value": null
+     },
+     {
+      "id": "RX-3CZ4A",
+      "value": null
+     },
+     {
+      "id": "RX-38M2W",
+      "value": null
+     },
+     {
+      "id": "RX-P2L6F",
+      "value": null
+     },
+     {
+      "id": "RX-TD364",
+      "value": null
+     },
+     {
+      "id": "RX-AGV7X",
+      "value": null
+     },
+     {
+      "id": "RX-L8PZU",
+      "value": null
+     },
+     {
+      "id": "RX-K9FQZ",
+      "value": null
+     },
+     {
+      "id": "RX-25ZWH",
+      "value": null
+     },
+     {
+      "id": "RX-ZVHZZ",
+      "value": null
+     }
+    ]
+   },
+   {
+    "worker": 2,
+    "brief": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.",
+    "ranges": [
+     [
+      151,
+      300
+     ]
+    ],
+    "slice": [
+     "RX-HGGRS",
+     "RX-K9A37",
+     "RX-C3K5G",
+     "RX-VG74W",
+     "RX-9LVG4",
+     "RX-PKFBN",
+     "RX-ZKBJV",
+     "RX-ADXBL",
+     "RX-2W44G",
+     "RX-C3WA7",
+     "RX-CHVP8",
+     "RX-QUUHS",
+     "RX-LKBWF",
+     "RX-FGRHT",
+     "RX-JVSNR",
+     "RX-28E7W",
+     "RX-QGHD5",
+     "RX-SNMHS",
+     "RX-Y3379",
+     "RX-SAUJD",
+     "RX-CHHMC",
+     "RX-B2AAE",
+     "RX-DJ27R",
+     "RX-MDJAA",
+     "RX-RXH72",
+     "RX-NSHUH",
+     "RX-X745G",
+     "RX-J6L46",
+     "RX-93MET",
+     "RX-BNJ2K",
+     "RX-MEUP6",
+     "RX-DU5FY",
+     "RX-FXFZE",
+     "RX-94XWR",
+     "RX-599KK",
+     "RX-XMXBB",
+     "RX-34EJP",
+     "RX-C2NB7",
+     "RX-NGHF6",
+     "RX-UACUE",
+     "RX-MKNMD",
+     "RX-3AWWD",
+     "RX-HY4FF",
+     "RX-RWGDJ",
+     "RX-QHP5K",
+     "RX-QADE3",
+     "RX-5KHCU",
+     "RX-GE2L2",
+     "RX-U39FQ",
+     "RX-T9RZY",
+     "RX-3JWR2",
+     "RX-N5FZ7",
+     "RX-5VH82",
+     "RX-9JCPQ",
+     "RX-K9QDL",
+     "RX-EPZHM",
+     "RX-PMKV6",
+     "RX-386YK",
+     "RX-SFYV7",
+     "RX-8AVZ8",
+     "RX-SL43F",
+     "RX-QTUW3",
+     "RX-UUC73",
+     "RX-Y8BKM",
+     "RX-HC8ND",
+     "RX-LSH6X",
+     "RX-4BHCC",
+     "RX-B3WVJ",
+     "RX-TJ5YD",
+     "RX-GGAPX",
+     "RX-PR9ZC",
+     "RX-3LMYY",
+     "RX-V2YNC",
+     "RX-FUYZ3",
+     "RX-VGV3R",
+     "RX-PRRU2",
+     "RX-USMXQ",
+     "RX-6RN8Y",
+     "RX-S2LDZ",
+     "RX-DE24B",
+     "RX-MP4D4",
+     "RX-XZFNX",
+     "RX-9XN69",
+     "RX-3NAUG",
+     "RX-62LD9",
+     "RX-TXPA8",
+     "RX-6QYYX",
+     "RX-AA3U2",
+     "RX-HBTVC",
+     "RX-7M8B7",
+     "RX-7LPFJ",
+     "RX-NSHN2",
+     "RX-CVYLD",
+     "RX-W74J9",
+     "RX-8BWTW",
+     "RX-4S4BB",
+     "RX-2HWQ9",
+     "RX-UTDDU",
+     "RX-33QGA",
+     "RX-7APQD",
+     "RX-AHGET",
+     "RX-PCE38",
+     "RX-TQNPB",
+     "RX-FDX8P",
+     "RX-C65CM",
+     "RX-TTEZ7",
+     "RX-NFHJE",
+     "RX-6LJC2",
+     "RX-2PP5W",
+     "RX-JKSZX",
+     "RX-BAHJE",
+     "RX-PLHXX",
+     "RX-BUQ5X",
+     "RX-YKXH3",
+     "RX-42UNY",
+     "RX-3H5LF",
+     "RX-2Q3BK",
+     "RX-JBLVW",
+     "RX-JDXKK",
+     "RX-XY8VR",
+     "RX-4CNKX",
+     "RX-5B3Y3",
+     "RX-BL9GT",
+     "RX-KFQZZ",
+     "RX-KZQU2",
+     "RX-TESW2",
+     "RX-5J2UY",
+     "RX-CKYBC",
+     "RX-SLAWZ",
+     "RX-GATTF",
+     "RX-2FZLZ",
+     "RX-Y2NB4",
+     "RX-DGZS7",
+     "RX-GXYFU",
+     "RX-AS5U5",
+     "RX-KANLL",
+     "RX-V38AV",
+     "RX-LUBLV",
+     "RX-MUWQN",
+     "RX-VSXAN",
+     "RX-KKJQA",
+     "RX-RU7KX",
+     "RX-M3DWC",
+     "RX-7T5TH",
+     "RX-ADPF7",
+     "RX-7T6PK",
+     "RX-E6JNM",
+     "RX-3FNUE",
+     "RX-Q3YTM",
+     "RX-HJTYR"
+    ],
+    "call": {
+     "prompt": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n151,RX-HGGRS,37,343.00,12691.00\n152,RX-K9A37,8,420.57,3611.88\n153,RX-C3K5G,15,337.95,3809.91\n154,RX-VG74W,26,317.41,8252.66\n155,RX-9LVG4,11,425.34,4678.74\n156,RX-PKFBN,30,278.29,8348.70\n157,RX-ZKBJV,1,108.93,117.20\n158,RX-ADXBL,21,175.41,3683.61\n159,RX-2W44G,2,160.23,320.46\n160,RX-C3WA7,31,235.02,7285.62\n161,RX-CHVP8,40,334.87,13394.80\n162,RX-QUUHS,5,291.53,1457.65\n163,RX-LKBWF,18,245.41,4417.38\n164,RX-FGRHT,5,282.74,1413.70\n165,RX-JVSNR,22,438.99,9657.78\n166,RX-28E7W,35,477.73,16720.55\n167,RX-QGHD5,7,127.45,892.15\n168,RX-SNMHS,20,68.77,1375.40\n169,RX-Y3379,40,45.01,1800.40\n170,RX-SAUJD,30,194.42,5832.60\n171,RX-CHHMC,36,27.52,990.72\n172,RX-B2AAE,11,264.89,2913.79\n173,RX-DJ27R,34,33.24,813.05\n174,RX-MDJAA,31,254.16,7878.96\n175,RX-RXH72,3,474.39,1404.33\n176,RX-NSHUH,18,441.58,6426.86\n177,RX-X745G,18,166.45,2732.55\n178,RX-J6L46,12,337.74,4052.88\n179,RX-93MET,8,43.47,396.83\n180,RX-BNJ2K,16,61.42,982.72\n181,RX-MEUP6,37,220.63,8163.31\n182,RX-DU5FY,20,323.55,6471.00\n183,RX-FXFZE,30,196.14,7217.27\n184,RX-94XWR,15,181.89,2728.35\n185,RX-599KK,16,343.12,5489.92\n186,RX-XMXBB,37,263.54,7972.78\n187,RX-34EJP,30,199.66,5989.80\n188,RX-C2NB7,32,330.92,10589.44\n189,RX-NGHF6,20,225.51,4510.20\n190,RX-UACUE,13,307.55,3998.15\n191,RX-MKNMD,26,268.56,6982.56\n192,RX-3AWWD,5,28.19,140.95\n193,RX-HY4FF,32,409.78,14599.58\n194,RX-RWGDJ,33,325.71,10748.43\n195,RX-QHP5K,5,321.60,1608.00\n196,RX-QADE3,26,281.13,7309.38\n197,RX-5KHCU,2,416.00,752.07\n198,RX-GE2L2,20,360.33,9323.61\n199,RX-U39FQ,36,267.35,9624.60\n200,RX-T9RZY,5,265.22,1326.10\n201,RX-3JWR2,39,387.38,15107.82\n202,RX-N5FZ7,31,211.61,6559.91\n203,RX-5VH82,6,232.68,1396.08\n204,RX-9JCPQ,13,392.04,5096.52\n205,RX-K9QDL,35,328.20,11487.00\n206,RX-EPZHM,1,85.14,85.14\n207,RX-PMKV6,18,278.40,5011.20\n208,RX-386YK,7,464.38,3250.66\n209,RX-SFYV7,12,392.93,4715.16\n210,RX-8AVZ8,4,52.87,211.48\n211,RX-SL43F,20,217.45,4349.00\n212,RX-QTUW3,34,263.10,8945.40\n213,RX-UUC73,2,181.46,362.92\n214,RX-Y8BKM,5,207.96,1004.66\n215,RX-HC8ND,28,137.09,3838.52\n216,RX-LSH6X,10,458.83,6181.29\n217,RX-4BHCC,1,455.15,455.15\n218,RX-B3WVJ,31,57.86,1793.66\n219,RX-TJ5YD,21,159.92,3358.32\n220,RX-GGAPX,21,123.71,2597.91\n221,RX-PR9ZC,40,394.77,15790.80\n222,RX-3LMYY,13,282.19,3177.50\n223,RX-V2YNC,1,455.93,455.93\n224,RX-FUYZ3,28,51.94,1799.36\n225,RX-VGV3R,39,106.70,4161.30\n226,RX-PRRU2,4,277.18,1108.72\n227,RX-USMXQ,21,358.22,7522.62\n228,RX-6RN8Y,13,115.20,1497.60\n229,RX-S2LDZ,10,442.99,4429.90\n230,RX-DE24B,10,27.43,274.30\n231,RX-MP4D4,8,204.37,1634.96\n232,RX-XZFNX,24,373.98,8975.52\n233,RX-9XN69,2,365.60,973.02\n234,RX-3NAUG,23,450.00,10801.38\n235,RX-62LD9,22,172.63,4095.70\n236,RX-TXPA8,20,337.56,6751.20\n237,RX-6QYYX,33,434.92,14352.36\n238,RX-AA3U2,33,409.82,14323.01\n239,RX-HBTVC,25,416.18,10404.50\n240,RX-7M8B7,32,455.59,14578.88\n241,RX-7LPFJ,15,379.24,5688.60\n242,RX-NSHN2,2,427.71,855.42\n243,RX-CVYLD,20,47.24,944.80\n244,RX-W74J9,11,461.92,5081.12\n245,RX-8BWTW,28,91.68,3046.03\n246,RX-4S4BB,16,330.75,5292.00\n247,RX-2HWQ9,32,374.42,11981.44\n248,RX-UTDDU,15,197.19,2957.85\n249,RX-33QGA,7,184.17,1289.19\n250,RX-7APQD,40,400.00,16000.00\n251,RX-AHGET,14,202.44,2834.16\n252,RX-PCE38,17,142.56,2423.52\n253,RX-TQNPB,30,396.64,14544.90\n254,RX-FDX8P,21,315.66,6628.86\n255,RX-C65CM,8,149.07,1192.56\n256,RX-TTEZ7,7,285.39,2447.51\n257,RX-NFHJE,14,192.91,2700.74\n258,RX-6LJC2,26,119.58,3477.13\n259,RX-2PP5W,4,470.35,1881.40\n260,RX-JKSZX,19,130.05,2470.95\n261,RX-BAHJE,2,40.26,80.52\n262,RX-PLHXX,12,334.60,4015.20\n263,RX-BUQ5X,34,289.16,9831.44\n264,RX-YKXH3,38,461.99,17555.62\n265,RX-42UNY,2,155.76,282.83\n266,RX-3H5LF,11,438.07,5955.85\n267,RX-2Q3BK,5,234.82,1174.10\n268,RX-JBLVW,14,134.37,2426.53\n269,RX-JDXKK,31,261.57,8108.67\n270,RX-XY8VR,37,270.07,9992.59\n271,RX-4CNKX,7,423.49,2964.43\n272,RX-5B3Y3,3,242.68,728.04\n273,RX-BL9GT,12,449.13,6047.80\n274,RX-KFQZZ,40,423.71,16948.40\n275,RX-KZQU2,34,157.38,5350.92\n276,RX-TESW2,7,248.15,1737.05\n277,RX-5J2UY,8,376.05,3008.40\n278,RX-CKYBC,4,462.33,1849.32\n279,RX-SLAWZ,29,36.27,1051.83\n280,RX-GATTF,3,395.23,1185.69\n281,RX-2FZLZ,13,77.64,1009.32\n282,RX-Y2NB4,38,413.45,15711.10\n283,RX-DGZS7,32,69.62,2227.84\n284,RX-GXYFU,32,179.03,5728.96\n285,RX-AS5U5,39,213.90,8342.10\n286,RX-KANLL,15,453.00,6795.00\n287,RX-V38AV,24,97.68,2033.39\n288,RX-LUBLV,24,37.56,901.44\n289,RX-MUWQN,38,32.26,1225.88\n290,RX-VSXAN,8,331.95,1765.86\n291,RX-KKJQA,23,331.54,7625.42\n292,RX-RU7KX,23,180.36,4148.28\n293,RX-M3DWC,12,340.09,4081.08\n294,RX-7T5TH,14,374.93,5249.02\n295,RX-ADPF7,28,32.21,1188.78\n296,RX-7T6PK,4,242.49,802.73\n297,RX-E6JNM,6,232.53,1395.18\n298,RX-3FNUE,36,30.90,1112.40\n299,RX-Q3YTM,17,276.99,5636.54\n300,RX-HJTYR,16,394.32,6309.12\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[\n  {\"line_id\": \"RX-K9A37\", \"shortfall\": 552.68},\n  {\"line_id\": \"RX-C3K5G\", \"shortfall\": 219.34},\n  {\"line_id\": \"RX-VG74W\", \"shortfall\": 5.90},\n  {\"line_id\": \"RX-9LVG4\", \"shortfall\": 609.10},\n  {\"line_id\": \"RX-PKFBN\", \"shortfall\": 100.00},\n  {\"line_id\": \"RX-ADXBL\", \"shortfall\": 10.80},\n  {\"line_id\": \"RX-C3WA7\", \"shortfall\": 1.02},\n  {\"line_id\": \"RX-CHVP8\", \"shortfall\": 38.00},\n  {\"line_id\": \"RX-QUUHS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-LKBWF\", \"shortfall\": 55.80},\n  {\"line_id\": \"RX-FGRHT\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JVSNR\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-28E7W\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-QGHD5\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SNMHS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-Y3379\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SAUJD\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-CHHMC\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-B2AAE\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-DJ27R\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MDJAA\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-RXH72\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-NSHUH\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-X745G\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-J6L46\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-93MET\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-BNJ2K\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MEUP6\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-DU5FY\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-FXFZE\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-94XWR\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-599KK\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-XMXBB\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-34EJP\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-C2NB7\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-NGHF6\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-UACUE\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MKNMD\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3AWWD\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-HY4FF\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-RWGDJ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-QHP5K\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-QADE3\", \"shortfall\": 0.0",
+     "reasoning": null,
+     "finish_reason": "length",
+     "prompt_tokens": 4362,
+     "completion_tokens": 1000,
+     "latency_ms": 2920,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "truncated",
+    "parsed_ok": true,
+    "parse_notes": [
+     "reply cut off by output cap; 42 complete entries before the cut used (D14)",
+     "33 entries with shortfall <= 0 counted as not reported (D13)"
+    ],
+    "nonpositive_dropped": 33,
+    "reported": [
+     {
+      "id": "RX-K9A37",
+      "value": 55268
+     },
+     {
+      "id": "RX-C3K5G",
+      "value": 21934
+     },
+     {
+      "id": "RX-VG74W",
+      "value": 590
+     },
+     {
+      "id": "RX-9LVG4",
+      "value": 60910
+     },
+     {
+      "id": "RX-PKFBN",
+      "value": 10000
+     },
+     {
+      "id": "RX-ADXBL",
+      "value": 1080
+     },
+     {
+      "id": "RX-C3WA7",
+      "value": 102
+     },
+     {
+      "id": "RX-CHVP8",
+      "value": 3800
+     },
+     {
+      "id": "RX-LKBWF",
+      "value": 5580
+     }
+    ]
+   },
+   {
+    "worker": 3,
+    "brief": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.",
+    "ranges": [
+     [
+      301,
+      450
+     ]
+    ],
+    "slice": [
+     "RX-BGFBR",
+     "RX-YJJ9C",
+     "RX-8F7F8",
+     "RX-KGNQQ",
+     "RX-X895W",
+     "RX-6G7NE",
+     "RX-PB4UL",
+     "RX-GTF8G",
+     "RX-UMSYS",
+     "RX-3HR75",
+     "RX-T8RGN",
+     "RX-7XHYA",
+     "RX-DPRNZ",
+     "RX-YFTR8",
+     "RX-3R8L9",
+     "RX-Z23W9",
+     "RX-6Q9CL",
+     "RX-HLT8M",
+     "RX-5Y3YA",
+     "RX-PXFAC",
+     "RX-ZDJ3M",
+     "RX-P9UAL",
+     "RX-NK8FR",
+     "RX-SZ3GJ",
+     "RX-2UQV6",
+     "RX-CUC5K",
+     "RX-S46U7",
+     "RX-CFY3R",
+     "RX-LDH4R",
+     "RX-WVGCL",
+     "RX-G7SFW",
+     "RX-E48RD",
+     "RX-3GPTY",
+     "RX-KCAKE",
+     "RX-3645D",
+     "RX-CSPQN",
+     "RX-S2TYW",
+     "RX-Y5HME",
+     "RX-JHJ9A",
+     "RX-9KUDB",
+     "RX-SS7WY",
+     "RX-ASRSY",
+     "RX-W5BAU",
+     "RX-TPJ2G",
+     "RX-853D9",
+     "RX-TKN46",
+     "RX-6NMPR",
+     "RX-E73EV",
+     "RX-ZBYQS",
+     "RX-8GMFQ",
+     "RX-LCJJN",
+     "RX-Q6EWP",
+     "RX-VFQ6M",
+     "RX-BABDY",
+     "RX-7J89K",
+     "RX-DCMSN",
+     "RX-SJDVN",
+     "RX-2G4EA",
+     "RX-FRT8M",
+     "RX-K9V2E",
+     "RX-XC7SJ",
+     "RX-J3ZHM",
+     "RX-8KPYA",
+     "RX-6W9RF",
+     "RX-UUXHQ",
+     "RX-ZNZKL",
+     "RX-YVLN9",
+     "RX-3JWK6",
+     "RX-SEZEN",
+     "RX-JBS57",
+     "RX-7G2GF",
+     "RX-KRP6G",
+     "RX-93GVM",
+     "RX-5W57X",
+     "RX-F8NPS",
+     "RX-F3WE4",
+     "RX-62L2T",
+     "RX-SE8K4",
+     "RX-EB3Z4",
+     "RX-UKKUU",
+     "RX-GT5BG",
+     "RX-3G6MB",
+     "RX-WWUYK",
+     "RX-5RAWG",
+     "RX-2ARUX",
+     "RX-BXTNJ",
+     "RX-JDU48",
+     "RX-VVLP9",
+     "RX-G7XSQ",
+     "RX-CTS2J",
+     "RX-L54X4",
+     "RX-3NM5S",
+     "RX-EH339",
+     "RX-XXPYY",
+     "RX-ENUM3",
+     "RX-UUXMD",
+     "RX-V4CZV",
+     "RX-Y9JK8",
+     "RX-RNR7W",
+     "RX-VBPJE",
+     "RX-6Z8ZF",
+     "RX-QV8VM",
+     "RX-F6WY3",
+     "RX-889E7",
+     "RX-HUBJK",
+     "RX-NWZQ5",
+     "RX-WCYMN",
+     "RX-FGJK2",
+     "RX-YC8VA",
+     "RX-94N5E",
+     "RX-MNLJZ",
+     "RX-MNQP3",
+     "RX-Y4BEQ",
+     "RX-JS5RN",
+     "RX-7TGVV",
+     "RX-CW2BA",
+     "RX-QRVNE",
+     "RX-QNPTE",
+     "RX-PL5B9",
+     "RX-HEPPY",
+     "RX-9HVUL",
+     "RX-JQVUG",
+     "RX-MH366",
+     "RX-GA5JH",
+     "RX-5L66X",
+     "RX-N8CRN",
+     "RX-BLNQW",
+     "RX-YU45V",
+     "RX-7M9GW",
+     "RX-DYZJE",
+     "RX-KYH3D",
+     "RX-SMDVT",
+     "RX-552NU",
+     "RX-6YEWM",
+     "RX-7FBEH",
+     "RX-4NU2E",
+     "RX-TJVTP",
+     "RX-22DJS",
+     "RX-PSA8Y",
+     "RX-97YHK",
+     "RX-PTBC2",
+     "RX-ZH999",
+     "RX-NZZAQ",
+     "RX-YSV5V",
+     "RX-QP4N8",
+     "RX-G8W9Z",
+     "RX-PUA7J",
+     "RX-6K235",
+     "RX-L76H8",
+     "RX-JRJ7G"
+    ],
+    "call": {
+     "prompt": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n301,RX-BGFBR,10,115.00,1150.00\n302,RX-YJJ9C,19,336.57,6394.83\n303,RX-8F7F8,36,368.55,13267.80\n304,RX-KGNQQ,38,15.72,597.36\n305,RX-X895W,28,193.07,5405.96\n306,RX-6G7NE,20,394.49,7889.80\n307,RX-PB4UL,16,318.90,5102.40\n308,RX-GTF8G,25,250.60,6265.00\n309,RX-UMSYS,28,38.99,724.34\n310,RX-3HR75,29,78.59,2279.11\n311,RX-T8RGN,9,433.12,3898.08\n312,RX-7XHYA,19,426.04,8094.76\n313,RX-DPRNZ,26,312.72,8130.72\n314,RX-YFTR8,27,311.70,8415.90\n315,RX-3R8L9,33,441.42,14566.86\n316,RX-Z23W9,40,159.86,5414.13\n317,RX-6Q9CL,25,99.79,2494.75\n318,RX-HLT8M,26,35.57,924.82\n319,RX-5Y3YA,33,76.86,2536.38\n320,RX-PXFAC,36,108.76,3915.36\n321,RX-ZDJ3M,29,433.30,12565.70\n322,RX-P9UAL,34,408.61,16021.47\n323,RX-NK8FR,10,27.55,275.50\n324,RX-SZ3GJ,6,217.10,1302.60\n325,RX-2UQV6,4,234.90,939.60\n326,RX-CUC5K,22,47.35,1041.70\n327,RX-S46U7,26,52.05,1353.30\n328,RX-CFY3R,17,330.28,5614.76\n329,RX-LDH4R,6,445.92,2675.52\n330,RX-WVGCL,29,269.96,7828.84\n331,RX-G7SFW,7,312.29,2186.03\n332,RX-E48RD,3,372.66,1117.98\n333,RX-3GPTY,33,45.26,1493.58\n334,RX-KCAKE,17,43.69,742.73\n335,RX-3645D,23,310.44,7140.12\n336,RX-CSPQN,7,432.19,3025.33\n337,RX-S2TYW,28,408.97,11451.16\n338,RX-Y5HME,9,99.66,896.94\n339,RX-JHJ9A,23,288.52,6635.96\n340,RX-9KUDB,37,465.06,17207.22\n341,RX-SS7WY,4,293.64,1174.56\n342,RX-ASRSY,9,341.86,3076.74\n343,RX-W5BAU,2,286.84,573.68\n344,RX-TPJ2G,33,116.15,3415.68\n345,RX-853D9,5,44.00,220.00\n346,RX-TKN46,17,283.95,4827.15\n347,RX-6NMPR,19,284.99,5414.81\n348,RX-E73EV,33,160.76,5305.08\n349,RX-ZBYQS,9,284.48,2560.32\n350,RX-8GMFQ,11,390.63,4296.93\n351,RX-LCJJN,32,364.55,11665.60\n352,RX-Q6EWP,4,318.78,1275.12\n353,RX-VFQ6M,10,302.49,3024.90\n354,RX-BABDY,27,68.86,1859.22\n355,RX-7J89K,2,447.32,894.64\n356,RX-DCMSN,4,374.79,1499.16\n357,RX-SJDVN,5,403.41,1826.45\n358,RX-2G4EA,3,345.49,1036.47\n359,RX-FRT8M,31,114.89,3561.59\n360,RX-K9V2E,3,19.42,61.30\n361,RX-XC7SJ,7,329.35,2305.45\n362,RX-J3ZHM,5,362.21,1811.05\n363,RX-8KPYA,22,184.99,4069.78\n364,RX-6W9RF,17,139.27,2367.59\n365,RX-UUXHQ,16,290.95,4655.20\n366,RX-ZNZKL,37,218.64,8089.68\n367,RX-YVLN9,11,209.60,2305.60\n368,RX-3JWK6,29,329.71,9561.59\n369,RX-SEZEN,5,15.27,54.93\n370,RX-JBS57,35,48.31,1690.85\n371,RX-7G2GF,21,167.46,3516.66\n372,RX-KRP6G,2,252.00,458.03\n373,RX-93GVM,8,322.79,3468.26\n374,RX-5W57X,10,374.96,3033.11\n375,RX-F8NPS,16,432.84,6925.44\n376,RX-F3WE4,7,323.40,2263.80\n377,RX-62L2T,34,410.68,13963.12\n378,RX-SE8K4,2,239.29,478.58\n379,RX-EB3Z4,16,111.57,1785.12\n380,RX-UKKUU,33,381.17,12578.61\n381,RX-GT5BG,17,371.75,6319.75\n382,RX-3G6MB,34,155.75,5295.50\n383,RX-WWUYK,32,64.78,2704.17\n384,RX-5RAWG,27,94.76,2558.52\n385,RX-2ARUX,5,206.99,1034.95\n386,RX-BXTNJ,32,327.47,10479.04\n387,RX-JDU48,22,80.71,1650.07\n388,RX-VVLP9,7,45.38,317.66\n389,RX-G7XSQ,28,37.80,760.07\n390,RX-CTS2J,35,219.01,8267.28\n391,RX-L54X4,18,232.72,4188.96\n392,RX-3NM5S,19,197.32,3749.08\n393,RX-EH339,33,418.18,13799.94\n394,RX-XXPYY,18,237.06,4267.08\n395,RX-ENUM3,29,258.38,7493.02\n396,RX-UUXMD,30,55.27,1658.10\n397,RX-V4CZV,12,107.51,1290.12\n398,RX-Y9JK8,4,177.49,709.96\n399,RX-RNR7W,17,443.40,7537.80\n400,RX-VBPJE,14,280.43,3926.02\n401,RX-6Z8ZF,40,201.34,8053.60\n402,RX-QV8VM,25,459.63,11490.75\n403,RX-F6WY3,32,414.83,9197.70\n404,RX-889E7,36,366.51,13194.36\n405,RX-HUBJK,4,33.94,135.76\n406,RX-NWZQ5,18,35.29,635.22\n407,RX-WCYMN,1,398.75,398.75\n408,RX-FGJK2,7,68.24,477.68\n409,RX-YC8VA,26,212.22,5517.72\n410,RX-94N5E,25,325.52,8138.00\n411,RX-MNLJZ,34,451.51,15351.34\n412,RX-MNQP3,39,72.98,2846.22\n413,RX-Y4BEQ,12,364.44,4373.28\n414,RX-JS5RN,36,318.00,11448.00\n415,RX-7TGVV,19,71.69,1362.11\n416,RX-CW2BA,32,433.98,13887.36\n417,RX-QRVNE,26,359.01,9334.26\n418,RX-QNPTE,24,120.06,2881.44\n419,RX-PL5B9,34,226.00,7684.00\n420,RX-HEPPY,32,118.87,3803.84\n421,RX-9HVUL,29,324.64,9414.56\n422,RX-JQVUG,29,374.45,10859.05\n423,RX-MH366,33,397.04,13102.32\n424,RX-GA5JH,4,203.87,815.48\n425,RX-5L66X,20,81.41,1628.20\n426,RX-N8CRN,39,334.67,13052.13\n427,RX-BLNQW,36,112.99,4067.64\n428,RX-YU45V,25,106.99,2674.75\n429,RX-7M9GW,3,447.88,1343.64\n430,RX-DYZJE,16,32.95,527.20\n431,RX-KYH3D,40,443.96,17758.40\n432,RX-SMDVT,38,233.09,8857.42\n433,RX-552NU,15,92.52,1387.80\n434,RX-6YEWM,32,460.18,10395.48\n435,RX-7FBEH,28,387.55,9013.39\n436,RX-4NU2E,39,289.68,11297.52\n437,RX-TJVTP,30,198.50,5955.00\n438,RX-22DJS,7,343.22,2402.54\n439,RX-PSA8Y,32,411.64,14695.30\n440,RX-97YHK,36,71.04,2557.44\n441,RX-PTBC2,8,190.86,1526.88\n442,RX-ZH999,36,332.09,11955.24\n443,RX-NZZAQ,38,228.15,8669.70\n444,RX-YSV5V,23,369.14,8490.22\n445,RX-QP4N8,36,25.57,920.52\n446,RX-G8W9Z,39,216.42,8440.38\n447,RX-PUA7J,36,470.47,16936.92\n448,RX-6K235,12,445.12,5341.44\n449,RX-L76H8,38,85.53,3250.14\n450,RX-JRJ7G,11,192.41,2116.51\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[\n  {\"line_id\": \"RX-8F7F8\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-UMSYS\", \"shortfall\": 0.14},\n  {\"line_id\": \"RX-Z23W9\", \"shortfall\": 979.27},\n  {\"line_id\": \"RX-3GPTY\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3645D\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-9KUDB\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-TPJ2G\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-6NMPR\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-E73EV\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-ZBYQS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-8GMFQ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-LCJJN\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-Q6EWP\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-VFQ6M\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-BABDY\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7J89K\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-DCMSN\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SJDVN\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2G4EA\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-FRT8M\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-K9V2E\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-XC7SJ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-J3ZHM\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-8KPYA\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-6W9RF\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-UUXHQ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-ZNZKL\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-YVLN9\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3JWK6\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SEZEN\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JBS57\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7G2GF\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-KRP6G\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-93GVM\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-5W57X\", \"shortfall\": 716.49},\n  {\"line_id\": \"RX-F8NPS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-F3WE4\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-62L2T\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SE8K4\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-EB3Z4\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-UKKUU\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-GT5BG\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3G6MB",
+     "reasoning": null,
+     "finish_reason": "length",
+     "prompt_tokens": 4367,
+     "completion_tokens": 1000,
+     "latency_ms": 2945,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "truncated",
+    "parsed_ok": true,
+    "parse_notes": [
+     "reply cut off by output cap; 42 complete entries before the cut used (D14)",
+     "39 entries with shortfall <= 0 counted as not reported (D13)"
+    ],
+    "nonpositive_dropped": 39,
+    "reported": [
+     {
+      "id": "RX-UMSYS",
+      "value": 14
+     },
+     {
+      "id": "RX-Z23W9",
+      "value": 97927
+     },
+     {
+      "id": "RX-5W57X",
+      "value": 71649
+     }
+    ]
+   },
+   {
+    "worker": 4,
+    "brief": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.",
+    "ranges": [
+     [
+      451,
+      600
+     ]
+    ],
+    "slice": [
+     "RX-4NBKZ",
+     "RX-CTMWH",
+     "RX-C5GPV",
+     "RX-SDAMS",
+     "RX-7AHJP",
+     "RX-A7FH2",
+     "RX-FTY9D",
+     "RX-URGGN",
+     "RX-TBK9Y",
+     "RX-VRRZL",
+     "RX-JWRDY",
+     "RX-LVZJR",
+     "RX-ZCZ8R",
+     "RX-7JQVQ",
+     "RX-2L5NG",
+     "RX-LPF66",
+     "RX-RKK75",
+     "RX-HFT4L",
+     "RX-NBXZF",
+     "RX-JTEJC",
+     "RX-E25SM",
+     "RX-2GYZ5",
+     "RX-FGU9G",
+     "RX-PRUWP",
+     "RX-2DR2W",
+     "RX-V36FJ",
+     "RX-K3EA8",
+     "RX-BZ5PH",
+     "RX-Q6BC9",
+     "RX-A7HEA",
+     "RX-7UJD5",
+     "RX-ASFPD",
+     "RX-3DL6Y",
+     "RX-KEK5Z",
+     "RX-PCVDM",
+     "RX-YEJBX",
+     "RX-ZKFQH",
+     "RX-BRPE3",
+     "RX-MSH4T",
+     "RX-XZ7X4",
+     "RX-E7G6J",
+     "RX-J3MBQ",
+     "RX-JLFZX",
+     "RX-A5F35",
+     "RX-F9YPG",
+     "RX-YD6UD",
+     "RX-D3V8K",
+     "RX-JRELJ",
+     "RX-38HKN",
+     "RX-QGH4Z",
+     "RX-EDNKY",
+     "RX-WECNX",
+     "RX-LZBXG",
+     "RX-478NP",
+     "RX-Q5G5L",
+     "RX-UPJ6P",
+     "RX-JRN55",
+     "RX-G78DJ",
+     "RX-U873X",
+     "RX-W6QFJ",
+     "RX-KKDK9",
+     "RX-FPPW4",
+     "RX-HY6QC",
+     "RX-5PCTQ",
+     "RX-78JB7",
+     "RX-6CZ6D",
+     "RX-9VK6B",
+     "RX-Z2YMF",
+     "RX-KDRCQ",
+     "RX-AHPTF",
+     "RX-CD499",
+     "RX-RNKAH",
+     "RX-9SSFV",
+     "RX-CDHA8",
+     "RX-L8PQM",
+     "RX-NBR33",
+     "RX-Z38BU",
+     "RX-VWFGC",
+     "RX-6T498",
+     "RX-L87AJ",
+     "RX-GUCKR",
+     "RX-89XR6",
+     "RX-2VWVC",
+     "RX-MZAV5",
+     "RX-RVWFK",
+     "RX-UYNJ4",
+     "RX-HP25W",
+     "RX-A4SF9",
+     "RX-347HN",
+     "RX-GKLGP",
+     "RX-AT6E7",
+     "RX-7DSCK",
+     "RX-TQ4PA",
+     "RX-EXTPN",
+     "RX-L9TWM",
+     "RX-ZK3UP",
+     "RX-XPWZY",
+     "RX-XVS5T",
+     "RX-XMVUD",
+     "RX-DJ7RV",
+     "RX-PC7D8",
+     "RX-N26YK",
+     "RX-5QEWR",
+     "RX-4D4BA",
+     "RX-7M4NB",
+     "RX-5JKKT",
+     "RX-JWA6R",
+     "RX-QJ7NV",
+     "RX-HK39K",
+     "RX-ESBPQ",
+     "RX-5NHJR",
+     "RX-K3W66",
+     "RX-P3DEE",
+     "RX-JGN4M",
+     "RX-CWCDM",
+     "RX-U9YQX",
+     "RX-RQYWL",
+     "RX-RTVZR",
+     "RX-N8YF9",
+     "RX-42FSD",
+     "RX-378NS",
+     "RX-VHX8T",
+     "RX-AR7Q5",
+     "RX-4EMTU",
+     "RX-7S7QJ",
+     "RX-B2YSA",
+     "RX-9TMZ9",
+     "RX-W9RS5",
+     "RX-J63TN",
+     "RX-4KPR5",
+     "RX-PDMA2",
+     "RX-MS6VG",
+     "RX-LFJP2",
+     "RX-3SMQ2",
+     "RX-VS96K",
+     "RX-X8EWC",
+     "RX-M6LW7",
+     "RX-9HNVS",
+     "RX-H5FG8",
+     "RX-P8HJS",
+     "RX-UNG4U",
+     "RX-RQ3PD",
+     "RX-9XC2Z",
+     "RX-AX6NT",
+     "RX-5GCXK",
+     "RX-7KAXF",
+     "RX-4BX4M",
+     "RX-XGRQF",
+     "RX-5PH9U",
+     "RX-NNHRQ"
+    ],
+    "call": {
+     "prompt": "You are auditing a remittance ledger. For each row assigned to you, calculate the amount owed as qty multiplied by unit_rate. A line is UNDERPAID if the paid amount is strictly less than the amount owed. For every underpaid line, report the row number, the line_id, and the shortfall calculated as (qty * unit_rate) - paid, formatted to two decimal places. Do not report lines that are paid exactly or overpaid. Return a list of objects with keys: row, line_id, shortfall.\n\nYour ledger rows:\nrow,line_id,qty,unit_rate,paid\n451,RX-4NBKZ,38,171.54,6518.52\n452,RX-CTMWH,23,439.40,10106.20\n453,RX-C5GPV,34,292.04,9929.36\n454,RX-SDAMS,14,326.38,4569.32\n455,RX-7AHJP,3,191.11,573.33\n456,RX-A7FH2,21,108.51,2278.71\n457,RX-FTY9D,35,350.76,12276.60\n458,RX-URGGN,39,406.19,15841.41\n459,RX-TBK9Y,28,67.11,1879.08\n460,RX-VRRZL,24,245.41,5889.84\n461,RX-JWRDY,26,59.87,1556.62\n462,RX-LVZJR,5,325.96,1629.80\n463,RX-ZCZ8R,9,246.95,2222.55\n464,RX-7JQVQ,25,142.85,3571.25\n465,RX-2L5NG,22,94.82,2086.04\n466,RX-LPF66,4,396.11,1584.44\n467,RX-RKK75,22,238.88,5255.36\n468,RX-HFT4L,2,444.64,889.28\n469,RX-NBXZF,38,45.63,1733.94\n470,RX-JTEJC,25,119.78,3262.48\n471,RX-E25SM,33,232.58,7675.14\n472,RX-2GYZ5,27,20.64,557.28\n473,RX-FGU9G,9,325.99,3304.86\n474,RX-PRUWP,23,23.63,543.49\n475,RX-2DR2W,32,193.83,6202.56\n476,RX-V36FJ,34,30.55,1038.70\n477,RX-K3EA8,12,103.77,1414.77\n478,RX-BZ5PH,8,248.93,1991.44\n479,RX-Q6BC9,7,453.24,3172.68\n480,RX-A7HEA,9,57.46,517.14\n481,RX-7UJD5,27,212.24,5730.48\n482,RX-ASFPD,38,443.60,16856.80\n483,RX-3DL6Y,12,89.57,1074.84\n484,RX-KEK5Z,24,169.90,4077.60\n485,RX-PCVDM,19,464.27,8821.13\n486,RX-YEJBX,14,112.33,1572.62\n487,RX-ZKFQH,22,286.12,6294.64\n488,RX-BRPE3,6,448.19,2689.14\n489,RX-MSH4T,21,378.88,10271.78\n490,RX-XZ7X4,23,383.16,7785.60\n491,RX-E7G6J,30,57.03,1710.90\n492,RX-J3MBQ,18,329.55,5931.90\n493,RX-JLFZX,4,242.52,970.08\n494,RX-A5F35,22,353.84,7784.48\n495,RX-F9YPG,7,166.64,1166.48\n496,RX-YD6UD,25,446.91,11172.75\n497,RX-D3V8K,5,232.57,1162.85\n498,RX-JRELJ,11,357.03,3927.33\n499,RX-38HKN,6,22.81,136.86\n500,RX-QGH4Z,26,456.04,13428.77\n501,RX-EDNKY,26,80.92,1670.58\n502,RX-WECNX,3,222.52,667.56\n503,RX-LZBXG,20,232.46,6044.51\n504,RX-478NP,12,189.03,3026.47\n505,RX-Q5G5L,15,33.17,497.55\n506,RX-UPJ6P,8,58.56,468.48\n507,RX-JRN55,31,168.46,5222.26\n508,RX-G78DJ,21,389.94,8188.74\n509,RX-U873X,40,13.56,542.40\n510,RX-W6QFJ,13,69.04,897.52\n511,RX-KKDK9,18,382.20,6256.59\n512,RX-FPPW4,38,76.65,2912.70\n513,RX-HY6QC,31,390.44,12103.64\n514,RX-5PCTQ,1,467.13,467.13\n515,RX-78JB7,19,255.55,4512.73\n516,RX-6CZ6D,16,110.99,1775.84\n517,RX-9VK6B,20,42.19,843.80\n518,RX-Z2YMF,18,264.22,4755.96\n519,RX-KDRCQ,6,316.87,1901.22\n520,RX-AHPTF,29,165.28,4793.12\n521,RX-CD499,5,68.25,341.25\n522,RX-RNKAH,31,226.39,7546.67\n523,RX-9SSFV,39,204.40,7971.60\n524,RX-CDHA8,40,474.33,18973.20\n525,RX-L8PQM,26,56.73,1474.98\n526,RX-NBR33,16,391.71,6267.36\n527,RX-Z38BU,21,366.87,7704.27\n528,RX-VWFGC,27,154.50,4171.50\n529,RX-6T498,1,55.32,58.44\n530,RX-L87AJ,11,329.11,3620.21\n531,RX-GUCKR,8,470.69,3765.52\n532,RX-89XR6,11,363.73,4001.03\n533,RX-2VWVC,20,275.89,6581.84\n534,RX-MZAV5,27,408.00,11016.00\n535,RX-RVWFK,1,182.49,182.49\n536,RX-UYNJ4,27,250.59,6765.93\n537,RX-HP25W,4,134.61,604.07\n538,RX-A4SF9,2,405.45,810.90\n539,RX-347HN,9,205.01,1845.09\n540,RX-GKLGP,36,179.82,5884.17\n541,RX-AT6E7,30,360.99,10829.70\n542,RX-7DSCK,35,382.92,13402.20\n543,RX-TQ4PA,5,198.23,991.15\n544,RX-EXTPN,34,130.48,3926.53\n545,RX-L9TWM,36,189.20,6811.20\n546,RX-ZK3UP,24,168.65,4047.60\n547,RX-XPWZY,14,95.68,1339.52\n548,RX-XVS5T,26,145.16,3774.16\n549,RX-XMVUD,23,164.89,2954.51\n550,RX-DJ7RV,34,430.49,14636.66\n551,RX-PC7D8,34,379.02,12886.68\n552,RX-N26YK,2,172.22,344.44\n553,RX-5QEWR,22,305.39,6718.58\n554,RX-4D4BA,17,376.68,4841.28\n555,RX-7M4NB,40,20.02,648.70\n556,RX-5JKKT,14,462.76,6478.64\n557,RX-JWA6R,12,80.15,961.80\n558,RX-QJ7NV,13,365.13,4746.69\n559,RX-HK39K,40,146.79,5871.60\n560,RX-ESBPQ,29,13.72,397.88\n561,RX-5NHJR,14,171.65,2403.10\n562,RX-K3W66,4,420.13,1950.59\n563,RX-P3DEE,32,116.26,3720.32\n564,RX-JGN4M,37,106.28,3932.36\n565,RX-CWCDM,4,175.65,702.60\n566,RX-U9YQX,6,172.44,1034.64\n567,RX-RQYWL,8,377.73,3021.84\n568,RX-RTVZR,9,358.00,3222.00\n569,RX-N8YF9,30,229.77,6893.10\n570,RX-42FSD,17,245.50,3737.04\n571,RX-378NS,1,120.21,120.21\n572,RX-VHX8T,5,102.43,512.15\n573,RX-AR7Q5,2,286.53,573.06\n574,RX-4EMTU,35,218.12,5239.18\n575,RX-7S7QJ,22,265.26,5835.72\n576,RX-B2YSA,28,290.79,8142.12\n577,RX-9TMZ9,33,32.18,1061.94\n578,RX-W9RS5,2,180.54,361.08\n579,RX-J63TN,6,148.97,893.82\n580,RX-4KPR5,26,403.62,10494.12\n581,RX-PDMA2,31,77.85,2413.35\n582,RX-MS6VG,15,67.78,1016.70\n583,RX-LFJP2,39,116.56,4545.84\n584,RX-3SMQ2,35,288.94,10112.90\n585,RX-VS96K,37,381.02,14097.74\n586,RX-X8EWC,24,396.71,9521.04\n587,RX-M6LW7,6,406.97,2441.82\n588,RX-9HNVS,20,113.58,2271.60\n589,RX-H5FG8,13,444.05,5772.65\n590,RX-P8HJS,12,434.05,5208.60\n591,RX-UNG4U,1,293.70,293.70\n592,RX-RQ3PD,37,208.85,7727.45\n593,RX-9XC2Z,21,201.14,4223.94\n594,RX-AX6NT,30,19.53,585.90\n595,RX-5GCXK,35,404.93,14172.55\n596,RX-7KAXF,17,224.98,3824.66\n597,RX-4BX4M,20,226.19,4523.80\n598,RX-XGRQF,27,105.47,2472.60\n599,RX-5PH9U,30,97.35,2920.50\n600,RX-NNHRQ,15,90.20,1353.00\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+     "raw_text": "[\n  {\"line_id\": \"RX-4NBKZ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-CTMWH\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-C5GPV\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-SDAMS\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7AHJP\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-A7FH2\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-FTY9D\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-URGGN\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-TBK9Y\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-VRRZL\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JWRDY\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-LVZJR\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-ZCZ8R\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7JQVQ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2L5NG\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-LPF66\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-RKK75\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-HFT4L\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-NBXZF\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JTEJC\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-E25SM\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2GYZ5\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-FGU9G\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-PRUWP\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-2DR2W\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-V36FJ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-K3EA8\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-BZ5PH\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-Q6BC9\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-A7HEA\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-7UJD5\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-ASFPD\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-3DL6Y\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-KEK5Z\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-PCVDM\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-YEJBX\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-ZKFQH\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-BRPE3\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-MSH4T\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-XZ7X4\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-E7G6J\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-J3MBQ\", \"shortfall\": 0.00},\n  {\"line_id\": \"RX-JLFZX\", \"shortfall\": 0.00},\n",
+     "reasoning": null,
+     "finish_reason": "length",
+     "prompt_tokens": 4353,
+     "completion_tokens": 1000,
+     "latency_ms": 3025,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "truncated",
+    "parsed_ok": true,
+    "parse_notes": [
+     "reply cut off by output cap; 43 complete entries before the cut used (D14)",
+     "43 entries with shortfall <= 0 counted as not reported (D13)"
+    ],
+    "nonpositive_dropped": 43,
+    "reported": []
+   }
+  ],
+  "merger": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\n4 workers each checked part of the ledger. You do not see the ledger. Their reports:\nWorker 1: [{\"line_id\": \"RX-M42XT\", \"shortfall\": 49.6}, {\"line_id\": \"RX-5NX9P\", \"shortfall\": null}, {\"line_id\": \"RX-XKMDL\", \"shortfall\": null}, {\"line_id\": \"RX-5S3ZZ\", \"shortfall\": null}, {\"line_id\": \"RX-8MYC7\", \"shortfall\": null}, {\"line_id\": \"RX-38DCE\", \"shortfall\": null}, {\"line_id\": \"RX-69348\", \"shortfall\": null}, {\"line_id\": \"RX-5Z7WH\", \"shortfall\": null}, {\"line_id\": \"RX-3CZ4A\", \"shortfall\": null}, {\"line_id\": \"RX-38M2W\", \"shortfall\": null}, {\"line_id\": \"RX-P2L6F\", \"shortfall\": null}, {\"line_id\": \"RX-TD364\", \"shortfall\": null}, {\"line_id\": \"RX-AGV7X\", \"shortfall\": null}, {\"line_id\": \"RX-L8PZU\", \"shortfall\": null}, {\"line_id\": \"RX-K9FQZ\", \"shortfall\": null}, {\"line_id\": \"RX-25ZWH\", \"shortfall\": null}, {\"line_id\": \"RX-ZVHZZ\", \"shortfall\": null}]\nWorker 2: [{\"line_id\": \"RX-K9A37\", \"shortfall\": 552.68}, {\"line_id\": \"RX-C3K5G\", \"shortfall\": 219.34}, {\"line_id\": \"RX-VG74W\", \"shortfall\": 5.9}, {\"line_id\": \"RX-9LVG4\", \"shortfall\": 609.1}, {\"line_id\": \"RX-PKFBN\", \"shortfall\": 100.0}, {\"line_id\": \"RX-ADXBL\", \"shortfall\": 10.8}, {\"line_id\": \"RX-C3WA7\", \"shortfall\": 1.02}, {\"line_id\": \"RX-CHVP8\", \"shortfall\": 38.0}, {\"line_id\": \"RX-LKBWF\", \"shortfall\": 55.8}]\nWorker 3: [{\"line_id\": \"RX-UMSYS\", \"shortfall\": 0.14}, {\"line_id\": \"RX-Z23W9\", \"shortfall\": 979.27}, {\"line_id\": \"RX-5W57X\", \"shortfall\": 716.49}]\nWorker 4: []\n\nProduce the final list of underpaid lines.\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+    "raw_text": "[\n  {\"line_id\": \"RX-M42XT\", \"shortfall\": 49.60},\n  {\"line_id\": \"RX-K9A37\", \"shortfall\": 552.68},\n  {\"line_id\": \"RX-C3K5G\", \"shortfall\": 219.34},\n  {\"line_id\": \"RX-VG74W\", \"shortfall\": 5.90},\n  {\"line_id\": \"RX-9LVG4\", \"shortfall\": 609.10},\n  {\"line_id\": \"RX-PKFBN\", \"shortfall\": 100.00},\n  {\"line_id\": \"RX-ADXBL\", \"shortfall\": 10.80},\n  {\"line_id\": \"RX-C3WA7\", \"shortfall\": 1.02},\n  {\"line_id\": \"RX-CHVP8\", \"shortfall\": 38.00},\n  {\"line_id\": \"RX-LKBWF\", \"shortfall\": 55.80},\n  {\"line_id\": \"RX-UMSYS\", \"shortfall\": 0.14},\n  {\"line_id\": \"RX-Z23W9\", \"shortfall\": 979.27},\n  {\"line_id\": \"RX-5W57X\", \"shortfall\": 716.49}\n]",
+    "reasoning": null,
+    "finish_reason": "stop",
+    "prompt_tokens": 781,
+    "completion_tokens": 322,
+    "latency_ms": 1249,
+    "retries": 0,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "nonpositive_dropped": 0,
+   "final": [
+    {
+     "id": "RX-M42XT",
+     "value": 4960
+    },
+    {
+     "id": "RX-K9A37",
+     "value": 55268
+    },
+    {
+     "id": "RX-C3K5G",
+     "value": 21934
+    },
+    {
+     "id": "RX-VG74W",
+     "value": 590
+    },
+    {
+     "id": "RX-9LVG4",
+     "value": 60910
+    },
+    {
+     "id": "RX-PKFBN",
+     "value": 10000
+    },
+    {
+     "id": "RX-ADXBL",
+     "value": 1080
+    },
+    {
+     "id": "RX-C3WA7",
+     "value": 102
+    },
+    {
+     "id": "RX-CHVP8",
+     "value": 3800
+    },
+    {
+     "id": "RX-LKBWF",
+     "value": 5580
+    },
+    {
+     "id": "RX-UMSYS",
+     "value": 14
+    },
+    {
+     "id": "RX-Z23W9",
+     "value": 97927
+    },
+    {
+     "id": "RX-5W57X",
+     "value": 71649
+    }
+   ]
+  }
+ },
+ "baseline": {
+  "call": {
+   "prompt": "You are auditing a remittance ledger. Each line is one billed service. The amount owed for a line is qty x unit_rate. A line is UNDERPAID when paid is less than qty x unit_rate; its shortfall is (qty x unit_rate) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported. Find every underpaid line.\n\nThe ledger:\nrow,line_id,qty,unit_rate,paid\n1,RX-WJZGH,16,446.03,7136.48\n2,RX-M42XT,40,104.16,4166.40\n3,RX-3RQE9,3,291.13,873.39\n4,RX-4BUN5,15,205.26,3078.90\n5,RX-SG76H,7,410.77,2875.39\n6,RX-5UL5F,14,423.95,5935.30\n7,RX-3PDAS,9,301.89,3488.20\n8,RX-K83ST,32,324.08,10370.56\n9,RX-5HDV5,9,327.88,2950.92\n10,RX-P3SX7,33,412.03,13596.99\n11,RX-YRLTC,13,432.36,6244.50\n12,RX-JNNJT,34,156.55,4170.58\n13,RX-VCRLT,35,361.63,12657.05\n14,RX-2QJJH,2,402.04,804.08\n15,RX-MDPTW,10,284.26,2842.60\n16,RX-V7UV2,15,285.96,4289.40\n17,RX-Y8SAT,16,36.45,583.20\n18,RX-DQYRT,18,289.78,5216.04\n19,RX-T8UAA,1,151.82,151.82\n20,RX-W55JM,38,252.19,9583.22\n21,RX-7C4YL,21,162.62,3415.02\n22,RX-JYLZR,36,132.87,4783.32\n23,RX-2H5AK,1,86.70,86.70\n24,RX-MQZTQ,7,288.71,2020.97\n25,RX-VA8KD,10,67.69,676.90\n26,RX-CSR97,1,185.51,185.51\n27,RX-5NX9P,9,13.73,123.57\n28,RX-XKNDL,32,34.54,1105.28\n29,RX-NNXPK,6,23.56,139.44\n30,RX-5S3ZZ,38,431.93,16413.34\n31,RX-8MYC7,32,381.83,12218.56\n32,RX-DWB7C,6,431.42,2588.52\n33,RX-38DCE,17,94.78,1611.26\n34,RX-NQYDK,1,14.34,14.34\n35,RX-69348,24,32.61,782.64\n36,RX-PZWYK,37,313.58,11602.46\n37,RX-5Z7WH,17,249.98,4249.66\n38,RX-ECETM,31,158.63,4917.53\n39,RX-S9AAE,15,111.37,1670.55\n40,RX-WXRBC,6,204.17,1225.02\n41,RX-V8SRF,15,300.09,4501.35\n42,RX-GKFVM,12,271.29,3255.48\n43,RX-3CZAA,13,413.04,3541.05\n44,RX-38M2W,10,85.28,852.80\n45,RX-Z4RAD,33,353.17,11654.61\n46,RX-P2L6F,16,200.21,3203.36\n47,RX-TD364,38,476.33,18100.54\n48,RX-HAHKN,29,137.30,3981.70\n49,RX-EPSPE,7,13.54,94.78\n50,RX-AGV7X,27,181.22,4892.94\n51,RX-L8PZU,31,301.18,9336.58\n52,RX-K9FQZ,10,379.21,3792.10\n53,RX-25ZWH,9,301.44,2712.96\n54,RX-ZVHZZ,26,367.07,9543.82\n55,RX-8C6QY,36,119.17,4290.12\n56,RX-DWVGF,38,434.16,16498.08\n57,RX-ERH9U,32,364.74,11671.68\n58,RX-UXMNQ,39,295.83,11537.37\n59,RX-SGKTH,20,237.81,3176.79\n60,RX-DPWP2,34,34.47,1171.98\n61,RX-YKMW8,15,345.29,5179.35\n62,RX-MDATN,15,30.86,462.90\n63,RX-BVPRK,13,443.25,5762.25\n64,RX-KJYYV,13,209.63,2725.19\n65,RX-8HVE7,37,258.52,9565.24\n66,RX-96TL4,16,317.36,5959.09\n67,RX-7GTDL,10,317.67,3176.70\n68,RX-P2K2P,1,190.50,253.13\n69,RX-ZJ9VX,23,73.15,1682.45\n70,RX-XEAZ8,28,272.06,8863.28\n71,RX-L5AY8,15,54.74,821.10\n72,RX-WVPU5,23,275.51,6336.73\n73,RX-YFBQY,33,23.32,769.56\n74,RX-MK8LD,34,322.98,10981.32\n75,RX-3ACCU,27,166.59,4497.93\n76,RX-5YZUC,7,142.92,1000.44\n77,RX-F47DZ,25,39.42,985.50\n78,RX-3DANZ,28,128.28,3591.84\n79,RX-KKUB8,39,340.81,13291.59\n80,RX-JTFU7,31,212.40,6584.40\n81,RX-6U773,10,242.19,2421.90\n82,RX-Q37Z2,7,299.58,2788.95\n83,RX-ZX8J7,15,330.39,4955.85\n84,RX-RW8AC,2,310.42,620.84\n85,RX-NLMKP,26,19.42,504.92\n86,RX-BSU6V,7,375.20,2626.40\n87,RX-L9WW7,5,414.24,2071.20\n88,RX-GRLLU,3,324.68,974.04\n89,RX-SUR3R,20,402.48,8049.60\n90,RX-VTRRL,4,312.21,1248.84\n91,RX-7NKMV,2,54.65,109.30\n92,RX-XUM43,35,154.94,5210.71\n93,RX-3TR6Q,4,350.49,1401.96\n94,RX-TFL6F,8,249.33,1568.05\n95,RX-AKDVN,5,298.23,1491.15\n96,RX-WTU87,17,77.46,1316.82\n97,RX-NQM8X,20,73.55,1324.35\n98,RX-JAWRB,19,464.82,8831.58\n99,RX-TCDS3,34,301.73,10258.82\n100,RX-RHYJ7,15,384.77,5771.55\n101,RX-8JTKK,37,163.61,6053.57\n102,RX-V3J5U,22,271.32,5969.04\n103,RX-9T976,11,382.51,4207.61\n104,RX-74DLC,14,358.59,5020.26\n105,RX-YY4M8,19,118.59,2253.21\n106,RX-5MKD5,33,416.47,13743.51\n107,RX-2H3VJ,1,310.07,310.07\n108,RX-S65JE,32,470.46,15054.72\n109,RX-43SA9,24,141.43,3394.32\n110,RX-C3QSW,22,450.94,9920.68\n111,RX-E5GVK,31,31.94,990.14\n112,RX-6NUNK,3,26.45,79.35\n113,RX-BSECY,8,231.59,1494.82\n114,RX-EGTBZ,17,223.11,3792.87\n115,RX-79ZUL,7,341.50,2390.50\n116,RX-LLMWW,2,50.95,101.90\n117,RX-75ZEJ,22,311.18,6845.96\n118,RX-EKAM5,3,89.96,263.08\n119,RX-Z7KS6,20,140.94,2818.80\n120,RX-CBLM4,22,150.80,3317.60\n121,RX-ANFDL,10,97.52,863.05\n122,RX-G7RZ4,19,253.09,4808.71\n123,RX-AGCJ3,18,58.84,1059.12\n124,RX-H4LD6,18,254.40,4579.20\n125,RX-9MFBL,20,463.22,9264.40\n126,RX-2XYMR,38,322.87,12269.06\n127,RX-K76KA,35,151.57,5504.10\n128,RX-XMHRP,32,57.98,1855.36\n129,RX-AJUDQ,13,334.35,4346.55\n130,RX-VNXDJ,27,397.91,10743.57\n131,RX-Y6UQ5,4,478.62,1914.48\n132,RX-R7LC5,16,370.87,5933.92\n133,RX-2DQ5E,9,358.39,3225.51\n134,RX-H66FZ,1,332.23,332.23\n135,RX-ZHLJY,25,104.45,2611.25\n136,RX-TK65R,5,164.39,821.95\n137,RX-LJ52U,27,31.42,1030.20\n138,RX-6U333,13,44.22,574.86\n139,RX-CGVAQ,32,284.03,9088.96\n140,RX-CF6QH,22,21.37,564.46\n141,RX-ULGBF,22,44.54,979.88\n142,RX-K9BVZ,39,128.74,5020.86\n143,RX-FT46E,28,214.16,5996.48\n144,RX-ZA5M6,18,421.53,7587.54\n145,RX-26HX8,24,395.86,9500.64\n146,RX-K9HNQ,34,405.95,13802.30\n147,RX-QL6UZ,37,241.96,8952.52\n148,RX-TKLPY,11,404.94,4454.34\n149,RX-4JWCY,29,283.73,8228.17\n150,RX-VY9DA,13,32.78,388.45\n151,RX-HGGRS,37,343.00,12691.00\n152,RX-K9A37,8,420.57,3611.88\n153,RX-C3K5G,15,337.95,3809.91\n154,RX-VG74W,26,317.41,8252.66\n155,RX-9LVG4,11,425.34,4678.74\n156,RX-PKFBN,30,278.29,8348.70\n157,RX-ZKBJV,1,108.93,117.20\n158,RX-ADXBL,21,175.41,3683.61\n159,RX-2W44G,2,160.23,320.46\n160,RX-C3WA7,31,235.02,7285.62\n161,RX-CHVP8,40,334.87,13394.80\n162,RX-QUUHS,5,291.53,1457.65\n163,RX-LKBWF,18,245.41,4417.38\n164,RX-FGRHT,5,282.74,1413.70\n165,RX-JVSNR,22,438.99,9657.78\n166,RX-28E7W,35,477.73,16720.55\n167,RX-QGHD5,7,127.45,892.15\n168,RX-SNMHS,20,68.77,1375.40\n169,RX-Y3379,40,45.01,1800.40\n170,RX-SAUJD,30,194.42,5832.60\n171,RX-CHHMC,36,27.52,990.72\n172,RX-B2AAE,11,264.89,2913.79\n173,RX-DJ27R,34,33.24,813.05\n174,RX-MDJAA,31,254.16,7878.96\n175,RX-RXH72,3,474.39,1404.33\n176,RX-NSHUH,18,441.58,6426.86\n177,RX-X745G,18,166.45,2732.55\n178,RX-J6L46,12,337.74,4052.88\n179,RX-93MET,8,43.47,396.83\n180,RX-BNJ2K,16,61.42,982.72\n181,RX-MEUP6,37,220.63,8163.31\n182,RX-DU5FY,20,323.55,6471.00\n183,RX-FXFZE,30,196.14,7217.27\n184,RX-94XWR,15,181.89,2728.35\n185,RX-599KK,16,343.12,5489.92\n186,RX-XMXBB,37,263.54,7972.78\n187,RX-34EJP,30,199.66,5989.80\n188,RX-C2NB7,32,330.92,10589.44\n189,RX-NGHF6,20,225.51,4510.20\n190,RX-UACUE,13,307.55,3998.15\n191,RX-MKNMD,26,268.56,6982.56\n192,RX-3AWWD,5,28.19,140.95\n193,RX-HY4FF,32,409.78,14599.58\n194,RX-RWGDJ,33,325.71,10748.43\n195,RX-QHP5K,5,321.60,1608.00\n196,RX-QADE3,26,281.13,7309.38\n197,RX-5KHCU,2,416.00,752.07\n198,RX-GE2L2,20,360.33,9323.61\n199,RX-U39FQ,36,267.35,9624.60\n200,RX-T9RZY,5,265.22,1326.10\n201,RX-3JWR2,39,387.38,15107.82\n202,RX-N5FZ7,31,211.61,6559.91\n203,RX-5VH82,6,232.68,1396.08\n204,RX-9JCPQ,13,392.04,5096.52\n205,RX-K9QDL,35,328.20,11487.00\n206,RX-EPZHM,1,85.14,85.14\n207,RX-PMKV6,18,278.40,5011.20\n208,RX-386YK,7,464.38,3250.66\n209,RX-SFYV7,12,392.93,4715.16\n210,RX-8AVZ8,4,52.87,211.48\n211,RX-SL43F,20,217.45,4349.00\n212,RX-QTUW3,34,263.10,8945.40\n213,RX-UUC73,2,181.46,362.92\n214,RX-Y8BKM,5,207.96,1004.66\n215,RX-HC8ND,28,137.09,3838.52\n216,RX-LSH6X,10,458.83,6181.29\n217,RX-4BHCC,1,455.15,455.15\n218,RX-B3WVJ,31,57.86,1793.66\n219,RX-TJ5YD,21,159.92,3358.32\n220,RX-GGAPX,21,123.71,2597.91\n221,RX-PR9ZC,40,394.77,15790.80\n222,RX-3LMYY,13,282.19,3177.50\n223,RX-V2YNC,1,455.93,455.93\n224,RX-FUYZ3,28,51.94,1799.36\n225,RX-VGV3R,39,106.70,4161.30\n226,RX-PRRU2,4,277.18,1108.72\n227,RX-USMXQ,21,358.22,7522.62\n228,RX-6RN8Y,13,115.20,1497.60\n229,RX-S2LDZ,10,442.99,4429.90\n230,RX-DE24B,10,27.43,274.30\n231,RX-MP4D4,8,204.37,1634.96\n232,RX-XZFNX,24,373.98,8975.52\n233,RX-9XN69,2,365.60,973.02\n234,RX-3NAUG,23,450.00,10801.38\n235,RX-62LD9,22,172.63,4095.70\n236,RX-TXPA8,20,337.56,6751.20\n237,RX-6QYYX,33,434.92,14352.36\n238,RX-AA3U2,33,409.82,14323.01\n239,RX-HBTVC,25,416.18,10404.50\n240,RX-7M8B7,32,455.59,14578.88\n241,RX-7LPFJ,15,379.24,5688.60\n242,RX-NSHN2,2,427.71,855.42\n243,RX-CVYLD,20,47.24,944.80\n244,RX-W74J9,11,461.92,5081.12\n245,RX-8BWTW,28,91.68,3046.03\n246,RX-4S4BB,16,330.75,5292.00\n247,RX-2HWQ9,32,374.42,11981.44\n248,RX-UTDDU,15,197.19,2957.85\n249,RX-33QGA,7,184.17,1289.19\n250,RX-7APQD,40,400.00,16000.00\n251,RX-AHGET,14,202.44,2834.16\n252,RX-PCE38,17,142.56,2423.52\n253,RX-TQNPB,30,396.64,14544.90\n254,RX-FDX8P,21,315.66,6628.86\n255,RX-C65CM,8,149.07,1192.56\n256,RX-TTEZ7,7,285.39,2447.51\n257,RX-NFHJE,14,192.91,2700.74\n258,RX-6LJC2,26,119.58,3477.13\n259,RX-2PP5W,4,470.35,1881.40\n260,RX-JKSZX,19,130.05,2470.95\n261,RX-BAHJE,2,40.26,80.52\n262,RX-PLHXX,12,334.60,4015.20\n263,RX-BUQ5X,34,289.16,9831.44\n264,RX-YKXH3,38,461.99,17555.62\n265,RX-42UNY,2,155.76,282.83\n266,RX-3H5LF,11,438.07,5955.85\n267,RX-2Q3BK,5,234.82,1174.10\n268,RX-JBLVW,14,134.37,2426.53\n269,RX-JDXKK,31,261.57,8108.67\n270,RX-XY8VR,37,270.07,9992.59\n271,RX-4CNKX,7,423.49,2964.43\n272,RX-5B3Y3,3,242.68,728.04\n273,RX-BL9GT,12,449.13,6047.80\n274,RX-KFQZZ,40,423.71,16948.40\n275,RX-KZQU2,34,157.38,5350.92\n276,RX-TESW2,7,248.15,1737.05\n277,RX-5J2UY,8,376.05,3008.40\n278,RX-CKYBC,4,462.33,1849.32\n279,RX-SLAWZ,29,36.27,1051.83\n280,RX-GATTF,3,395.23,1185.69\n281,RX-2FZLZ,13,77.64,1009.32\n282,RX-Y2NB4,38,413.45,15711.10\n283,RX-DGZS7,32,69.62,2227.84\n284,RX-GXYFU,32,179.03,5728.96\n285,RX-AS5U5,39,213.90,8342.10\n286,RX-KANLL,15,453.00,6795.00\n287,RX-V38AV,24,97.68,2033.39\n288,RX-LUBLV,24,37.56,901.44\n289,RX-MUWQN,38,32.26,1225.88\n290,RX-VSXAN,8,331.95,1765.86\n291,RX-KKJQA,23,331.54,7625.42\n292,RX-RU7KX,23,180.36,4148.28\n293,RX-M3DWC,12,340.09,4081.08\n294,RX-7T5TH,14,374.93,5249.02\n295,RX-ADPF7,28,32.21,1188.78\n296,RX-7T6PK,4,242.49,802.73\n297,RX-E6JNM,6,232.53,1395.18\n298,RX-3FNUE,36,30.90,1112.40\n299,RX-Q3YTM,17,276.99,5636.54\n300,RX-HJTYR,16,394.32,6309.12\n301,RX-BGFBR,10,115.00,1150.00\n302,RX-YJJ9C,19,336.57,6394.83\n303,RX-8F7F8,36,368.55,13267.80\n304,RX-KGNQQ,38,15.72,597.36\n305,RX-X895W,28,193.07,5405.96\n306,RX-6G7NE,20,394.49,7889.80\n307,RX-PB4UL,16,318.90,5102.40\n308,RX-GTF8G,25,250.60,6265.00\n309,RX-UMSYS,28,38.99,724.34\n310,RX-3HR75,29,78.59,2279.11\n311,RX-T8RGN,9,433.12,3898.08\n312,RX-7XHYA,19,426.04,8094.76\n313,RX-DPRNZ,26,312.72,8130.72\n314,RX-YFTR8,27,311.70,8415.90\n315,RX-3R8L9,33,441.42,14566.86\n316,RX-Z23W9,40,159.86,5414.13\n317,RX-6Q9CL,25,99.79,2494.75\n318,RX-HLT8M,26,35.57,924.82\n319,RX-5Y3YA,33,76.86,2536.38\n320,RX-PXFAC,36,108.76,3915.36\n321,RX-ZDJ3M,29,433.30,12565.70\n322,RX-P9UAL,34,408.61,16021.47\n323,RX-NK8FR,10,27.55,275.50\n324,RX-SZ3GJ,6,217.10,1302.60\n325,RX-2UQV6,4,234.90,939.60\n326,RX-CUC5K,22,47.35,1041.70\n327,RX-S46U7,26,52.05,1353.30\n328,RX-CFY3R,17,330.28,5614.76\n329,RX-LDH4R,6,445.92,2675.52\n330,RX-WVGCL,29,269.96,7828.84\n331,RX-G7SFW,7,312.29,2186.03\n332,RX-E48RD,3,372.66,1117.98\n333,RX-3GPTY,33,45.26,1493.58\n334,RX-KCAKE,17,43.69,742.73\n335,RX-3645D,23,310.44,7140.12\n336,RX-CSPQN,7,432.19,3025.33\n337,RX-S2TYW,28,408.97,11451.16\n338,RX-Y5HME,9,99.66,896.94\n339,RX-JHJ9A,23,288.52,6635.96\n340,RX-9KUDB,37,465.06,17207.22\n341,RX-SS7WY,4,293.64,1174.56\n342,RX-ASRSY,9,341.86,3076.74\n343,RX-W5BAU,2,286.84,573.68\n344,RX-TPJ2G,33,116.15,3415.68\n345,RX-853D9,5,44.00,220.00\n346,RX-TKN46,17,283.95,4827.15\n347,RX-6NMPR,19,284.99,5414.81\n348,RX-E73EV,33,160.76,5305.08\n349,RX-ZBYQS,9,284.48,2560.32\n350,RX-8GMFQ,11,390.63,4296.93\n351,RX-LCJJN,32,364.55,11665.60\n352,RX-Q6EWP,4,318.78,1275.12\n353,RX-VFQ6M,10,302.49,3024.90\n354,RX-BABDY,27,68.86,1859.22\n355,RX-7J89K,2,447.32,894.64\n356,RX-DCMSN,4,374.79,1499.16\n357,RX-SJDVN,5,403.41,1826.45\n358,RX-2G4EA,3,345.49,1036.47\n359,RX-FRT8M,31,114.89,3561.59\n360,RX-K9V2E,3,19.42,61.30\n361,RX-XC7SJ,7,329.35,2305.45\n362,RX-J3ZHM,5,362.21,1811.05\n363,RX-8KPYA,22,184.99,4069.78\n364,RX-6W9RF,17,139.27,2367.59\n365,RX-UUXHQ,16,290.95,4655.20\n366,RX-ZNZKL,37,218.64,8089.68\n367,RX-YVLN9,11,209.60,2305.60\n368,RX-3JWK6,29,329.71,9561.59\n369,RX-SEZEN,5,15.27,54.93\n370,RX-JBS57,35,48.31,1690.85\n371,RX-7G2GF,21,167.46,3516.66\n372,RX-KRP6G,2,252.00,458.03\n373,RX-93GVM,8,322.79,3468.26\n374,RX-5W57X,10,374.96,3033.11\n375,RX-F8NPS,16,432.84,6925.44\n376,RX-F3WE4,7,323.40,2263.80\n377,RX-62L2T,34,410.68,13963.12\n378,RX-SE8K4,2,239.29,478.58\n379,RX-EB3Z4,16,111.57,1785.12\n380,RX-UKKUU,33,381.17,12578.61\n381,RX-GT5BG,17,371.75,6319.75\n382,RX-3G6MB,34,155.75,5295.50\n383,RX-WWUYK,32,64.78,2704.17\n384,RX-5RAWG,27,94.76,2558.52\n385,RX-2ARUX,5,206.99,1034.95\n386,RX-BXTNJ,32,327.47,10479.04\n387,RX-JDU48,22,80.71,1650.07\n388,RX-VVLP9,7,45.38,317.66\n389,RX-G7XSQ,28,37.80,760.07\n390,RX-CTS2J,35,219.01,8267.28\n391,RX-L54X4,18,232.72,4188.96\n392,RX-3NM5S,19,197.32,3749.08\n393,RX-EH339,33,418.18,13799.94\n394,RX-XXPYY,18,237.06,4267.08\n395,RX-ENUM3,29,258.38,7493.02\n396,RX-UUXMD,30,55.27,1658.10\n397,RX-V4CZV,12,107.51,1290.12\n398,RX-Y9JK8,4,177.49,709.96\n399,RX-RNR7W,17,443.40,7537.80\n400,RX-VBPJE,14,280.43,3926.02\n401,RX-6Z8ZF,40,201.34,8053.60\n402,RX-QV8VM,25,459.63,11490.75\n403,RX-F6WY3,32,414.83,9197.70\n404,RX-889E7,36,366.51,13194.36\n405,RX-HUBJK,4,33.94,135.76\n406,RX-NWZQ5,18,35.29,635.22\n407,RX-WCYMN,1,398.75,398.75\n408,RX-FGJK2,7,68.24,477.68\n409,RX-YC8VA,26,212.22,5517.72\n410,RX-94N5E,25,325.52,8138.00\n411,RX-MNLJZ,34,451.51,15351.34\n412,RX-MNQP3,39,72.98,2846.22\n413,RX-Y4BEQ,12,364.44,4373.28\n414,RX-JS5RN,36,318.00,11448.00\n415,RX-7TGVV,19,71.69,1362.11\n416,RX-CW2BA,32,433.98,13887.36\n417,RX-QRVNE,26,359.01,9334.26\n418,RX-QNPTE,24,120.06,2881.44\n419,RX-PL5B9,34,226.00,7684.00\n420,RX-HEPPY,32,118.87,3803.84\n421,RX-9HVUL,29,324.64,9414.56\n422,RX-JQVUG,29,374.45,10859.05\n423,RX-MH366,33,397.04,13102.32\n424,RX-GA5JH,4,203.87,815.48\n425,RX-5L66X,20,81.41,1628.20\n426,RX-N8CRN,39,334.67,13052.13\n427,RX-BLNQW,36,112.99,4067.64\n428,RX-YU45V,25,106.99,2674.75\n429,RX-7M9GW,3,447.88,1343.64\n430,RX-DYZJE,16,32.95,527.20\n431,RX-KYH3D,40,443.96,17758.40\n432,RX-SMDVT,38,233.09,8857.42\n433,RX-552NU,15,92.52,1387.80\n434,RX-6YEWM,32,460.18,10395.48\n435,RX-7FBEH,28,387.55,9013.39\n436,RX-4NU2E,39,289.68,11297.52\n437,RX-TJVTP,30,198.50,5955.00\n438,RX-22DJS,7,343.22,2402.54\n439,RX-PSA8Y,32,411.64,14695.30\n440,RX-97YHK,36,71.04,2557.44\n441,RX-PTBC2,8,190.86,1526.88\n442,RX-ZH999,36,332.09,11955.24\n443,RX-NZZAQ,38,228.15,8669.70\n444,RX-YSV5V,23,369.14,8490.22\n445,RX-QP4N8,36,25.57,920.52\n446,RX-G8W9Z,39,216.42,8440.38\n447,RX-PUA7J,36,470.47,16936.92\n448,RX-6K235,12,445.12,5341.44\n449,RX-L76H8,38,85.53,3250.14\n450,RX-JRJ7G,11,192.41,2116.51\n451,RX-4NBKZ,38,171.54,6518.52\n452,RX-CTMWH,23,439.40,10106.20\n453,RX-C5GPV,34,292.04,9929.36\n454,RX-SDAMS,14,326.38,4569.32\n455,RX-7AHJP,3,191.11,573.33\n456,RX-A7FH2,21,108.51,2278.71\n457,RX-FTY9D,35,350.76,12276.60\n458,RX-URGGN,39,406.19,15841.41\n459,RX-TBK9Y,28,67.11,1879.08\n460,RX-VRRZL,24,245.41,5889.84\n461,RX-JWRDY,26,59.87,1556.62\n462,RX-LVZJR,5,325.96,1629.80\n463,RX-ZCZ8R,9,246.95,2222.55\n464,RX-7JQVQ,25,142.85,3571.25\n465,RX-2L5NG,22,94.82,2086.04\n466,RX-LPF66,4,396.11,1584.44\n467,RX-RKK75,22,238.88,5255.36\n468,RX-HFT4L,2,444.64,889.28\n469,RX-NBXZF,38,45.63,1733.94\n470,RX-JTEJC,25,119.78,3262.48\n471,RX-E25SM,33,232.58,7675.14\n472,RX-2GYZ5,27,20.64,557.28\n473,RX-FGU9G,9,325.99,3304.86\n474,RX-PRUWP,23,23.63,543.49\n475,RX-2DR2W,32,193.83,6202.56\n476,RX-V36FJ,34,30.55,1038.70\n477,RX-K3EA8,12,103.77,1414.77\n478,RX-BZ5PH,8,248.93,1991.44\n479,RX-Q6BC9,7,453.24,3172.68\n480,RX-A7HEA,9,57.46,517.14\n481,RX-7UJD5,27,212.24,5730.48\n482,RX-ASFPD,38,443.60,16856.80\n483,RX-3DL6Y,12,89.57,1074.84\n484,RX-KEK5Z,24,169.90,4077.60\n485,RX-PCVDM,19,464.27,8821.13\n486,RX-YEJBX,14,112.33,1572.62\n487,RX-ZKFQH,22,286.12,6294.64\n488,RX-BRPE3,6,448.19,2689.14\n489,RX-MSH4T,21,378.88,10271.78\n490,RX-XZ7X4,23,383.16,7785.60\n491,RX-E7G6J,30,57.03,1710.90\n492,RX-J3MBQ,18,329.55,5931.90\n493,RX-JLFZX,4,242.52,970.08\n494,RX-A5F35,22,353.84,7784.48\n495,RX-F9YPG,7,166.64,1166.48\n496,RX-YD6UD,25,446.91,11172.75\n497,RX-D3V8K,5,232.57,1162.85\n498,RX-JRELJ,11,357.03,3927.33\n499,RX-38HKN,6,22.81,136.86\n500,RX-QGH4Z,26,456.04,13428.77\n501,RX-EDNKY,26,80.92,1670.58\n502,RX-WECNX,3,222.52,667.56\n503,RX-LZBXG,20,232.46,6044.51\n504,RX-478NP,12,189.03,3026.47\n505,RX-Q5G5L,15,33.17,497.55\n506,RX-UPJ6P,8,58.56,468.48\n507,RX-JRN55,31,168.46,5222.26\n508,RX-G78DJ,21,389.94,8188.74\n509,RX-U873X,40,13.56,542.40\n510,RX-W6QFJ,13,69.04,897.52\n511,RX-KKDK9,18,382.20,6256.59\n512,RX-FPPW4,38,76.65,2912.70\n513,RX-HY6QC,31,390.44,12103.64\n514,RX-5PCTQ,1,467.13,467.13\n515,RX-78JB7,19,255.55,4512.73\n516,RX-6CZ6D,16,110.99,1775.84\n517,RX-9VK6B,20,42.19,843.80\n518,RX-Z2YMF,18,264.22,4755.96\n519,RX-KDRCQ,6,316.87,1901.22\n520,RX-AHPTF,29,165.28,4793.12\n521,RX-CD499,5,68.25,341.25\n522,RX-RNKAH,31,226.39,7546.67\n523,RX-9SSFV,39,204.40,7971.60\n524,RX-CDHA8,40,474.33,18973.20\n525,RX-L8PQM,26,56.73,1474.98\n526,RX-NBR33,16,391.71,6267.36\n527,RX-Z38BU,21,366.87,7704.27\n528,RX-VWFGC,27,154.50,4171.50\n529,RX-6T498,1,55.32,58.44\n530,RX-L87AJ,11,329.11,3620.21\n531,RX-GUCKR,8,470.69,3765.52\n532,RX-89XR6,11,363.73,4001.03\n533,RX-2VWVC,20,275.89,6581.84\n534,RX-MZAV5,27,408.00,11016.00\n535,RX-RVWFK,1,182.49,182.49\n536,RX-UYNJ4,27,250.59,6765.93\n537,RX-HP25W,4,134.61,604.07\n538,RX-A4SF9,2,405.45,810.90\n539,RX-347HN,9,205.01,1845.09\n540,RX-GKLGP,36,179.82,5884.17\n541,RX-AT6E7,30,360.99,10829.70\n542,RX-7DSCK,35,382.92,13402.20\n543,RX-TQ4PA,5,198.23,991.15\n544,RX-EXTPN,34,130.48,3926.53\n545,RX-L9TWM,36,189.20,6811.20\n546,RX-ZK3UP,24,168.65,4047.60\n547,RX-XPWZY,14,95.68,1339.52\n548,RX-XVS5T,26,145.16,3774.16\n549,RX-XMVUD,23,164.89,2954.51\n550,RX-DJ7RV,34,430.49,14636.66\n551,RX-PC7D8,34,379.02,12886.68\n552,RX-N26YK,2,172.22,344.44\n553,RX-5QEWR,22,305.39,6718.58\n554,RX-4D4BA,17,376.68,4841.28\n555,RX-7M4NB,40,20.02,648.70\n556,RX-5JKKT,14,462.76,6478.64\n557,RX-JWA6R,12,80.15,961.80\n558,RX-QJ7NV,13,365.13,4746.69\n559,RX-HK39K,40,146.79,5871.60\n560,RX-ESBPQ,29,13.72,397.88\n561,RX-5NHJR,14,171.65,2403.10\n562,RX-K3W66,4,420.13,1950.59\n563,RX-P3DEE,32,116.26,3720.32\n564,RX-JGN4M,37,106.28,3932.36\n565,RX-CWCDM,4,175.65,702.60\n566,RX-U9YQX,6,172.44,1034.64\n567,RX-RQYWL,8,377.73,3021.84\n568,RX-RTVZR,9,358.00,3222.00\n569,RX-N8YF9,30,229.77,6893.10\n570,RX-42FSD,17,245.50,3737.04\n571,RX-378NS,1,120.21,120.21\n572,RX-VHX8T,5,102.43,512.15\n573,RX-AR7Q5,2,286.53,573.06\n574,RX-4EMTU,35,218.12,5239.18\n575,RX-7S7QJ,22,265.26,5835.72\n576,RX-B2YSA,28,290.79,8142.12\n577,RX-9TMZ9,33,32.18,1061.94\n578,RX-W9RS5,2,180.54,361.08\n579,RX-J63TN,6,148.97,893.82\n580,RX-4KPR5,26,403.62,10494.12\n581,RX-PDMA2,31,77.85,2413.35\n582,RX-MS6VG,15,67.78,1016.70\n583,RX-LFJP2,39,116.56,4545.84\n584,RX-3SMQ2,35,288.94,10112.90\n585,RX-VS96K,37,381.02,14097.74\n586,RX-X8EWC,24,396.71,9521.04\n587,RX-M6LW7,6,406.97,2441.82\n588,RX-9HNVS,20,113.58,2271.60\n589,RX-H5FG8,13,444.05,5772.65\n590,RX-P8HJS,12,434.05,5208.60\n591,RX-UNG4U,1,293.70,293.70\n592,RX-RQ3PD,37,208.85,7727.45\n593,RX-9XC2Z,21,201.14,4223.94\n594,RX-AX6NT,30,19.53,585.90\n595,RX-5GCXK,35,404.93,14172.55\n596,RX-7KAXF,17,224.98,3824.66\n597,RX-4BX4M,20,226.19,4523.80\n598,RX-XGRQF,27,105.47,2472.60\n599,RX-5PH9U,30,97.35,2920.50\n600,RX-NNHRQ,15,90.20,1353.00\n\nDo not show your working or any explanation. Reply with only a JSON array. Each element is {\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}. List only lines whose shortfall is greater than 0. Use [] if there are none.",
+   "raw_text": null,
+   "reasoning": null,
+   "finish_reason": null,
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "latency_ms": null,
+   "retries": 0,
+   "cached": false,
+   "error": "request too large: HTTP 413: {\"error\":{\"message\":\"Request too large for model `qwen/qwen3.8-27b` in organization `org_[redacted]` service tier `on_demand` on input tokens per minute (ITPM): Limit 7000, Requested 16732, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n",
+   "rejected_too_large": true,
+   "requested_tokens": 16732,
+   "limit_tokens": 7000,
+   "limit_kind": "input"
+  },
+  "status": "rejected_too_large",
+  "parsed_ok": false,
+  "parse_notes": [
+   "baseline did not fit in one call: requested 16732 input tokens, limit 7000"
+  ],
+  "nonpositive_dropped": 0,
+  "final": null
+ },
+ "usage": {
+  "swarm": {
+   "calls": 6,
+   "prompt_tokens": 18374,
+   "completion_tokens": 4949,
+   "latency_ms": 17299
+  },
+  "baseline": {
+   "calls": 1,
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "latency_ms": 0
+  }
+ }
+}

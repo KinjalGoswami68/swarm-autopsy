@@ -208,3 +208,15 @@ the swarm.
    footnote. Neither is ever a score of zero.
 4. Temperature is cast to float in the cache key, so 0 and 0.0 share a key.
 5. CLI output is UTF-8, so the footnote markers print correctly on Windows.
+
+## D16. Grid results (2026-11-13) are dominated by the output cap at M and L
+
+Observation, not a choice. The 9-run grid finished with no stops. With the 1,000-token output cap
+(D15), every L worker and most M workers were cut off (`truncated`), as were 5 of the 6 S/M
+baselines. An ad-hoc count (not part of the autopsy): of the swarm's "assigned, missed" items,
+**99 of 129 at size L sat in a cut-off worker's slice after the last line that worker reached**
+(L seeds 1/2/3: 33/40, 31/44, 35/45). At M it was 4 of 33; at S, 0 of 6. Those L losses are
+caused by the provider's output cap, not by the workers' judgement. Tracking this as its own
+bucket ("assigned, unreached: output cap") would change the scoring buckets, so it awaits the
+owner's decision. M seed 2 lost all 24 items because the planner's own reply (four long briefs)
+was cut off before its JSON closed, so no split existed.
