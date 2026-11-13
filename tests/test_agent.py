@@ -175,3 +175,23 @@ def test_pacer_output_room_no_wait():
     p = agent.Pacer(itpm=0, otpm=1000, clock=clock, sleep=clock.sleep)
     p.record(100, 500)
     assert p.wait_for(100) == 0
+
+
+def test_limit_kind_input_vs_output():
+    assert agent.RequestTooLarge("Request too large on input tokens per minute (ITPM): Limit 7000, "
+                                 "Requested 24702").limit_kind == "input"
+    e = agent.RequestTooLarge("Request too large on output tokens per minute (OTPM): Limit 1000, "
+                              "Requested 1342")
+    assert e.limit_kind == "output" and e.requested_tokens == 1342
+
+
+def test_cache_key_int_and_float_temperature_match():
+    assert agent.cache_key("m", 0, None, [], ["t"]) == agent.cache_key("m", 0.0, None, [], ["t"])
+
+
+def test_pacer_counts_full_out_reserve():
+    clock = FakeClock()
+    p = agent.Pacer(itpm=0, otpm=1000, out_reserve=1000, clock=clock, sleep=clock.sleep)
+    p.record(100, 50)  # counted as 1000: the provider may count the whole max_tokens
+    clock.t = 1
+    assert p.wait_for(100) > 0 and clock.t >= 60

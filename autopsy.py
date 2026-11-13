@@ -136,7 +136,7 @@ def baseline_autopsy(run):
     if b["final"] is None:  # did not fit / not scored; never a score of zero (D9)
         call = b.get("call") or {}
         return {"status": b.get("status"), "requested_tokens": call.get("requested_tokens"),
-                "limit_tokens": call.get("limit_tokens")}
+                "limit_tokens": call.get("limit_tokens"), "limit_kind": call.get("limit_kind")}
     key_values = {_norm(k["id"]): k.get("value") for k in run["items"]["key"]}
     universe = {_norm(i) for i in run["items"].get("universe") or []}
     score = _score(b["final"], key_values, universe)
@@ -193,7 +193,7 @@ def render(run, a=None):
                    + ("" if b["status"] == "ok" else f"  [{b['status']}]"))
     else:
         out.append(f"baseline: not scored ({b['status']}): requested {b.get('requested_tokens')} "
-                   f"input tokens, limit {b.get('limit_tokens')}")
+                   f"{b.get('limit_kind')} tokens, limit {b.get('limit_tokens')}")
     out.append("")
 
     out.append(f"## Where the {s['lost']} lost key items went")

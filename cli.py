@@ -30,7 +30,9 @@ def cmd_generate(args):
 def cmd_run(args):
     if args.endpoint:
         agent.set_endpoint(args.endpoint)
-    agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm)
+    if args.max_tokens is None and args.otpm:
+        args.max_tokens = args.otpm  # D15: expected output never exceeds the per-minute limit
+    agent.PACER = agent.Pacer(itpm=args.itpm, otpm=args.otpm, out_reserve=args.max_tokens or 300)
     cfg = dict(model=args.model, temperature=args.temperature, reasoning_effort=args.reasoning_effort,
                workers=args.workers, max_tokens=args.max_tokens, itpm=args.itpm, otpm=args.otpm)
     runs_dir = Path(args.runs_dir)
@@ -114,10 +116,21 @@ def table(runs):
         else:
             unfit = [b for b in base if "score" not in b]
             sizes = sorted({b.get("requested_tokens") for b in unfit} - {None})
-            b_rec = b_pre = "did not fit in one call†"
-            notes.append(f"† size {size}: baseline not run to a score. The provider rejected the "
-                         f"one-call prompt: requested {', '.join(map(str, sizes))} input tokens, "
-                         f"limit {unfit[0].get('limit_tokens')} per request. Not a score of zero.")
+            if len(unfit) == len(base) and all(b.get("limit_kind") == "input" for b in unfit):
+                b_rec = b_pre = "did not fit in one call†"
+                notes.append(f"† size {size}: baseline not run to a score. The provider rejected "
+                             f"the one-call prompt: requested {', '.join(map(str, sizes))} input "
+                             f"tokens, limit {unfit[0].get('limit_tokens')} per request. "
+                             "Not a score of zero.")
+            else:
+                b_rec = b_pre = "not scored‡"
+                notes.append(f"‡ size {size}: baseline not scored in {len(unfit)} of {len(base)} "
+                             "runs (see per-run notes). Not a score of zero.")
+                for r, b in zip(rs, base):
+                    if "score" not in b:
+                        notes.append(f"* {r['task']['task_id']}: baseline {b['status']} "
+                                     f"({b.get('limit_kind')} limit {b.get('limit_tokens')}, "
+                                     f"requested {b.get('requested_tokens')})")
         sw = [a["swarm"] for a in aa]
         lines.append("| " + " | ".join([
             size, ",".join(str(r["task"]["seed"]) for r in rs), str(sw[0]["key_count"]),
@@ -184,6 +197,8 @@ def main(argv=None):
     t.add_argument("--model", default=None)
     t.set_defaults(func=cmd_table)
 
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     args = ap.parse_args(argv)
     args.func(args)
 

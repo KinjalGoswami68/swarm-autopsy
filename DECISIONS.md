@@ -181,3 +181,30 @@ misses are caused by the output cap, not by the model's judgement. The footnotes
 runs this affects. Splitting these out ("unreached: output cap") would be a new bucket, so it
 needs the owner's decision and has not been done.
 
+
+## D15. First grid discarded: output-limit rejections misread, cache key mismatch
+
+Decided under the owner's standing rule (provider limits and pacing).
+
+**What happened (2026-11-13, first grid, 9 runs):** 15 calls, including tiny planner prompts,
+were refused with HTTP 429 "Request too large ... on output tokens per minute (OTPM): Limit
+1000, Requested 1342" (also 1353 and 1425). With no `max_tokens` sent, Groq sets a request's
+expected output from recent replies (1342, 1353 and 1425 were earlier baseline reply sizes) and
+refuses the request when that estimate is over the 1,000-per-minute output limit. The harness
+treated these as "did not fit in one call", which is wrong: the prompts fit. Also, the CLI
+passed temperature `0.0` where the measurement calls used `0`, so the cache keys differed and
+no measured call was reused. Those 9 run files were deleted; they measured the harness, not
+the swarm.
+
+**Choice:**
+1. Every call sends `max_tokens` equal to the per-minute output limit (`--otpm`, default 1000),
+   so the provider's expected output never exceeds the limit. Same for every role and the
+   baseline. **Effect: replies are cut off at 1,000 output tokens, not 2,048** (about 42 listed
+   lines at about 23.5 tokens each). Cut-off replies follow D14.
+2. The output pacer counts each call as max(completion tokens, max_tokens) and waits until the
+   window has room for a full max_tokens reply: about one call per minute.
+3. A rejection records `limit_kind` (`input` or `output`). Only an `input` rejection of the
+   baseline is shown as "did not fit in one call"; anything else is "not scored" with a per-run
+   footnote. Neither is ever a score of zero.
+4. Temperature is cast to float in the cache key, so 0 and 0.0 share a key.
+5. CLI output is UTF-8, so the footnote markers print correctly on Windows.

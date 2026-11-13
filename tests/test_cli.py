@@ -36,3 +36,18 @@ def test_rate_limit_exits_2(monkeypatch, tmp_path):
         assert e.code == 2
     else:
         raise AssertionError("expected exit 2")
+
+
+def test_output_limit_rejection_is_not_reported_as_did_not_fit(monkeypatch, tmp_path, capsys):
+    def fake(model, temperature, prompt, call_id, **kw):
+        if call_id[1] == "baseline":
+            raise agent.RequestTooLarge("Request too large on output tokens per minute (OTPM): "
+                                        "Limit 1000, Requested 1342")
+        task = ledger.generate("S", 1)
+        return FakeModel(task, even_plan(60))(model, temperature, prompt, call_id, **kw)
+    monkeypatch.setattr(agent, "call_agent", fake)
+    cli.main(["run", "--sizes", "S", "--seeds", "1", "--itpm", "0", "--otpm", "0",
+              "--runs-dir", str(tmp_path)])
+    cli.main(["table", "--runs-dir", str(tmp_path)])
+    out = capsys.readouterr().out
+    assert "did not fit" not in out and "not scored‡" in out and "output limit 1000" in out

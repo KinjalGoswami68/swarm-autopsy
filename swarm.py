@@ -195,7 +195,8 @@ def _call(cfg, prompt, call_id):
                 "prompt_tokens": 0,
                 "completion_tokens": 0, "latency_ms": None, "retries": 0, "cached": False,
                 "error": f"{TOO_LARGE}: {e}", "rejected_too_large": True,
-                "requested_tokens": e.requested_tokens, "limit_tokens": e.limit_tokens}
+                "requested_tokens": e.requested_tokens, "limit_tokens": e.limit_tokens,
+                "limit_kind": e.limit_kind}
     return {"prompt": prompt, "raw_text": r["raw_text"], "reasoning": r.get("reasoning"),
             "finish_reason": r.get("finish_reason"),
             "prompt_tokens": r["prompt_tokens"], "completion_tokens": r["completion_tokens"],
@@ -222,8 +223,10 @@ def run_baseline(task, cfg):
     items, notes, dropped = parse_items(call["raw_text"], call.get("finish_reason") == "length")
     status = _status(call, items)
     if status == "rejected_too_large":
-        notes = [f"baseline did not fit in one call: requested {call['requested_tokens']} "
-                 f"input tokens, limit {call['limit_tokens']}"]
+        what = ("did not fit in one call" if call["limit_kind"] == "input"
+                else f"rejected by the provider's {call['limit_kind']} token limit")
+        notes = [f"baseline {what}: requested {call['requested_tokens']} "
+                 f"{call['limit_kind']} tokens, limit {call['limit_tokens']}"]
     return {"call": call, "status": status, "parsed_ok": items is not None, "parse_notes": notes,
             "nonpositive_dropped": dropped,
             "final": None if status == "rejected_too_large" else (items or [])}
@@ -245,7 +248,8 @@ def run_swarm(task, cfg):
         status = _status(call, items)
         if status == "rejected_too_large":
             notes = [f"worker call rejected: {TOO_LARGE} (requested {call['requested_tokens']} "
-                     f"input tokens, limit {call['limit_tokens']}); treated as reporting nothing"]
+                     f"{call['limit_kind']} tokens, limit {call['limit_tokens']}); "
+                     "treated as reporting nothing"]
         workers.append({"worker": i, "brief": a["brief"], "ranges": a["ranges"],
                         "slice": [r["line_id"] for r in rows], "call": call, "status": status,
                         "parsed_ok": items is not None, "parse_notes": notes,

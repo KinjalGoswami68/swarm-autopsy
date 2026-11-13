@@ -28,7 +28,7 @@ class FakeModel:
         role = call_id[1]
         tag = role if role != "worker" else f"worker{call_id[3]}"
         if tag in self.too_large or role in self.too_large:
-            raise agent.RequestTooLarge("Request too large ... Limit 7000, Requested 9000")
+            raise agent.RequestTooLarge("Request too large on input tokens per minute (ITPM): Limit 7000, Requested 9000")
         if role == "planner":
             text = self.plan
         elif role == "worker":

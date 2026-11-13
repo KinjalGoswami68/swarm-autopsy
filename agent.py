@@ -39,6 +39,11 @@ class RequestTooLarge(Exception):
         m = re.search(r"Limit\s+(\d+),\s*Requested\s+(\d+)", message or "")
         self.limit_tokens = int(m.group(1)) if m else None
         self.requested_tokens = int(m.group(2)) if m else None
+        low = (message or "").lower()
+        # D15: "input" = the prompt itself is over the limit (did not fit); "output" = the
+        # provider's expected output for this request is over the per-minute output limit.
+        self.limit_kind = ("output" if "output tokens" in low else
+                           "input" if "input tokens" in low or "413" in low else None)
 
 
 class Pacer:
@@ -47,15 +52,17 @@ class Pacer:
     Input: before a live call, waits until (input tokens sent in the last 60 s + this call's
     estimate) fits under `itpm`. A call whose estimate alone exceeds `itpm` is sent anyway: the
     provider rejects it (RequestTooLarge) without spending budget.
-    Output: the reply length is unknown in advance, so waits until (completion tokens received in
-    the last 60 s + OUT_RESERVE) fits under `otpm`. A 429 with a short retry-after covers the rest.
+    Output: waits until (output tokens counted in the last 60 s + out_reserve) fits under `otpm`.
+    Each call counts as max(its completion tokens, out_reserve), because the provider may count
+    the full max_tokens (D15). A 429 with a short retry-after covers the rest.
     A limit of 0 disables that window.
     """
     CHARS_PER_TOKEN = 1.2  # measured 1.33 on a size-S prompt (D9); digits tokenise one by one
-    OUT_RESERVE = 300  # typical answer-only reply (D12)
 
-    def __init__(self, itpm=7000, otpm=0, window_s=60.0, clock=time.monotonic, sleep=None):
+    def __init__(self, itpm=7000, otpm=0, out_reserve=300, window_s=60.0, clock=time.monotonic,
+                 sleep=None):
         self.itpm, self.otpm, self.window_s, self.clock = itpm, otpm, window_s, clock
+        self.out_reserve = out_reserve
         self.sleep = sleep or (lambda s: time.sleep(s))
         self.sent = []  # (timestamp, input tokens, output tokens)
 
@@ -69,7 +76,7 @@ class Pacer:
     def _blocked(self, tokens):
         used_in, used_out = self._used(self.clock())
         over_in = bool(self.itpm) and tokens <= self.itpm and used_in + tokens > self.itpm
-        over_out = bool(self.otpm) and used_out + min(self.OUT_RESERVE, self.otpm) > self.otpm
+        over_out = bool(self.otpm) and used_out + min(self.out_reserve, self.otpm) > self.otpm
         return over_in or over_out
 
     def wait_for(self, tokens):
@@ -81,7 +88,8 @@ class Pacer:
         return waited
 
     def record(self, tokens, out_tokens=0):
-        self.sent.append((self.clock(), tokens, out_tokens))
+        self.sent.append((self.clock(), tokens,
+                          max(out_tokens, self.out_reserve if self.otpm else 0)))
 
 
 PACER = Pacer(itpm=0)  # the CLI sets the real limits (--itpm, --otpm); tests stay unpaced
@@ -95,7 +103,9 @@ def set_endpoint(url):
 
 def cache_key(model, temperature, reasoning_effort, messages, call_id, max_tokens=None):
     """call_id = [task_id, role, index]: identical prompts in different roles never share a response."""
-    payload = json.dumps([model, temperature, reasoning_effort, max_tokens, messages, call_id, ENDPOINT])
+    # float(): 0 and 0.0 must share a key (D15: the CLI passes 0.0)
+    payload = json.dumps([model, float(temperature), reasoning_effort, max_tokens, messages, call_id,
+                          ENDPOINT])
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
