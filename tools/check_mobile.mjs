@@ -38,6 +38,7 @@ ws.addEventListener("message", (e) => {
 const send = (method, params = {}) => new Promise((r) => { const i = ++id; pending.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
 
 await send("Emulation.setDeviceMetricsOverride", { width: WIDTH, height: HEIGHT, deviceScaleFactor: 1, mobile: MOBILE });
+if (process.env.REDUCED) await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
 let failed = 0;
 for (const [n, url] of urls.entries()) {
   await send("Page.navigate", { url });
@@ -53,7 +54,7 @@ for (const [n, url] of urls.entries()) {
   console.log(`${ok ? "OK  " : "FAIL"} ${url}: page width ${v.w}px, viewport ${v.vw}px${v.wide.length ? "; too wide: " + v.wide.join(", ") : ""}`);
   const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true,
     clip: { x: 0, y: 0, width: WIDTH, height: Math.min(v.h, 9000), scale: 1 } });
-  writeFileSync(join(outDir, `${MOBILE ? "mobile" : "desktop"}_${n}.png`), Buffer.from(shot.result.data, "base64"));
+  writeFileSync(join(outDir, `${MOBILE ? "mobile" : "desktop"}${process.env.REDUCED ? "_reduced" : ""}_${n}.png`), Buffer.from(shot.result.data, "base64"));
 }
 ws.close();
 chrome.kill();
