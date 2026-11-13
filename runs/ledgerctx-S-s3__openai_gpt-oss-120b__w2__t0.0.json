@@ -1170,13 +1170,15 @@
      "quote_verified": false
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "output two lists: (1) all underpaid lines you found (include row number, claim_id, shortfall) and (2) any claim_id that appears more than once within the rows you processed (include the row numbers where it appears).",
      "quote_verified": true,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"output two lists: (1) all underpaid lines you found (include row number, claim_id, shortfall) and (2) any claim_id that appears more than once within the rows you processed (include the row numbers where it appears).\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1192,13 +1194,15 @@
      "quote_verified": true
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "If paid < amount_owed, record this line as UNDERPAID and note the shortfall = amount_owed – paid (rounded to two decimals). Also track every claim_id you encounter. After processing, output two lists: (1) all underpaid lines you found ... and (2) any claim_id that appears more than once within the rows you processed ...",
      "quote_verified": false,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Assume the rate table from rows 1‑10 is globally available for lookup.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record this line as UNDERPAID and note the shortfall = amount_owed – paid (rounded to two decimals). Also track every claim_id you encounter. After processing, output two lists: (1) all underpaid lines you found ... and (2) any claim_id that appears more than once within the rows you processed ...\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1206,6 +1210,7 @@
     "completion_tokens": 325,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

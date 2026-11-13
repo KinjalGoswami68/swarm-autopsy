@@ -294,3 +294,17 @@ def test_annotate_stores_and_never_changes_score(monkeypatch, tmp_path):
     assert autopsy.autopsy(run) == before
     assert "why (model-read annotation): relies on something not given: yes" in autopsy.render(run)
     assert "model-read annotations" in cli.why_table([run])
+
+
+def test_b_derived_from_kinds_list():
+    brief = "Report underpaid lines. Report duplicates within your rows."
+    text = json.dumps({"a": {"answer": "no", "quote": ""},
+                       "b": {"answer": "yes", "quote": "Report duplicates within your rows.",
+                             "kinds": ["underpaid", "duplicates"]}})
+    b = judge.parse_judgement(text, brief, ["underpaid", "duplicates"])["b"]
+    assert b["answer"] == "no" and b["judge_answer"] == "yes"
+    text = json.dumps({"a": {"answer": "no", "quote": ""},
+                       "b": {"answer": "no", "quote": "", "kinds": []}})
+    assert judge.parse_judgement(text, "No further output.", ["underpaid", "duplicates"])["b"]["answer"] == "yes"
+    text = json.dumps({"a": {"answer": "no", "quote": ""}, "b": {"answer": "yes", "quote": "x"}})
+    assert judge.parse_judgement(text, "x", ["underpaid", "duplicates"])["b"]["answer"] == "yes"  # no list: fallback

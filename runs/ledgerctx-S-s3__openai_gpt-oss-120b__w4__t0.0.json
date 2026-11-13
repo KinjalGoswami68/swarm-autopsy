@@ -1239,10 +1239,12 @@
      "quote_verified": false
     },
     "limits_kinds": {
-     "answer": "no",
+     "answer": "yes",
      "quote": "",
      "quote_verified": false,
-     "kinds": []
+     "kinds": [],
+     "judge_answer": "no",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": []\n  }\n}",
     "error": null,
@@ -1263,7 +1265,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the rate‑code lookup built by Worker 1, determine the applicable unit_rate for each line\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record this line as UNDERPAID with shortfall = amount_owed – paid (rounded to two decimals). Also record every claim_id you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1284,7 +1288,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same calculations as described for Worker 2: determine the correct unit_rate (own value or from rate_code), compute amount_owed, flag UNDERPAID lines with their shortfall (two‑decimal currency), and list every claim_id you encounter.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same calculations as described for Worker 2: determine the correct unit_rate (own value or from rate_code), compute amount_owed, flag UNDERPAID lines with their shortfall (two‑decimal currency), and list every claim_id you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1305,7 +1311,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Follow the exact same procedure as Workers 2 and 3: resolve unit_rate, compute amount_owed, identify UNDERPAID lines with shortfall (two‑decimal), and collect all claim_id values you see.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"identify UNDERPAID lines with shortfall (two‑decimal), and collect all claim_id values you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1313,6 +1321,7 @@
     "completion_tokens": 255,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

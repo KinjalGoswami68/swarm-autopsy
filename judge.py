@@ -77,7 +77,10 @@ def quote_verified(quote, brief):
     return bool(q) and q.rstrip(".") in _canon(brief)
 
 
-def parse_judgement(text, brief):
+def parse_judgement(text, brief, all_kinds=None):
+    """D28: answer b is derived from the judge's own `kinds` list (yes when it lists fewer kinds
+    than the task has); the judge's yes/no is kept as `judge_answer`. Falls back to the yes/no
+    when the list is missing or unusable."""
     data = agent.extract_json(text)
     out = {}
     for q in ("a", "b"):
@@ -91,6 +94,11 @@ def parse_judgement(text, brief):
         if q == "b":
             kinds = part.get("kinds")
             entry["kinds"] = kinds if isinstance(kinds, list) else None
+            entry["judge_answer"] = entry["answer"]
+            if all_kinds and isinstance(kinds, list) and all(isinstance(k, str) for k in kinds):
+                listed = {k.strip().lower() for k in kinds} & set(all_kinds)
+                entry["answer"] = "yes" if listed != set(all_kinds) else "no"
+                entry["derived_from_kinds"] = True
         out[q] = entry
     return out
 
@@ -104,7 +112,7 @@ def annotate(run, cfg):
                              ["judge", JUDGE_VERSION, run["run_id"], w["worker"]],
                              reasoning_effort=cfg.get("reasoning_effort"),
                              max_tokens=swarm.max_tokens_for(cfg, prompt))
-        j = parse_judgement(r["raw_text"], w["brief"]) if r["raw_text"] else {
+        j = parse_judgement(r["raw_text"], w["brief"], _structure(run)[2]) if r["raw_text"] else {
             "a": {"answer": None, "quote": None, "quote_verified": False},
             "b": {"answer": None, "quote": None, "quote_verified": False, "kinds": None}}
         briefs.append({"worker": w["worker"],
@@ -117,6 +125,19 @@ def annotate(run, cfg):
                                     "temperature": cfg["temperature"],
                                     "reasoning_effort": cfg.get("reasoning_effort")},
                           "briefs": briefs}
+    return run
+
+
+def rederive(run):
+    """Re-parse stored judge replies with the current rules (no model calls)."""
+    kinds = _structure(run)[2]
+    briefs = {w["worker"]: w["brief"] for w in run["swarm"]["workers"]}
+    for b in (run.get("annotations") or {}).get("briefs") or []:
+        if b.get("raw_text"):
+            j = parse_judgement(b["raw_text"], briefs[b["worker"]], kinds)
+            b["relies_on_missing"], b["limits_kinds"] = j["a"], j["b"]
+    if run.get("annotations"):
+        run["annotations"]["b_rule"] = "derived from the judge's kinds list (D28)"
     return run
 
 

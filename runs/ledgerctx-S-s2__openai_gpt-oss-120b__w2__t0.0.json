@@ -1234,13 +1234,15 @@
      "quote_verified": true
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "If paid < amount_owed, record the line as UNDERPAID ... Also track every claim_id you encounter. ... output ... claim_ids that appear more than once within the rows you processed as DUPLICATED",
      "quote_verified": false,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"if the unit_rate field is non‑empty use it, otherwise look up the rate_code in the rate table.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record the line as UNDERPAID ... Also track every claim_id you encounter. ... output ... claim_ids that appear more than once within the rows you processed as DUPLICATED\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1256,13 +1258,15 @@
      "quote_verified": true
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "Output two JSON lists: (1) underpaid lines as objects {\"row\": <row>, \"shortfall\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.",
      "quote_verified": true,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Use the same rate table rows 1‑10 to resolve any missing unit_rate via rate_code.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two JSON lists: (1) underpaid lines as objects {\\\"row\\\": <row>, \\\"shortfall\\\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1270,6 +1274,7 @@
     "completion_tokens": 287,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

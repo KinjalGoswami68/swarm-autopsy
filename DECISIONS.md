@@ -511,3 +511,13 @@ read against the brief text and the worker's rows:**
 **Open (owner to decide):** derive (b) deterministically from the judge's `kinds` list (yes when
 it lists fewer kinds than the task has) instead of its yes/no answer. On these 42 briefs that
 would agree with the hand check in every case except the debatable one.
+
+## D28. Annotation (b) is derived from the judge's kinds list
+
+**Owner decision (2026-11-13).** Answer (b), "does the brief limit the worker to some kinds of
+finding", is now "yes" exactly when the judge's own `kinds` list names fewer kinds than the task
+has; the judge's yes/no is kept as `judge_answer`. When the list is missing or unusable, the
+yes/no is used. The 42 stored annotations were re-derived from their saved replies (no model
+calls). Result: (b) "yes" in 0 of 6 briefs at W=2, 9 of 12 at W=4, 23 of 24 at W=8, matching the
+hand check (D27) in every case; the debatable seed-1 W=4 worker-2 brief ("claim_id counts")
+now reads "no". Annotations still never change a score.

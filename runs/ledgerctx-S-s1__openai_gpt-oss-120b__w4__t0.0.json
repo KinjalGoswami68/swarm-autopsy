@@ -1246,7 +1246,9 @@
      "answer": "yes",
      "quote": "No underpayment or duplicate checks are needed here.",
      "quote_verified": true,
-     "kinds": []
+     "kinds": [],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"No underpayment or duplicate checks are needed here.\",\n    \"kinds\": []\n  }\n}",
     "error": null,
@@ -1262,13 +1264,15 @@
      "quote_verified": true
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "Return two lists: (a) underpaid lines with row number, claim_id, shortfall; (b) claim_id counts.",
      "quote_verified": true,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the rate‑code map supplied by Worker 1, determine the unit rate for each line (use the line’s own unit_rate if present, otherwise look up its rate_code).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Return two lists: (a) underpaid lines with row number, claim_id, shortfall; (b) claim_id counts.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1290,7 +1294,9 @@
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "no",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1312,7 +1318,9 @@
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "no",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same analysis as Worker 2: compute underpaid lines and shortfalls, and tally claim_id occurrences in your rows.\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1320,6 +1328,7 @@
     "completion_tokens": 383,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

@@ -1223,10 +1223,12 @@
      "quote_verified": false
     },
     "limits_kinds": {
-     "answer": "no",
+     "answer": "yes",
      "quote": "",
      "quote_verified": false,
-     "kinds": []
+     "kinds": [],
+     "judge_answer": "no",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": []\n  }\n}",
     "error": null,
@@ -1247,7 +1249,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the rate‑code lookup built from rows 1‑10, process rows 11‑30 (line items).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount owed, record the line as UNDERPAID and note the shortfall (amount owed – paid) rounded to two decimals. Also record the claim_id for every line item you process.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1268,7 +1272,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the same rate‑code lookup, process rows 31‑50 (line items). Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1289,7 +1295,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using the same rate‑code lookup, process rows 51‑70 (line items).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"identify UNDERPAID lines and their shortfall, and record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1297,6 +1305,7 @@
     "completion_tokens": 259,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

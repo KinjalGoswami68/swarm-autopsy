@@ -1359,10 +1359,12 @@
      "quote_verified": false
     },
     "limits_kinds": {
-     "answer": "no",
+     "answer": "yes",
      "quote": "",
      "quote_verified": false,
-     "kinds": []
+     "kinds": [],
+     "judge_answer": "no",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": []\n  }\n}",
     "error": null,
@@ -1383,7 +1385,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"if the unit_rate column is non‑empty use it, otherwise look up the rate_code in the rate table (rows 1‑10).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record the line_id, claim_id, shortfall = amount_owed – paid (rounded to two decimals).\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1404,7 +1408,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Same as Worker 2.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Identify underpaid lines and record their shortfalls.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1425,7 +1431,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Same as Worker 2.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Identify underpaid lines and record their shortfalls.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1446,7 +1454,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Same as Worker 2.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Identify underpaid lines and record their shortfalls.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1467,7 +1477,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Same as Worker 2.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Identify underpaid lines and record their shortfalls.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1488,7 +1500,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Same as Worker 2.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Identify underpaid lines and record their shortfalls.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1504,13 +1518,15 @@
      "quote_verified": true
     },
     "limits_kinds": {
-     "answer": "yes",
+     "answer": "no",
      "quote": "Output two sections: 1) Underpaid lines – each entry should include line_id, claim_id, shortfall (two‑decimal format). 2) Duplicated claims – list each duplicated claim_id once.",
      "quote_verified": true,
      "kinds": [
       "underpaid",
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Collect the underpaid line reports from Workers 2‑7 and combine them into a single list sorted by line_id.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two sections: 1) Underpaid lines – each entry should include line_id, claim_id, shortfall (two‑decimal format). 2) Duplicated claims – list each duplicated claim_id once.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
     "error": null,
@@ -1518,6 +1534,7 @@
     "completion_tokens": 348,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }

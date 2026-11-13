@@ -1451,7 +1451,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"otherwise look up the rate_code in the rate table (rows 1‑10).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, report the line as UNDERPAID with the shortfall (amount_owed – paid) rounded to two decimals.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1472,7 +1474,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1493,7 +1497,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1514,7 +1520,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1535,7 +1543,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1556,7 +1566,9 @@
      "quote_verified": true,
      "kinds": [
       "underpaid"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same underpayment analysis as described for Worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report each underpaid line with its shortfall.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
     "error": null,
@@ -1575,7 +1587,9 @@
      "answer": "yes",
      "quote": "No underpayment analysis is needed.",
      "quote_verified": true,
-     "kinds": []
+     "kinds": [],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"No underpayment analysis is needed.\",\n    \"kinds\": []\n  }\n}",
     "error": null,
@@ -1596,7 +1610,9 @@
      "quote_verified": true,
      "kinds": [
       "duplicates"
-     ]
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
     },
     "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"identify every claim_id that appears on more than one line item.\",\n    \"kinds\": [\"duplicates\"]\n  }\n}",
     "error": null,
@@ -1604,6 +1620,7 @@
     "completion_tokens": 238,
     "cached": false
    }
-  ]
+  ],
+  "b_rule": "derived from the judge's kinds list (D28)"
  }
 }
