@@ -13,6 +13,7 @@ ANSWER_ONLY = "Do not show your working or any explanation."  # D12: free-tier o
 ITEM_FORMAT = (
     ANSWER_ONLY + ' Reply with only a JSON array. Each element is '
     '{"line_id": "<line_id>", "shortfall": <amount with two decimals>}. '
+    'List only lines whose shortfall is greater than 0. '  # D13
     'Use [] if there are none.'
 )
 
@@ -75,11 +76,34 @@ def to_cents(v):
     return None
 
 
-def parse_items(text):
-    """Parse a reply into (items, notes). items is None when there is no usable JSON list.
+_OBJECT = re.compile(r"\{[^{}\[\]]*\}")
+
+
+def salvage_entries(text):
+    """D14: from a reply cut off by the output cap, the complete {...} entries before the cut."""
+    out = []
+    for m in _OBJECT.finditer(text or ""):
+        try:
+            entry = json.loads(m.group(0))
+        except json.JSONDecodeError:
+            continue
+        if isinstance(entry, dict) and "line_id" in entry:
+            out.append(entry)
+    return out
+
+
+def parse_items(text, truncated=False):
+    """Parse a reply into (items, notes, nonpositive_dropped). items is None when there is no
+    usable JSON list.
+
+    truncated=True (finish_reason "length"): if the array never closed, the complete entries
+    before the cut are used and noted (D14).
 
     Accepts a bare array, or an object whose single list value is the array. Entries without a
     string line_id are dropped and noted. Repeated ids within one reply are kept once, noted.
+    D13: an entry whose own shortfall is 0 or negative is the reply saying "not underpaid", so it
+    counts as not reported; the count is returned and noted. An entry whose shortfall cannot be
+    read as a number still counts as reported (the reply named the line).
     """
     notes = []
     data = agent.extract_json(text)
@@ -88,9 +112,12 @@ def parse_items(text):
         if len(lists) == 1:
             data = lists[0]
             notes.append("array found inside an object")
+    if not isinstance(data, list) and truncated:
+        data = salvage_entries(text)
+        notes.append(f"reply cut off by output cap; {len(data)} complete entries before the cut used (D14)")
     if not isinstance(data, list):
-        return None, notes + ["no JSON array in reply"]
-    items, seen = [], set()
+        return None, notes + ["no JSON array in reply"], 0
+    items, seen, nonpositive = [], set(), 0
     for entry in data:
         lid = entry.get("line_id") if isinstance(entry, dict) else None
         if not isinstance(lid, str) or not lid.strip():
@@ -101,8 +128,14 @@ def parse_items(text):
             notes.append(f"repeated id in reply: {lid}")
             continue
         seen.add(lid)
-        items.append({"id": lid, "value": to_cents(entry.get("shortfall"))})
-    return items, notes
+        value = to_cents(entry.get("shortfall"))
+        if value is not None and value <= 0:
+            nonpositive += 1
+            continue
+        items.append({"id": lid, "value": value})
+    if nonpositive:
+        notes.append(f"{nonpositive} entries with shortfall <= 0 counted as not reported (D13)")
+    return items, notes, nonpositive
 
 
 def parse_plan(text, n_lines, workers):
@@ -177,21 +210,22 @@ def _status(call, items):
         return "rejected_too_large"
     if call["error"]:
         return "call_failed"
-    if items is None:
-        return "truncated" if call.get("finish_reason") == "length" else "unparseable"
-    return "ok"
+    if call.get("finish_reason") == "length":
+        return "truncated"  # D14: salvaged entries (if any) are kept, the status still says cut off
+    return "ok" if items is not None else "unparseable"
 
 
 def run_baseline(task, cfg):
     """status "rejected_too_large" means the baseline did not fit in one call: final is None and
     it has no score (never a score of zero)."""
     call = _call(cfg, baseline_prompt(task), [task["task_id"], "baseline", 0])
-    items, notes = parse_items(call["raw_text"])
+    items, notes, dropped = parse_items(call["raw_text"], call.get("finish_reason") == "length")
     status = _status(call, items)
     if status == "rejected_too_large":
         notes = [f"baseline did not fit in one call: requested {call['requested_tokens']} "
                  f"input tokens, limit {call['limit_tokens']}"]
     return {"call": call, "status": status, "parsed_ok": items is not None, "parse_notes": notes,
+            "nonpositive_dropped": dropped,
             "final": None if status == "rejected_too_large" else (items or [])}
 
 
@@ -207,7 +241,7 @@ def run_swarm(task, cfg):
     for i, a in enumerate(assignments, start=1):
         rows = ledger.rows_in_ranges(task["rows"], a["ranges"])
         call = _call(cfg, worker_prompt(a["brief"], rows), [task["task_id"], "worker", W, i])
-        items, notes = parse_items(call["raw_text"])
+        items, notes, dropped = parse_items(call["raw_text"], call.get("finish_reason") == "length")
         status = _status(call, items)
         if status == "rejected_too_large":
             notes = [f"worker call rejected: {TOO_LARGE} (requested {call['requested_tokens']} "
@@ -215,14 +249,15 @@ def run_swarm(task, cfg):
         workers.append({"worker": i, "brief": a["brief"], "ranges": a["ranges"],
                         "slice": [r["line_id"] for r in rows], "call": call, "status": status,
                         "parsed_ok": items is not None, "parse_notes": notes,
-                        "reported": items or []})
+                        "nonpositive_dropped": dropped, "reported": items or []})
         reports.append((i, items))
 
     if workers:
         m_call = _call(cfg, merger_prompt(task, reports), [task["task_id"], "merger", W])
-        items, notes = parse_items(m_call["raw_text"])
+        items, notes, dropped = parse_items(m_call["raw_text"], m_call.get("finish_reason") == "length")
         merger = {"call": m_call, "status": _status(m_call, items),
-                  "parsed_ok": items is not None, "parse_notes": notes, "final": items or []}
+                  "parsed_ok": items is not None, "parse_notes": notes,
+                  "nonpositive_dropped": dropped, "final": items or []}
     else:
         merger = {"call": None, "status": "not_called", "parsed_ok": False,
                   "parse_notes": ["merger not called: planner produced no usable briefs"],

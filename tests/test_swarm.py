@@ -152,9 +152,43 @@ def test_parse_plan_clamps_and_drops():
     ('[{"line_id":"RX-B","shortfall":"n/a"}]', ["RX-B"], [None]),
 ])
 def test_parse_items(text, ids, values):
-    items, _ = swarm.parse_items(text)
+    items, _, _ = swarm.parse_items(text)
     assert [i["id"] for i in items] == ids and [i["value"] for i in items] == values
 
 
 def test_parse_items_none_when_no_array():
     assert swarm.parse_items("nothing")[0] is None
+
+
+def test_nonpositive_shortfall_counts_as_not_reported():
+    text = ('[{"line_id":"RX-A","shortfall":0.00},{"line_id":"RX-B","shortfall":-3},'
+            '{"line_id":"RX-C","shortfall":"12.50"},{"line_id":"RX-D","shortfall":"?"}]')
+    items, notes, dropped = swarm.parse_items(text)
+    assert [i["id"] for i in items] == ["RX-C", "RX-D"] and dropped == 2
+    assert any("counted as not reported" in n for n in notes)
+
+
+def test_dropped_count_and_raw_reply_kept_in_run(monkeypatch, task):
+    reply = lambda p: '[{"line_id":"RX-ZZZZZ","shortfall":0}]'
+    r = run(monkeypatch, FakeModel(task, even_plan(60), worker_reply=reply), task)
+    w = r["swarm"]["workers"][0]
+    assert w["nonpositive_dropped"] == 1 and w["reported"] == []
+    assert "RX-ZZZZZ" in w["call"]["raw_text"]
+
+
+def test_format_line_asks_for_positive_only():
+    assert "greater than 0" in swarm.ITEM_FORMAT and "Do not show your working" in swarm.ITEM_FORMAT
+
+
+def test_truncated_reply_salvages_complete_entries():
+    text = ('[\n{"line_id":"RX-A","shortfall":5.00},\n{"line_id":"RX-B","shortfall":0},\n'
+            '{"line_id":"RX-C","sho')
+    items, notes, dropped = swarm.parse_items(text, truncated=True)
+    assert [i["id"] for i in items] == ["RX-A"] and dropped == 1
+    assert any("cut off" in n for n in notes)
+    assert swarm.parse_items(text)[0] is None  # not salvaged unless the provider cut it off
+
+
+def test_truncated_status_kept_even_with_salvage():
+    call = {"finish_reason": "length", "rejected_too_large": False, "error": None}
+    assert swarm._status(call, [{"id": "A", "value": 1}]) == "truncated"

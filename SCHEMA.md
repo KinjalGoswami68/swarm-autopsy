@@ -35,8 +35,11 @@ cap, `finish_reason` = `length`) | `call_failed` (non-retryable API error) |
 ## swarm
 
 - `planner`: `call`, `status`, `briefs_used`, `parse_notes` (briefs ignored past W, ranges clamped or dropped).
-- `workers[]` ★: `worker` (1-based), `brief`, `ranges` (inclusive row ranges), `slice` (item ids the worker was shown), `reported` (items it returned), `call`, `status`, `parse_notes`. A worker whose status is not `ok` has `reported: []`.
+- `workers[]` ★: `worker` (1-based), `brief`, `ranges` (inclusive row ranges), `slice` (item ids the worker was shown), `reported` (items it returned), `call`, `status`, `parse_notes`. A worker that was rejected, failed or unparseable has `reported: []`; a `truncated` worker keeps the complete entries written before the cut (DECISIONS D14).
 - `merger` ★: `call`, `status`, `final` (the swarm's answer), `parse_notes`.
+
+Every parsed stage (workers, merger, baseline) also has `nonpositive_dropped`: entries whose own
+shortfall was 0 or negative, counted as not reported (DECISIONS D13).
 
 ## baseline
 

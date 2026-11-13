@@ -143,10 +143,41 @@ working**, for the swarm and the baseline alike.
 planted items were listed (2 of 12 shortfalls correct to the cent), but the reply listed 57
 of 60 lines, most with `"shortfall": 0.00`. See D13.
 
-## D13. Replies that list non-underpaid lines (open: awaiting owner decision)
+## D13. Replies that list non-underpaid lines: positive-only prompt and scoring rule
 
-The answer-only S baseline listed nearly every line, most with shortfall 0.00, despite the
+The answer-only S baseline (D12) listed 57 of 60 lines, most with shortfall 0.00, despite the
 task text ("must not be reported") and the format line ("Use [] if there are none").
-At about 23 output tokens per listed line, the same behaviour would exceed the 2,048-token
-output cap for the M baseline (200 lines) and for L workers (about 150 lines each), cutting the
-reply off before the JSON array closes.
+
+**Choice (confirmed by owner):**
+1. **Prompt.** The format line given to every role and to the baseline adds "List only lines
+   whose shortfall is greater than 0."
+2. **Scoring rule.** An entry whose own reported shortfall is 0 or negative is the reply saying
+   "not underpaid", so it **counts as not reported**. This applies to workers, merger and baseline
+   alike. The count is stored per call as `nonpositive_dropped` with a parse note, and the raw
+   reply stays in the run file. An entry whose shortfall cannot be read as a number still counts
+   as reported, because the reply named the line. Dropped worker entries are not shown to the
+   merger, since D6 shows only parsed items.
+
+**Re-check (2026-11-13), size S seed 1 baseline:** 1,765 input / 1,342 output tokens,
+finish_reason `stop`. The sentence did not change the behaviour: the reply still listed 57
+lines; 50 had shortfall <= 0 and were dropped by the rule, leaving 7 reported (6 of 12 planted
+lines found, 1 shortfall correct to the cent). About 23.5 output tokens per listed line, so M
+baselines and L workers that list every line will still hit the 2,048 output cap (D14).
+
+## D14. Replies cut off by the output cap: keep the complete entries before the cut
+
+Decided under the owner's standing rule (provider limits: treat swarm and baseline the same,
+record, continue).
+
+**Choice:** when a reply ends with `finish_reason: "length"` and its JSON array never closed,
+the complete `{...}` entries before the cut are parsed (then D13 applies). Status stays
+`truncated`, the parse note says how many entries were used, and the table footnotes every
+truncated call. This applies identically to workers, merger and baseline. Replies that were
+not cut off are never salvaged this way.
+
+**What this means for the numbers:** a key line that a truncated reply never reached is
+counted as missed: "assigned, missed" for a worker, a miss for the baseline. Some of those
+misses are caused by the output cap, not by the model's judgement. The footnotes say which
+runs this affects. Splitting these out ("unreached: output cap") would be a new bucket, so it
+needs the owner's decision and has not been done.
+
