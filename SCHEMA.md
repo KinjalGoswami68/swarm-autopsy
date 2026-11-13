@@ -52,3 +52,18 @@ of zero; `call.requested_tokens` and `call.limit_tokens` record the measured siz
 `prompt` (exact text sent), `raw_text`, `reasoning`, `finish_reason`, `prompt_tokens`,
 `completion_tokens`, `latency_ms`, `retries`, `cached`, `error`, `rejected_too_large`,
 and when rejected: `requested_tokens`, `limit_tokens`.
+
+## schema_version 2 (DECISIONS D22)
+
+Version 2 adds optional fields; every version-1 file is still valid and autopsies the same way.
+
+- **Key items** may carry `type` (e.g. `line`, `context`, `pair`), `subtype` (`far`/`near` for
+  pairs), `needs` (the universe ids a correct judgement requires; default `[id]`) and
+  `context` (the subset of `needs` that is shared context, such as a rate-table row).
+- **Multi-row findings** use the id `PAIR:<idA>+<idB>` with the two ids sorted, so a pair
+  matches whatever order it is reported in.
+- **Reported items** may carry `kind` (`underpaid` or `pair`).
+- **`universe`** and worker `slice`s include context rows (e.g. `RATE:RC-17`).
+- **Buckets:** `never_assigned`, `context_not_passed`, `evidence_split`, `assigned_unreached`,
+  `assigned_missed`, `dropped_at_merge`, `kept`; the rules are in DECISIONS D17 and D22.
+- **`task.fixed_sentence`**, when present, must be shown wherever the run's numbers are shown.

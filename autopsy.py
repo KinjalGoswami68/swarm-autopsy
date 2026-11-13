@@ -6,9 +6,12 @@ family that fills them (see SCHEMA.md).
 import re
 from collections import Counter
 
-BUCKETS = ["never_assigned", "assigned_unreached", "assigned_missed", "dropped_at_merge", "kept"]
-LOSS_BUCKETS = BUCKETS[:4]
+BUCKETS = ["never_assigned", "context_not_passed", "evidence_split", "assigned_unreached",
+           "assigned_missed", "dropped_at_merge", "kept"]
+LOSS_BUCKETS = BUCKETS[:-1]
 BUCKET_LABEL = {"never_assigned": "never assigned (split)",
+                "context_not_passed": "context not passed (split)",
+                "evidence_split": "evidence split across workers (split)",
                 "assigned_unreached": "assigned, unreached (reply cut off)",
                 "assigned_missed": "assigned, missed (worker)",
                 "dropped_at_merge": "found, dropped at merge (merge)",
@@ -39,20 +42,40 @@ def reached_ids(order, call, status):
     return set(order[:last + 1])
 
 
-def bucket_of(item, slices, reported_sets, final_ids, reached=None):
-    """Exactly one bucket, checked in order: kept, dropped at merge, assigned (unreached or missed),
-    never assigned. Unreached only when every worker holding the item was cut off before it."""
+def bucket_of(item, slices, reported_sets, final_ids, reached=None, needs=None, context=None):
+    """Exactly one bucket (D17, D22), checked in order:
+      kept                  in the final answer
+      dropped_at_merge      some worker reported it
+      never_assigned        no worker's slice held any of its own rows (needs minus context)
+      context_not_passed    a worker held its own rows, but no worker held them plus its context rows
+      evidence_split        its rows were assigned, but no single worker's slice held them all
+      assigned_unreached    workers held every needed row, but each was cut off before reaching them
+      assigned_missed       a worker held every needed row and was not cut off before them
+    `needs` defaults to [item] and `context` to [], which gives the schema-1 buckets."""
     if item in final_ids:
         return "kept"
     if any(item in rep for rep in reported_sets):
         return "dropped_at_merge"
+    needs = [_norm(n) for n in (needs or [item])]
+    context = {_norm(c) for c in (context or [])}
+    own = [n for n in needs if n not in context] or needs
     reached = reached or [None] * len(slices)
-    holders = [r for sl, r in zip(slices, reached) if item in sl]
-    if not holders:
+    if not any(any(n in sl for n in own) for sl in slices):
         return "never_assigned"
-    if all(r is not None and item not in r for r in holders):
+    complete = [r for sl, r in zip(slices, reached) if all(n in sl for n in needs)]
+    if not complete:
+        if context and any(all(n in sl for n in own) for sl in slices):
+            return "context_not_passed"
+        return "evidence_split"
+    if all(r is not None and not all(n in r for n in needs) for r in complete):
         return "assigned_unreached"
     return "assigned_missed"
+
+
+def item_label(k):
+    """Type label for per-type recall: line, context, far pair, near pair; schema-1 items: item."""
+    t = k.get("type") or "item"
+    return f"{k['subtype']} {t}" if t == "pair" and k.get("subtype") else t
 
 
 def _ratio(a, b):
@@ -60,13 +83,25 @@ def _ratio(a, b):
 
 
 def _value_accuracy(found_ids, reported_values, key_values):
-    """Share of found key items whose reported value is within tolerance (None if none found)."""
-    ok = sum(1 for i in found_ids if reported_values.get(i) is not None
+    """Share of found key items (with a key value) whose reported value is within tolerance."""
+    valued = [i for i in found_ids if key_values.get(i) is not None]
+    ok = sum(1 for i in valued if reported_values.get(i) is not None
              and abs(reported_values[i] - key_values[i]) <= VALUE_TOLERANCE)
-    return {"accurate": ok, "found": len(found_ids), "rate": _ratio(ok, len(found_ids))}
+    return {"accurate": ok, "found": len(valued), "rate": _ratio(ok, len(valued))}
 
 
-def _score(final_items, key_values, universe):
+def _fp_kind(i, universe, key_pair_members):
+    """real_line / nonexistent_id; for a reported pair (id "PAIR:a+b"): half_pair when one of its
+    ids belongs to a key pair (D22), otherwise wrong_pair (or nonexistent_id)."""
+    if i.startswith("PAIR:"):
+        members = i[5:].split("+")
+        if universe and not all(m in universe for m in members):
+            return "nonexistent_id"
+        return "half_pair" if any(m in key_pair_members for m in members) else "wrong_pair"
+    return "real_line" if i in universe else "nonexistent_id"
+
+
+def _score(final_items, key_values, universe, key_items=()):
     final_ids = list(dict.fromkeys(_ids(final_items)))  # dedupe, keep order
     values = {}
     for it in final_items:
@@ -74,15 +109,22 @@ def _score(final_items, key_values, universe):
     key = set(key_values)
     tp = [i for i in final_ids if i in key]
     fps = [i for i in final_ids if i not in key]
+    pair_members = {_norm(n) for k in key_items if k.get("type") == "pair" for n in k.get("needs", [])}
+    by_type = {}
+    found = set(tp)
+    for k in key_items:
+        label = item_label(k)
+        f, n = by_type.get(label, (0, 0))
+        by_type[label] = (f + (_norm(k["id"]) in found), n + 1)
     return {
         "recall": _ratio(len(tp), len(key)),
         "precision": _ratio(len(tp), len(final_ids)),
         "true_positives": len(tp),
         "final_count": len(final_ids),
         "duplicates_in_final": len(final_items) - len(final_ids),
-        "false_positives": [{"id": i, "kind": "real_line" if i in universe else "nonexistent_id"}
-                            for i in fps],
+        "false_positives": [{"id": i, "kind": _fp_kind(i, universe, pair_members)} for i in fps],
         "value_accuracy": _value_accuracy(tp, values, key_values),
+        "by_type": {t: {"found": f, "total": n} for t, (f, n) in by_type.items()},
     }
 
 
@@ -98,18 +140,21 @@ def swarm_autopsy(run):
 
     reached = [reached_ids(w["slice"], w.get("call"), w.get("status")) for w in workers]
     per_item = []
-    for item in key_values:
-        b = bucket_of(item, slices, reported, final_ids, reached)
+    for k in run["items"]["key"]:
+        item = _norm(k["id"])
+        needs = [_norm(n) for n in (k.get("needs") or [item])]
+        b = bucket_of(item, slices, reported, final_ids, reached, needs, k.get("context"))
         per_item.append({
-            "id": item, "bucket": b,
-            "in_slices": [w["worker"] for w, sl in zip(workers, slices) if item in sl],
+            "id": item, "type": item_label(k), "bucket": b, "needs": needs,
+            "in_slices": [w["worker"] for w, sl in zip(workers, slices) if any(n in sl for n in needs)],
+            "complete_in": [w["worker"] for w, sl in zip(workers, slices) if all(n in sl for n in needs)],
             "reported_by": [w["worker"] for w, rep in zip(workers, reported) if item in rep],
         })
     counts = Counter(p["bucket"] for p in per_item)
 
     slice_count = Counter(i for sl in slices for i in sl)
     all_ids = universe or set(slice_count)
-    score = _score(final_items, key_values, universe)
+    score = _score(final_items, key_values, universe, run["items"]["key"])
     any_reported = set().union(*reported) if reported else set()
     fp_kept, fp_merger = [], []
     for fp in score["false_positives"]:
@@ -162,11 +207,14 @@ def baseline_autopsy(run):
                 "limit_tokens": call.get("limit_tokens"), "limit_kind": call.get("limit_kind")}
     key_values = {_norm(k["id"]): k.get("value") for k in run["items"]["key"]}
     universe = {_norm(i) for i in run["items"].get("universe") or []}
-    score = _score(b["final"], key_values, universe)
+    score = _score(b["final"], key_values, universe, run["items"]["key"])
     found = set(_ids(b["final"]))
     reached = reached_ids(run["items"].get("universe") or [], b.get("call"), b.get("status"))
+    needs = {_norm(k["id"]): [_norm(n) for n in (k.get("needs") or [k["id"]])]
+             for k in run["items"]["key"]}
     missed = [i for i in key_values if i not in found]
-    unreached = [] if reached is None else [i for i in missed if i not in reached]
+    unreached = [] if reached is None else [i for i in missed
+                                            if not all(n in reached for n in needs[i])]
     # missed_unreached: misses after the point where the reply was cut off (information only, D17)
     return {"status": b.get("status"), "score": score, "missed": len(missed),
             "missed_unreached": len(unreached)}
@@ -202,7 +250,10 @@ def render(run, a=None):
     a = a or autopsy(run)
     s, b = a["swarm"], a["baseline"]
     t = run.get("task", {})
-    out = [f"# Autopsy: {run.get('run_id')}",
+    out = [f"# Autopsy: {run.get('run_id')}"]
+    if t.get("fixed_sentence"):
+        out.append(f"> {t['fixed_sentence']}")
+    out += [
            f"task {t.get('task_id')}  size {t.get('size')}  seed {t.get('seed')}  "
            f"lines {t.get('n_lines')}  key items {s['key_count']}",
            f"model {run['config']['model']}  temperature {run['config']['temperature']}  "
@@ -224,6 +275,12 @@ def render(run, a=None):
     else:
         out.append(f"baseline: not scored ({b['status']}): requested {b.get('requested_tokens')} "
                    f"{b.get('limit_kind')} tokens, limit {b.get('limit_tokens')}")
+    if len(sc["by_type"]) > 1 or "item" not in sc["by_type"]:
+        def per_type(score):
+            return ", ".join(f"{t} {v['found']}/{v['total']}" for t, v in score["by_type"].items())
+        out.append(f"swarm found by type:    {per_type(sc)}")
+        if "score" in b:
+            out.append(f"baseline found by type: {per_type(b['score'])}")
     out.append("")
 
     out.append(f"## Where the {s['lost']} lost key items went")
@@ -238,10 +295,10 @@ def render(run, a=None):
     for n in sw["planner"].get("parse_notes", []):
         out.append(f"  note: {n}")
     for w in sw["workers"]:
-        key_in = sum(1 for p in s["per_item"] if w["worker"] in p["in_slices"])
+        key_in = sum(1 for p in s["per_item"] if w["worker"] in p["complete_in"])
         found = sum(1 for p in s["per_item"] if w["worker"] in p["reported_by"])
         out.append(f"worker {w['worker']}: ranges {w['ranges']}  rows {len(w['slice'])}  "
-                   f"key items in slice {key_in}  reported {len(w['reported'])} "
+                   f"key items fully in slice {key_in}  reported {len(w['reported'])} "
                    f"(of which key {found})  status {w.get('status')}")
         out.append(f"  brief: {w['brief'][:300]}")
         for n in w.get("parse_notes", []):
@@ -271,7 +328,9 @@ def render(run, a=None):
         if p["bucket"] != "kept":
             base = ("baseline not scored" if base_ids is None
                     else "baseline also missed" if p["id"] not in base_ids else "baseline found it")
-            out.append(f"{p['id']}: {BUCKET_LABEL[p['bucket']]}; in slices of {p['in_slices'] or '-'}; "
+            typ = "" if p["type"] == "item" else f" [{p['type']}]"
+            out.append(f"{p['id']}{typ}: {BUCKET_LABEL[p['bucket']]}; rows in slices of "
+                       f"{p['in_slices'] or '-'}; all rows in {p['complete_in'] or '-'}; "
                        f"reported by {p['reported_by'] or '-'}; {base}")
     c = a["cross"]
     if c["baseline_also_missed"] is not None:

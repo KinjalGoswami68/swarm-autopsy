@@ -320,3 +320,71 @@ Consequences:
 - HTTP timeout raised from 300 to 600 s (L baseline took 221 s).
 - Thinking stays at the provider default and is hidden; answer-only prompts (D12) still apply
   to every role, so swarm and baseline are treated the same.
+
+
+## D22. Task family 2, "ledger-ctx": a ledger built so that splitting can hurt
+
+**Design (approved by owner, 2026-11-13).** Code: `ledger2.py`. Task ids `ledgerctx-<size>-s<seed>`.
+
+- **Rate table:** rows 1..T (`row,rate_code,unit_rate`); T = 10 / 20 / 40 for S / M / L.
+- **Line items:** rows T+1..T+N (`row,line_id,claim_id,qty,unit_rate,rate_code,paid`); N = 60 / 200 / 600.
+  Each row fills exactly one of `unit_rate` or `rate_code`; about half are coded (owner, Q1).
+- **Planted key items**, each with `type` and `needs` (the rows a correct judgement requires):
+  `line` = underpaid row with an inline rate (needs its row); `context` = underpaid row with only
+  a rate code (needs its row and that code's table row, the latter listed in `context`);
+  `pair` = one claim_id billed on two rows, both paid normally (owner, Q6), id
+  `PAIR:<idA>+<idB>` (sorted), subtype `far` (at least N/2 rows apart) or `near` (1 to 5 rows
+  apart, a control). Counts (owner, Q5): S = 4 line, 4 context, 3 far pairs, 1 near pair; M and L
+  x2 and x4. Distractors: as many overpaid rows as underpaid ones, half inline and half coded.
+  All other claim_ids are unique.
+- **Planner sees** the task text, the section row ranges and both header lines, never the rows or
+  the rate table's contents (owner, Q2). It expresses the split as row ranges only (D2); a worker
+  gets the table only if its ranges include rows 1..T.
+- **Pair scoring (owner, Q4):** a pair counts only when reported in `duplicates` with exactly
+  both ids. A reported pair sharing one id with a key pair is a false positive of kind
+  `half_pair`; any other wrong pair is `wrong_pair`. Duplicate entries that are not two different
+  line ids are dropped and noted. D13 (shortfall <= 0 means not reported) applies to `underpaid`.
+- **Answer-only prompts** are kept (owner, Q8). Thinking stays hidden at the provider default.
+- **New autopsy buckets**, checked after "dropped at merge" and before "assigned, unreached" and
+  "assigned, missed": **never assigned** = no slice held any of the item's own rows (its needs
+  minus context rows); **context not passed** = some worker held the item's own row but no worker
+  held it together with the rate-table row it needs ("the worker's slice lacked the table row",
+  owner, Q2); **evidence split across workers** = its rows were assigned but no single slice held
+  all of them. Unreached and missed then require a worker holding every needed row. Items with
+  no `needs` count as needing only themselves, so schema-1 runs score exactly as before.
+- **Fixed sentence (owner, Q7)**, shown on every table, autopsy and site page with these runs:
+  "This family is built so that splitting can hurt; its numbers show the autopsy detects split and context failures, not how often swarms lose in general."
+- **Run files** are `schema_version: 2`: key items may carry `type`, `needs`, `context`,
+  `subtype`; reported items carry `kind` (`underpaid` or `pair`). Rate-table rows have ids
+  `RATE:<code>` and are part of `universe` and of slices.
+
+**Frozen prompt wording (owner, Q3).** Fixed before any family-2 call and never to be adjusted
+after seeing results. Only the numbers (rows, T, W) are filled in. Planner prompt as rendered for
+size S, W = 4:
+
+```
+You are auditing a remittance ledger with two sections. The rate table lists rate codes and their unit rates. Each line item is one billed service; it gives either its own unit_rate or a rate_code whose unit rate is in the rate table. The amount owed for a line is qty x unit rate. A line is UNDERPAID when paid is less than the amount owed; its shortfall is (amount owed) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported as underpaid. A claim is DUPLICATED when the same claim_id appears on more than one line item (billed more than once). Find every underpaid line and every duplicated claim.
+
+The ledger has 70 rows. Rows 1 to 10 are the rate table, with columns:
+row,rate_code,unit_rate
+Rows 11 to 70 are line items, with columns:
+row,line_id,claim_id,qty,unit_rate,rate_code,paid
+A line item gives either its own unit_rate or a rate_code defined in the rate table. A claim_id may appear on more than one line item.
+You will not see the rows themselves.
+
+You coordinate 4 workers. Each worker receives only the brief you write for it and the ledger rows you assign to it, given as inclusive row ranges. Workers cannot see the task description above, each other, or any rows you do not assign to them. Their reports will then be combined into one final answer.
+
+Write a brief for each of the 4 workers. Do not show your working or any explanation. Reply with only a JSON object:
+{"workers": [{"worker": 1, "brief": "<instructions>", "ranges": [[<first row>, <last row>]]}, ...]}
+```
+
+Format line given to every worker, the merger and the baseline:
+
+```
+Do not show your working or any explanation. Reply with only a JSON object: {"underpaid": [{"line_id": "<line_id>", "shortfall": <amount with two decimals>}], "duplicates": [{"line_ids": ["<line_id>", "<line_id>"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.
+```
+
+Workers get `<brief>` + "Your ledger rows:" + their rows as up to two CSV blocks ("Rate
+table:" and/or "Line items:", each with its header) + the format line. The merger gets the
+task text, each worker's parsed items re-serialised in the reply format (D6), "Produce the final
+report." and the format line. The baseline gets the task text, the whole ledger and the format line.

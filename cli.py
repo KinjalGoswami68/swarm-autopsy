@@ -10,10 +10,12 @@ from pathlib import Path
 import agent
 import autopsy
 import ledger
+import ledger2
 import runfile
 import swarm
 
 RUNS_DIR = Path(__file__).parent / "runs"
+GENERATORS = {"ledger": ledger.generate, "ledger-ctx": ledger2.generate}
 
 
 def cmd_generate(args):
@@ -21,7 +23,7 @@ def cmd_generate(args):
     out.mkdir(parents=True, exist_ok=True)
     for size in args.sizes:
         for seed in args.seeds:
-            t = ledger.generate(size, seed)
+            t = GENERATORS[args.family](size, seed)
             p = out / f"{t['task_id']}.json"
             p.write_text(json.dumps(t, indent=1), encoding="utf-8")
             print(f"wrote {p}  ({t['n_lines']} lines, {t['n_planted']} planted)")
@@ -40,7 +42,7 @@ def cmd_run(args):
     for size in args.sizes:
         for seed in args.seeds:
             done += 1
-            task = ledger.generate(size, seed)
+            task = GENERATORS[args.family](size, seed)
             path = runs_dir / f"{swarm.run_id(task, cfg)}.json"
             if path.exists() and not args.force:
                 print(f"[{done}/{total}] {path.name}: exists, skipped", flush=True)
@@ -93,6 +95,20 @@ def _cross(crosses):
     return f"{also} of {total}"
 
 
+def _by_type(sw, base):
+    """'line 7/12 (12/12), context ...': found/total summed over seeds; baseline in brackets."""
+    out = []
+    for t in sw[0]["score"]["by_type"]:
+        f = sum(s["score"]["by_type"][t]["found"] for s in sw)
+        n = sum(s["score"]["by_type"][t]["total"] for s in sw)
+        if all("score" in b for b in base):
+            bf = sum(b["score"]["by_type"][t]["found"] for b in base)
+            out.append(f"{t} {f}/{n} ({bf}/{n})")
+        else:
+            out.append(f"{t} {f}/{n} (n/a)")
+    return ", ".join(out)
+
+
 def table(runs):
     """Markdown table: one row per (size, workers), means over seeds with per-seed values in brackets."""
     by_size = defaultdict(list)
@@ -100,11 +116,18 @@ def table(runs):
         by_size[(run["task"]["size"], run["config"]["workers"])].append(run)
     rank = {s: i for i, s in enumerate(ledger.SIZES)}
     order = sorted(by_size, key=lambda k: (rank.get(k[0], 99), k[0], k[1]))
-    lines = ["| size | W | seeds | K | baseline recall | baseline precision | swarm recall | "
-             "swarm precision | lost: never assigned | lost: assigned, unreached (reply cut off) | "
-             "lost: assigned, missed | assigned, missed: baseline also missed | "
-             "lost: dropped at merge | swarm FPs kept-invented by merger, per seed |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    ctx = all(r["task"].get("family") == ledger2.FAMILY for r in runs)  # D22 columns
+    head = ["size", "W", "seeds", "K", "baseline recall", "baseline precision", "swarm recall",
+            "swarm precision", "lost: never assigned"]
+    if ctx:
+        head += ["lost: context not passed", "lost: evidence split across workers"]
+    head += ["lost: assigned, unreached (reply cut off)", "lost: assigned, missed",
+             "assigned, missed: baseline also missed", "lost: dropped at merge",
+             "swarm FPs kept-invented by merger, per seed"]
+    if ctx:
+        head += ["found by type, swarm (baseline), all seeds"]
+    lines = (["> " + ledger2.FIXED_SENTENCE, ""] if ctx else []) + [
+        "| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
     notes = []
     for key in order:
         size, workers = key
@@ -139,12 +162,15 @@ def table(runs):
             _fmt_mean([s["score"]["recall"] for s in sw], True),
             _fmt_mean([s["score"]["precision"] for s in sw], True),
             _fmt_mean([s["buckets"]["never_assigned"] for s in sw]),
+            *([_fmt_mean([s["buckets"]["context_not_passed"] for s in sw]),
+               _fmt_mean([s["buckets"]["evidence_split"] for s in sw])] if ctx else []),
             _fmt_mean([s["buckets"]["assigned_unreached"] for s in sw]),
             _fmt_mean([s["buckets"]["assigned_missed"] for s in sw]),
             _cross([a["cross"] for a in aa]),
             _fmt_mean([s["buckets"]["dropped_at_merge"] for s in sw]),
             "/".join(f"{len(s['false_positives']['worker_reported_kept'])}-"
                      f"{len(s['false_positives']['invented_by_merger'])}" for s in sw),
+            *([_by_type(sw, base)] if ctx else []),
         ]) + " |")
         for r, a in zip(rs, aa):
             for f in a["swarm"]["flags"]:
@@ -163,7 +189,11 @@ def cmd_table(args):
     if not runs:
         print("no run files found")
         return
-    print(table(runs))
+    families = sorted({r["task"].get("family", "remittance-ledger") for r in runs})
+    for i, fam in enumerate(families):
+        if len(families) > 1:
+            print(("\n" if i else "") + f"## {fam}\n")
+        print(table([r for r in runs if r["task"].get("family", "remittance-ledger") == fam]))
 
 
 def main(argv=None):
@@ -171,12 +201,15 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     g = sub.add_parser("generate", help="write ledger tasks (with answer keys) to disk")
+    g.add_argument("--family", default="ledger", choices=list(GENERATORS))
     g.add_argument("--sizes", nargs="+", default=list(ledger.SIZES), choices=list(ledger.SIZES))
     g.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3])
     g.add_argument("--out", default="tasks")
     g.set_defaults(func=cmd_generate)
 
     r = sub.add_parser("run", help="run swarm and baseline; one run file per task")
+    r.add_argument("--family", default="ledger", choices=list(GENERATORS),
+                   help="ledger = family 1; ledger-ctx = family 2 (context and pair items, D22)")
     r.add_argument("--sizes", nargs="+", default=list(ledger.SIZES), choices=list(ledger.SIZES))
     r.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3])
     r.add_argument("--workers", type=int, default=4)

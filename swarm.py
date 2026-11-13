@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 import agent
 import ledger
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # D22: key items may carry type/needs; v1 files still load
 
 ANSWER_ONLY = "Do not show your working or any explanation."  # D12: free-tier output cap
 
@@ -117,6 +117,16 @@ def parse_items(text, truncated=False):
         notes.append(f"reply cut off by output cap; {len(data)} complete entries before the cut used (D14)")
     if not isinstance(data, list):
         return None, notes + ["no JSON array in reply"], 0
+    items, entry_notes, nonpositive = parse_entry_list(data)
+    return items, notes + entry_notes, nonpositive
+
+
+def parse_entry_list(data):
+    """A list of {"line_id", "shortfall"} entries -> (items, notes, nonpositive_dropped).
+
+    Shared by both task families. Entries without a string line_id are dropped and noted;
+    repeated ids are kept once, noted; D13 drops entries whose own shortfall is <= 0."""
+    notes = []
     items, seen, nonpositive = [], set(), 0
     for entry in data:
         lid = entry.get("line_id") if isinstance(entry, dict) else None
@@ -219,8 +229,9 @@ def _status(call, items):
 def run_baseline(task, cfg):
     """status "rejected_too_large" means the baseline did not fit in one call: final is None and
     it has no score (never a score of zero)."""
-    call = _call(cfg, baseline_prompt(task), [task["task_id"], "baseline", 0])
-    items, notes, dropped = parse_items(call["raw_text"], call.get("finish_reason") == "length")
+    fam = family(task)
+    call = _call(cfg, fam.baseline_prompt(task), [task["task_id"], "baseline", 0])
+    items, notes, dropped = fam.parse_items(call["raw_text"], call.get("finish_reason") == "length")
     status = _status(call, items)
     if status == "rejected_too_large":
         what = ("did not fit in one call" if call["limit_kind"] == "input"
@@ -234,31 +245,32 @@ def run_baseline(task, cfg):
 
 def run_swarm(task, cfg):
     W = cfg["workers"]
-    plan_call = _call(cfg, planner_prompt(task, W), [task["task_id"], "planner", W])
-    assignments, plan_notes = parse_plan(plan_call["raw_text"], task["n_lines"], W)
+    fam = family(task)
+    plan_call = _call(cfg, fam.planner_prompt(task, W), [task["task_id"], "planner", W])
+    assignments, plan_notes = parse_plan(plan_call["raw_text"], fam.n_rows(task), W)
     planner = {"call": plan_call, "status": _status(plan_call, assignments or None),
                "parsed_ok": bool(assignments), "parse_notes": plan_notes,
                "briefs_used": len(assignments)}
 
     workers, reports = [], []
     for i, a in enumerate(assignments, start=1):
-        rows = ledger.rows_in_ranges(task["rows"], a["ranges"])
-        call = _call(cfg, worker_prompt(a["brief"], rows), [task["task_id"], "worker", W, i])
-        items, notes, dropped = parse_items(call["raw_text"], call.get("finish_reason") == "length")
+        rows = fam.rows_in_ranges(task["rows"], a["ranges"])
+        call = _call(cfg, fam.worker_prompt(a["brief"], rows), [task["task_id"], "worker", W, i])
+        items, notes, dropped = fam.parse_items(call["raw_text"], call.get("finish_reason") == "length")
         status = _status(call, items)
         if status == "rejected_too_large":
             notes = [f"worker call rejected: {TOO_LARGE} (requested {call['requested_tokens']} "
                      f"{call['limit_kind']} tokens, limit {call['limit_tokens']}); "
                      "treated as reporting nothing"]
         workers.append({"worker": i, "brief": a["brief"], "ranges": a["ranges"],
-                        "slice": [r["line_id"] for r in rows], "call": call, "status": status,
+                        "slice": [fam.row_id(r) for r in rows], "call": call, "status": status,
                         "parsed_ok": items is not None, "parse_notes": notes,
                         "nonpositive_dropped": dropped, "reported": items or []})
         reports.append((i, items))
 
     if workers:
-        m_call = _call(cfg, merger_prompt(task, reports), [task["task_id"], "merger", W])
-        items, notes, dropped = parse_items(m_call["raw_text"], m_call.get("finish_reason") == "length")
+        m_call = _call(cfg, fam.merger_prompt(task, reports), [task["task_id"], "merger", W])
+        items, notes, dropped = fam.parse_items(m_call["raw_text"], m_call.get("finish_reason") == "length")
         merger = {"call": m_call, "status": _status(m_call, items),
                   "parsed_ok": items is not None, "parse_notes": notes,
                   "nonpositive_dropped": dropped, "final": items or []}
@@ -301,13 +313,65 @@ def run_task(task, cfg, only=None):
                    "temperature": cfg["temperature"], "reasoning_effort": cfg["reasoning_effort"],
                    "workers": cfg["workers"], "max_tokens": cfg.get("max_tokens"),
                    "itpm": cfg.get("itpm"), "otpm": cfg.get("otpm")},
-        "task": {"family": task["family"], "task_id": task["task_id"], "size": task["size"],
-                 "seed": task["seed"], "n_lines": task["n_lines"], "n_planted": task["n_planted"],
-                 "task_text": ledger.TASK_TEXT, "columns": ledger.COLUMNS, "rows": task["rows"]},
-        "items": {"universe": [r["line_id"] for r in task["rows"]],
-                  "key": [{"id": k["line_id"], "value": k["shortfall_cents"]} for k in task["key"]],
-                  "value_unit": "cents"},
+        "task": family(task).task_block(task),
+        "items": family(task).items_block(task),
         "swarm": swarm,
         "baseline": baseline,
         "usage": {"swarm": _usage(swarm_calls), "baseline": _usage([baseline["call"]])},
     }
+
+
+# ---------------- task families (D22) ----------------
+
+class _LedgerFamily:
+    """Family 1, "remittance-ledger": the prompts above, unchanged (cached calls stay valid)."""
+
+    @staticmethod
+    def n_rows(task):
+        return task["n_lines"]
+
+    @staticmethod
+    def row_id(r):
+        return r["line_id"]
+
+    @staticmethod
+    def rows_in_ranges(rows, ranges):
+        return ledger.rows_in_ranges(rows, ranges)
+
+    planner_prompt = staticmethod(planner_prompt)
+    worker_prompt = staticmethod(worker_prompt)
+    merger_prompt = staticmethod(merger_prompt)
+    baseline_prompt = staticmethod(baseline_prompt)
+    parse_items = staticmethod(parse_items)
+
+    @staticmethod
+    def task_block(task):
+        return {"family": task["family"], "task_id": task["task_id"], "size": task["size"],
+                "seed": task["seed"], "n_lines": task["n_lines"], "n_planted": task["n_planted"],
+                "task_text": ledger.TASK_TEXT, "columns": ledger.COLUMNS, "rows": task["rows"]}
+
+    @staticmethod
+    def items_block(task):
+        return {"universe": [r["line_id"] for r in task["rows"]],
+                "key": [{"id": k["line_id"], "value": k["shortfall_cents"]} for k in task["key"]],
+                "value_unit": "cents"}
+
+
+class _LedgerCtxFamily:
+    """Family 2, "ledger-ctx": prompts and parsing live in ledger2.py."""
+
+    @staticmethod
+    def n_rows(task):
+        return task["n_rows"]
+
+    def __getattr__(self, name):
+        import ledger2
+        return getattr(ledger2, name)
+
+
+def family(task):
+    if task["family"] == "remittance-ledger":
+        return _LedgerFamily
+    if task["family"] == "ledger-ctx":
+        return _LedgerCtxFamily()
+    raise ValueError(f"unknown task family {task['family']!r}")
