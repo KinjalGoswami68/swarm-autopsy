@@ -55,3 +55,10 @@ mark { background: var(--mark); color: inherit; }
 .error { color: var(--lost); font-weight: 600; }
 .ok { font-weight: 600; }
 .errors code { overflow-wrap: anywhere; }
+.story { margin-top: 2.5rem; }
+.hero h1 { font-size: 1.8rem; line-height: 1.25; }
+.lede { font-size: 1.1rem; }
+.note { border: 1px solid var(--line); padding: .5rem .8rem; }
+blockquote { margin: .8rem 0; padding: .5rem 1rem; border-left: 3px solid var(--kept); font-size: 1.05rem; }
+.quotes q { overflow-wrap: anywhere; }
+caption { text-align: left; font-weight: 600; padding: .3rem 0; }
