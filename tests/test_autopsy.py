@@ -29,7 +29,7 @@ def test_each_bucket():
     run = make_run([(["B", "C", "E"], ["C"]), (["D", "F"], ["D"])], final=["D"])
     a = autopsy.swarm_autopsy(run)
     by = {p["id"]: p["bucket"] for p in a["per_item"]}
-    assert by == {"A": "never_assigned", "B": "assigned_missed",
+    assert by == {"A": "never_assigned", "B": "holder_answered_missed",
                   "C": "dropped_at_merge", "D": "kept"}
     assert a["lost"] == 3 and sum(a["buckets"].values()) == 4
     assert a["score"]["recall"] == 0.25 and a["score"]["precision"] == 1.0
@@ -132,7 +132,7 @@ def test_unreached_when_cut_off_before_item():
     run = make_run([(["A", "B", "C", "D"], [])], final=[])
     _truncate(run, 0, '[{"line_id":"A","shortfall":0},{"line_id":"B","shortfall":0},{"line_')
     by = {p["id"]: p["bucket"] for p in autopsy.swarm_autopsy(run)["per_item"]}
-    assert by == {"A": "assigned_missed", "B": "assigned_missed",
+    assert by == {"A": "holder_returned_nothing", "B": "holder_returned_nothing",
                   "C": "assigned_unreached", "D": "assigned_unreached"}
 
 
@@ -140,13 +140,13 @@ def test_unreached_needs_every_holder_cut_off_before_it():
     # C is in two slices; worker 2 was not cut off, so C counts as missed, not unreached.
     run = make_run([(["A", "B", "C"], []), (["C"], [])], final=[], key=("C",))
     _truncate(run, 0, '[{"line_id":"A"')
-    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "assigned_missed"
+    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "holder_returned_nothing"
 
 
 def test_not_truncated_never_unreached():
     run = make_run([(["A", "B"], [])], final=[], key=("B",))
     run["swarm"]["workers"][0]["call"] = {"raw_text": "[]"}
-    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "assigned_missed"
+    assert autopsy.swarm_autopsy(run)["per_item"][0]["bucket"] == "holder_returned_nothing"
 
 
 def test_baseline_unreached_count():
@@ -155,3 +155,12 @@ def test_baseline_unreached_count():
     run["baseline"]["call"] = {"raw_text": '[{"line_id":"A","shortfall":1},{"line_id":"B","sh'}
     b = autopsy.baseline_autopsy(run)
     assert b["missed"] == 3 and b["missed_unreached"] == 2  # C, D after the cut; B reached
+
+
+def test_returned_nothing_vs_answered_missed():
+    # B: held by worker 1 (reported nothing) and worker 2 (reported E): one holder answered.
+    # C: held only by worker 1, which reported nothing.
+    run = make_run([(["B", "C"], []), (["B", "E"], ["E"])], final=[], key=("B", "C"))
+    by = {p["id"]: p["bucket"] for p in autopsy.swarm_autopsy(run)["per_item"]}
+    assert by == {"B": "holder_answered_missed", "C": "holder_returned_nothing"}
+    assert autopsy.autopsy(run)["cross"]["assigned_missed"] == 2  # both count as missed

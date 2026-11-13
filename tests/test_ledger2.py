@@ -162,7 +162,8 @@ def test_every_new_bucket():
                   final=[], key=KEY)
     by = {p["id"]: p["bucket"] for p in autopsy.swarm_autopsy(run)["per_item"]}
     assert by == {"A": "context_not_passed", "PAIR:B+F": "evidence_split",
-                  "C": "assigned_missed", "PAIR:D+E": "assigned_missed", "G": "never_assigned"}
+                  "C": "holder_returned_nothing", "PAIR:D+E": "holder_returned_nothing",
+                  "G": "never_assigned"}
 
 
 def test_context_row_alone_is_never_assigned():
@@ -250,3 +251,46 @@ def test_ctx_end_to_end(monkeypatch, tmp_path, capsys):
     assert ledger2.FIXED_SENTENCE in out and "lost: context not passed" in out
     cli.main(["autopsy", str(path)])
     assert ledger2.FIXED_SENTENCE in capsys.readouterr().out
+
+
+# ---------- D27 brief annotations ----------
+import judge
+
+
+def test_quote_verified_tolerates_dash_and_space_style():
+    brief = "Read rows 1‑10 of the ledger (the rate table).  Return the completed map."
+    assert judge.quote_verified("Read rows 1-10 of the ledger (the rate table).", brief)
+    assert judge.quote_verified("return the completed map", brief)
+    assert not judge.quote_verified("Use worker 1's output.", brief)
+    assert not judge.quote_verified("", brief)
+
+
+def test_judge_prompt_states_slice_facts():
+    task = ledger2.generate("S", 1)
+    run = {"task": ledger2.task_block(task), "run_id": "r"}
+    p = judge.judge_prompt(run, {"brief": "B", "ranges": [[11, 30]]})
+    assert "Rows given to this worker: 11 to 30. These rows do not include the rate table" in p
+    p = judge.judge_prompt(run, {"brief": "B", "ranges": [[1, 35]]})
+    assert "These rows include the rate table" in p
+
+
+def test_annotate_stores_and_never_changes_score(monkeypatch, tmp_path):
+    task = ledger2.generate("S", 1)
+    monkeypatch.setattr(agent, "call_agent", CtxModel(task))
+    cli.main(["run", "--family", "ledger-ctx", "--sizes", "S", "--seeds", "1", "--runs-dir", str(tmp_path)])
+    path = next(tmp_path.glob("*.json"))
+    before = autopsy.autopsy(runfile.load(path))
+
+    def fake_judge(model, temperature, prompt, call_id, **kw):
+        assert call_id[0] == "judge"
+        return {"raw_text": json.dumps({"a": {"answer": "yes", "quote": "audit"},
+                                        "b": {"answer": "no", "quote": "", "kinds": ["underpaid"]}}),
+                "error": None, "prompt_tokens": 1, "completion_tokens": 1, "cached": False}
+    monkeypatch.setattr(agent, "call_agent", fake_judge)
+    cli.main(["annotate", str(path), "--tpm", "0"])
+    run = runfile.load(path)
+    assert run["annotations"]["briefs"][0]["relies_on_missing"] == {
+        "answer": "yes", "quote": "audit", "quote_verified": True}
+    assert autopsy.autopsy(run) == before
+    assert "why (model-read annotation): relies on something not given: yes" in autopsy.render(run)
+    assert "model-read annotations" in cli.why_table([run])

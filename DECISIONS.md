@@ -459,3 +459,32 @@ fully (12/12, 0 false positives, D19). Every role and the baseline use the same 
 swarm and baseline are still treated the same. Known risk: at old-ledger M, low reasoning gave
 up and answered `[]` (D19). Rule set by the owner: if the probe gives up or returns an empty
 list, stop and report.
+
+## D27. "Assigned, missed" split by fact; model-read brief annotations
+
+**Owner decision (2026-11-13).** No change to prompts, sizes or models.
+
+1. **Bucket split, deterministic, from the run file only.** "Assigned, missed" is replaced by
+   two buckets. Both apply to an item whose every needed row was held by at least one worker
+   that was not cut off before them (the "reaching holders"):
+   - **assigned, holder returned nothing** (`holder_returned_nothing`): every reaching holder's
+     parsed `reported` list is empty. An empty list after D13 (all entries had shortfall <= 0),
+     or a reply with no usable JSON, also counts as empty: the worker reported nothing usable.
+   - **assigned, holder answered, missed it** (`holder_answered_missed`): at least one reaching
+     holder reported other items but not this one.
+   The "baseline also missed" cross-check covers both. Old run files are re-scored with no
+   model calls; the qwen and Gemini old-ledger tables gain one column.
+2. **Brief annotations** (`judge.py`, `cli.py annotate`), **separate from the buckets and never
+   changing a score.** One cached judge call per brief at temperature 0, two yes/no questions,
+   each with the brief's exact sentence quoted as evidence: (a) does the brief rely on something
+   the worker was not given (another worker's output, or rows outside its slice)? (b) does it
+   limit the worker to some kinds of finding? The judge is told only facts that are certain from
+   the run file (the worker's rows, whether they include the rate table, that workers cannot see
+   each other, the kinds of finding). Each quote is checked against the brief text
+   (`quote_verified`, ignoring whitespace, case, and dash or quote style). Stored in the run file
+   under `annotations` with the label "model-read annotations"; shown beside the bucket table as
+   "why" and in each autopsy as "why (model-read annotation)".
+   **Judge:** openai/gpt-oss-120b on Groq, reasoning_effort low, `--max-tokens-total 3000`
+   (briefs are short; a smaller request lets about three calls fit per minute). This is the
+   run's own model, chosen because Gemini's 20 daily requests are committed to the size-M
+   schedule (D24); it is not an independent reader, so its annotations were checked by hand.

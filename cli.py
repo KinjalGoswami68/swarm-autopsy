@@ -10,6 +10,7 @@ from pathlib import Path
 import agent
 import autopsy
 import ledger
+import judge
 import ledger2
 import runfile
 import swarm
@@ -75,6 +76,50 @@ def cmd_run(args):
                   + (f"; flags: {s['flags']}" if s["flags"] else ""), flush=True)
 
 
+def cmd_annotate(args):
+    agent.set_endpoint(args.endpoint)
+    agent.BUDGET = agent.RequestBudget(rpd=args.rpd)
+    agent.PACER = agent.Pacer(itpm=args.tpm, combined=True) if args.tpm else agent.Pacer(itpm=0)
+    cfg = dict(model=args.model, temperature=args.temperature,
+               reasoning_effort=args.reasoning_effort, max_tokens=None,
+               max_tokens_total=args.max_tokens_total)
+    for path in args.run_files:
+        run = runfile.load(path)
+        try:
+            judge.annotate(run, cfg)
+        except agent.RateLimitStop as e:
+            print(f"STOPPED by rate limit: {e}", flush=True)
+            sys.exit(2)
+        runfile.save(run, path)
+        flags = judge.summary(run)
+        print(f"{Path(path).name}: " + ", ".join(
+            f"w{w} a={a} b={b}" for w, (a, b) in sorted(flags.items())), flush=True)
+
+
+def why_table(runs):
+    """D27: per W, how many briefs the judge flagged. Model-read, never a score."""
+    by_w = defaultdict(list)
+    for r in runs:
+        by_w[r["config"]["workers"]].append(r)
+    lines = ["Why (model-read annotations of the briefs, D27; they never change a score):", "",
+             "| W | briefs read | relies on something the worker was not given | "
+             "limits the worker to some kinds of finding | quotes verified in the brief |",
+             "|---|---|---|---|---|"]
+    for w in sorted(by_w):
+        anns = [b for r in by_w[w] for b in ((r.get("annotations") or {}).get("briefs") or [])]
+        total = sum(len(r["swarm"]["workers"]) for r in by_w[w])
+        if not anns:
+            lines.append(f"| {w} | 0 of {total} | n/a | n/a | n/a |")
+            continue
+        a = sum(b["relies_on_missing"]["answer"] == "yes" for b in anns)
+        bb = sum(b["limits_kinds"]["answer"] == "yes" for b in anns)
+        quotes = [x for b in anns for x in (b["relies_on_missing"], b["limits_kinds"])
+                  if x["answer"] == "yes"]
+        ver = sum(x["quote_verified"] for x in quotes)
+        lines.append(f"| {w} | {len(anns)} of {total} | {a} | {bb} | {ver} of {len(quotes)} |")
+    return "\n".join(lines)
+
+
 def cmd_autopsy(args):
     run = runfile.load(args.run_file)
     if args.json:
@@ -126,7 +171,8 @@ def table(runs):
             "swarm precision", "lost: never assigned"]
     if ctx:
         head += ["lost: context not passed", "lost: evidence split across workers"]
-    head += ["lost: assigned, unreached (reply cut off)", "lost: assigned, missed",
+    head += ["lost: assigned, unreached (reply cut off)", "lost: assigned, holder returned nothing",
+             "lost: assigned, holder answered, missed it",
              "assigned, missed: baseline also missed", "lost: dropped at merge",
              "swarm FPs kept-invented by merger, per seed"]
     if ctx:
@@ -170,7 +216,8 @@ def table(runs):
             *([_fmt_mean([s["buckets"]["context_not_passed"] for s in sw]),
                _fmt_mean([s["buckets"]["evidence_split"] for s in sw])] if ctx else []),
             _fmt_mean([s["buckets"]["assigned_unreached"] for s in sw]),
-            _fmt_mean([s["buckets"]["assigned_missed"] for s in sw]),
+            _fmt_mean([s["buckets"]["holder_returned_nothing"] for s in sw]),
+            _fmt_mean([s["buckets"]["holder_answered_missed"] for s in sw]),
             _cross([a["cross"] for a in aa]),
             _fmt_mean([s["buckets"]["dropped_at_merge"] for s in sw]),
             "/".join(f"{len(s['false_positives']['worker_reported_kept'])}-"
@@ -198,7 +245,10 @@ def cmd_table(args):
     for i, fam in enumerate(families):
         if len(families) > 1:
             print(("\n" if i else "") + f"## {fam}\n")
-        print(table([r for r in runs if r["task"].get("family", "remittance-ledger") == fam]))
+        fam_runs = [r for r in runs if r["task"].get("family", "remittance-ledger") == fam]
+        print(table(fam_runs))
+        if any(r.get("annotations") for r in fam_runs):
+            print("\n" + why_table(fam_runs))
 
 
 def main(argv=None):
@@ -237,6 +287,17 @@ def main(argv=None):
     r.add_argument("--runs-dir", default=str(RUNS_DIR))
     r.add_argument("--force", action="store_true", help="rewrite existing run files")
     r.set_defaults(func=cmd_run)
+
+    j = sub.add_parser("annotate", help="model-read brief annotations (D27); never a score")
+    j.add_argument("run_files", nargs="+")
+    j.add_argument("--model", default="openai/gpt-oss-120b")
+    j.add_argument("--endpoint", default=agent.DEFAULT_ENDPOINT)
+    j.add_argument("--temperature", type=float, default=0.0)
+    j.add_argument("--reasoning-effort", default="low")
+    j.add_argument("--tpm", type=int, default=8000)
+    j.add_argument("--max-tokens-total", type=int, default=8000)
+    j.add_argument("--rpd", type=int, default=1000)
+    j.set_defaults(func=cmd_annotate)
 
     a = sub.add_parser("autopsy", help="full autopsy of one run file")
     a.add_argument("run_file")

@@ -7,13 +7,15 @@ import re
 from collections import Counter
 
 BUCKETS = ["never_assigned", "context_not_passed", "evidence_split", "assigned_unreached",
-           "assigned_missed", "dropped_at_merge", "kept"]
+           "holder_returned_nothing", "holder_answered_missed", "dropped_at_merge", "kept"]
+MISSED_BUCKETS = ("holder_returned_nothing", "holder_answered_missed")  # D27: was "assigned_missed"
 LOSS_BUCKETS = BUCKETS[:-1]
 BUCKET_LABEL = {"never_assigned": "never assigned (split)",
                 "context_not_passed": "context not passed (split)",
                 "evidence_split": "evidence split across workers (split)",
                 "assigned_unreached": "assigned, unreached (reply cut off)",
-                "assigned_missed": "assigned, missed (worker)",
+                "holder_returned_nothing": "assigned, holder returned nothing (worker)",
+                "holder_answered_missed": "assigned, holder answered, missed it (worker)",
                 "dropped_at_merge": "found, dropped at merge (merge)",
                 "kept": "found and kept"}
 VALUE_TOLERANCE = 1  # cents (D7)
@@ -50,7 +52,9 @@ def bucket_of(item, slices, reported_sets, final_ids, reached=None, needs=None, 
       context_not_passed    a worker held its own rows, but no worker held them plus its context rows
       evidence_split        its rows were assigned, but no single worker's slice held them all
       assigned_unreached    workers held every needed row, but each was cut off before reaching them
-      assigned_missed       a worker held every needed row and was not cut off before them
+      holder_returned_nothing   (D27) workers held every needed row and were not cut off before
+                                them, and every such worker's reported list is empty
+      holder_answered_missed    (D27) as above, but at least one such worker reported other items
     `needs` defaults to [item] and `context` to [], which gives the schema-1 buckets."""
     if item in final_ids:
         return "kept"
@@ -62,14 +66,18 @@ def bucket_of(item, slices, reported_sets, final_ids, reached=None, needs=None, 
     reached = reached or [None] * len(slices)
     if not any(any(n in sl for n in own) for sl in slices):
         return "never_assigned"
-    complete = [r for sl, r in zip(slices, reached) if all(n in sl for n in needs)]
+    complete = [(r, rep) for sl, r, rep in zip(slices, reached, reported_sets)
+                if all(n in sl for n in needs)]
     if not complete:
         if context and any(all(n in sl for n in own) for sl in slices):
             return "context_not_passed"
         return "evidence_split"
-    if all(r is not None and not all(n in r for n in needs) for r in complete):
+    reaching = [rep for r, rep in complete if r is None or all(n in r for n in needs)]
+    if not reaching:
         return "assigned_unreached"
-    return "assigned_missed"
+    if all(len(rep) == 0 for rep in reaching):
+        return "holder_returned_nothing"
+    return "holder_answered_missed"
 
 
 def item_label(k):
@@ -225,7 +233,7 @@ def cross_check(s, b, run):
 
     Separates "the model cannot do this line" from "the swarm lost it". None when the baseline
     was not scored (e.g. it did not fit in one call)."""
-    missed = [p["id"] for p in s["per_item"] if p["bucket"] == "assigned_missed"]
+    missed = [p["id"] for p in s["per_item"] if p["bucket"] in MISSED_BUCKETS]
     if "score" not in b:
         return {"assigned_missed": len(missed), "baseline_also_missed": None, "ids": None}
     base_ids = set(_ids(run["baseline"]["final"]))
@@ -301,6 +309,15 @@ def render(run, a=None):
                    f"key items fully in slice {key_in}  reported {len(w['reported'])} "
                    f"(of which key {found})  status {w.get('status')}")
         out.append(f"  brief: {w['brief'][:300]}")
+        ann = {b["worker"]: b for b in ((run.get("annotations") or {}).get("briefs") or [])}
+        if w["worker"] in ann:
+            b = ann[w["worker"]]
+            for label, key in (("relies on something not given", "relies_on_missing"),
+                               ("limits kinds of finding", "limits_kinds")):
+                x = b[key]
+                quote = (f' -- "{x["quote"]}"' + ("" if x["quote_verified"] else " [quote not found in brief]")
+                         if x.get("answer") == "yes" else "")
+                out.append(f"  why (model-read annotation): {label}: {x.get('answer')}{quote}")
         for n in w.get("parse_notes", []):
             out.append(f"  note: {n}")
     cov = s["coverage"]
