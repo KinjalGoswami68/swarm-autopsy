@@ -77,10 +77,10 @@ function buildAsciiModel(run, a, r4run, r4a) {
     apart: farSplit === farPairs.length ? `pink: each duplicate claim's two rows, in different workers`
       : `pink: the ${farPairs.length} duplicate claims' rows; ${farSplit} split across workers`,
   };
-  if (r4run) {
+  if (r4run) { // (the replay passed in is R1 since D35)
     const h4 = holders(r4run.swarm.workers), n4 = r4run.swarm.workers.length;
-    captions.rescatter = `after one sentence to the planner: ` +
-      (h4.length === n4 ? "every worker holds the rate table" : `${h4.length} of ${n4} workers hold the rate table`);
+    captions.rescatter = (h4.length === n4 ? "every worker given the rate table" : `${h4.length} of ${n4} workers given the rate table`) +
+      `: ${r4a.swarm.score.true_positives} of ${a.swarm.key_count} found`;
   }
   return {
     captions, farPairs,
@@ -193,33 +193,60 @@ async function main() {
         : `Across ${fam2A.length} runs the merger dropped ${dropped} reported items.`)),
     el("p", {}, "So every point this swarm lost was lost before the merge: in the split, or in a worker.")));
 
-  // 5. One sentence to the planner
+  // 5. The fix that holds on every seed (D35): R1 per seed at the story's W, R4 beside it.
   if (r4) {
     const sentence = r4.run.replay.change.replace(/^.*?sentence: /, "");
-    const diff = r4.a.swarm.per_item.filter((p) => p.bucket === "kept").length - s.per_item.filter((p) => p.bucket === "kept").length;
-    const repRows = ["R1", "R2", "R3", "R4"].filter((l) => repA.has(l)).map((l) => {
-      const x = repA.get(l);
-      return [`${l} ${x.run.replay.name}`, `${x.a.swarm.score.true_positives} of ${K}`, x.run.replay.change];
+    const holdsTable = (wk) => wk.filter((w) => w.slice.some((i) => String(i).startsWith("RATE:"))).map((w) => w.worker);
+    const found = (r) => autopsy(r).swarm.score.true_positives;
+    // every original run at the story's worker count, with its R1 and R4 replays
+    const seedsAtW = fam2A.filter((x) => x.run.config.workers === W).sort((p, q) => p.run.task.seed - q.run.task.seed)
+      .map((x) => {
+        const list = (reps.get(x.run.run_id) || []).map((r) => r.run);
+        return { seed: x.run.task.seed, orig: x.a.swarm.score.true_positives,
+          r1: list.find((q) => q.replay.label === "R1"), r4: list.find((q) => q.replay.label === "R4") };
+      }).filter((x) => x.r1 && x.r4);
+    const r1Found = seedsAtW.map((x) => found(x.r1)), r4Found = seedsAtW.map((x) => found(x.r4));
+    const seedList = andList(seedsAtW.map((x) => x.seed));
+    const same = r1Found.every((n) => n === r1Found[0]);
+    const headline = same && seedsAtW.length > 1
+      ? `Give every worker the rate table: ${r1Found[0]} of ${K} on ${seedsAtW.length === 3 ? "all three" : "every"} seed${seedsAtW.length > 1 ? "s" : ""}`
+      : `Give every worker the rate table: ${andList(r1Found)} of ${K}`;
+    // one plain sentence per seed where the planner sentence did worse than the table
+    const r4Notes = seedsAtW.filter((x) => found(x.r4) < found(x.r1)).map((x) => {
+      const h = holdsTable(x.r4.swarm.workers), n = x.r4.swarm.workers.length;
+      const empty = x.r4.swarm.workers.filter((w) => w.reported.length === 0).length;
+      const who = noSplit(x.r4) ? `gave every worker all ${x.r4.items.universe.length} rows`
+        : h.length === n ? "gave every worker the rate table"
+        : `still gave the rate table to ${h.length === 1 ? `worker ${h[0]} only` : `${h.length} of ${n} workers`}`;
+      const what = empty === n ? `all ${word(n)} workers returned empty lists` : `${empty} of ${n} workers returned empty lists`;
+      return `In seed ${x.seed}, the planner ${who}, and ${what}.`;
     });
     const totalReps = fam2.length * 4;
-    const otherRuns = fam2A.filter((x) => x.run.run_id !== run.run_id && reps.has(x.run.run_id));
-    parts.push(section("truth", "rescatter", `One sentence to the planner: ${r4.a.swarm.score.true_positives} of ${K}`,
+    const otherRuns = fam2A.filter((x) => x.run.config.workers !== W && reps.has(x.run.run_id))
+      .sort((p, q) => p.run.config.workers - q.run.config.workers || p.run.task.seed - q.run.task.seed);
+    parts.push(section("truth", "rescatter", headline,
+      el("p", {}, `Replay R1 keeps the planner's blocks and briefs and adds the rate-table rows to every worker's slice; nothing else changes. ` +
+        `At W=${W} the swarm then finds ${andList(r1Found)} of ${K} on seeds ${seedList}, against ${andList(seedsAtW.map((x) => x.orig))} in the original runs.`),
+      table(["Seed", "Original run", "R1: rate table to every worker", "R4: one sentence to the planner"],
+        seedsAtW.map((x) => [`seed ${x.seed}`, `${x.orig} of ${K}`, `${found(x.r1)} of ${K}`,
+          `${found(x.r4)} of ${K}${noSplit(x.r4) ? " (no split: a worker held every row)" : ""}`])),
+      el("p", {}, "The first fix tried was one sentence added to the planner's prompt:"),
       el("blockquote", {}, sentence),
-      el("p", {}, `Added to the planner's prompt, nothing else changed: the swarm finds ${r4.a.swarm.score.true_positives} of ${K}, ${diff >= 0 ? "+" : ""}${diff} on the original run. ` +
-        `This time the planner gave ${r4.run.swarm.workers.filter((w) => w.slice.some((i) => String(i).startsWith("RATE:"))).length} of ${r4.run.swarm.workers.length} workers the rate table.`),
-      el("p", { class: "note" }, `These numbers are from one run: seed ${t.seed} at W=${W}. `,
-        el("a", { href: "#nine" }, "The nine-run table"), " has all three seeds. ",
-        `Replays of the other runs appear here as they land: ${data.replays.length} of ${totalReps} done.`),
-      table(["Replay", "Found", "What changed"], repRows),
-      otherRuns.length ? table(["Other run", ...["R1", "R2", "R3", "R4"]], otherRuns.map((x) => {
+      el("p", {}, `It finds ${andList(r4Found)} of ${K} on seeds ${seedList}` +
+        // the "only when" clause is printed only if every seed bears it out
+        (seedsAtW.every((x) => (holdsTable(x.r4.swarm.workers).length === x.r4.swarm.workers.length) === (found(x.r4) >= found(x.r1)))
+          ? ": it matches the table fix only when the planner responds by handing every worker the table. " : ". ") + r4Notes.join(" ")),
+      el("p", { class: "note" }, `The story above is one run: seed ${t.seed} at W=${W}. This section shows all ${word(seedsAtW.length)} seeds at W=${W}; `,
+        el("a", { href: "#nine" }, "the nine-run table"), ` has every setting. Replays done: ${data.replays.length} of ${totalReps}.`),
+      otherRuns.length ? table(["Other run", "R1", "R2", "R3", "R4"], otherRuns.map((x) => {
         const list = reps.get(x.run.run_id).map((r) => r.run);
         return [`seed ${x.run.task.seed}, W=${x.run.config.workers} (original ${x.a.swarm.score.true_positives} of ${K})`,
           ...["R1", "R2", "R3", "R4"].map((l) => {
             const r = list.find((q) => q.replay.label === l);
             if (!r) return "not yet";
-            return `${autopsy(r).swarm.score.true_positives} of ${K}${noSplit(r) ? " (no split: a worker held every row)" : ""}`;
+            return `${found(r)} of ${K}${noSplit(r) ? " (no split: a worker held every row)" : ""}`;
           })];
-      }), { caption: "Replays of the other runs so far" }) : null,
+      }), { caption: `Replays at the other worker counts` }) : null,
       shortCaveat()));
 
     // 6. The far pairs
@@ -239,7 +266,8 @@ async function main() {
   const stage = el("div", { class: "track-stage", "aria-hidden": "true" },
     el("canvas", { class: "ascii-canvas" }), el("p", { class: "ascii-caption" }));
   parts.push(el("div", { class: "track" }, el("div", { class: "track-text" }, trackSections), stage));
-  const asciiModel = buildAsciiModel(run, a, r4 ? r4.run : null, r4 ? r4.a : null);
+  const r1 = repA.get("R1");
+  const asciiModel = buildAsciiModel(run, a, r1 ? r1.run : null, r1 ? r1.a : null); // section 5 shows R1 (D35)
 
   // 7. Nine runs
   const byW = new Map();

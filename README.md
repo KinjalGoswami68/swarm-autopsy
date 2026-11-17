@@ -14,7 +14,8 @@ that autopsies your own run file in the browser).
 ## The headline run
 
 One task, one model (`openai/gpt-oss-120b` on Groq, temperature 0, low reasoning), a 70-row
-remittance ledger with 12 planted problems (seed 1, 4 workers):
+remittance ledger with 12 planted problems. The first three points are seed 1 with 4 workers; the
+replay points cover seeds 1, 2 and 3 with 4 workers:
 
 - **The single agent found 12 of 12. The four-worker swarm found 3.**
 - Where the 9 went: **4** context not passed (the worker holding the row was never given the
@@ -23,9 +24,16 @@ remittance ledger with 12 planted problems (seed 1, 4 workers):
   needed and returned an empty list). **0** were lost at the merge.
 - The planner gave the rate table to one worker and told the others to use "the rate-code map
   supplied by Worker 1", which no worker can receive.
+- **Giving every worker the rate table** (replay R1: the planner's blocks and briefs unchanged,
+  the rate-table rows added to every slice) brings the four-worker swarm to **9 of 12 on all three
+  seeds** (originals: 3, 1 and 4).
 - **One sentence added to the planner's prompt** ("Workers cannot communicate with each other,
-  and each worker sees only its own rows.") brings the swarm to **9 of 12**. The 3 far pairs come
-  back in no replay, because no worker ever holds both rows.
+  and each worker sees only its own rows.", replay R4) finds **9, 9 and 0** of 12 on the same
+  three seeds. It matches the table fix only when the planner responds by handing every worker
+  the table; in seed 3 the planner still gave the table to worker 1 only, and all four workers
+  returned empty lists.
+- At four workers, the 3 far pairs come back in no replay on any seed: no worker ever holds both
+  rows of a pair.
 
 Across all nine runs (seeds 1-3 × 2, 4 and 8 workers), the single agent averages 86% recall and the
 swarm 22-39%, and the merger never drops an item a worker reported. On a first ledger where every

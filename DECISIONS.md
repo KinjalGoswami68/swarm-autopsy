@@ -700,3 +700,23 @@ reads only "Built by Kinjal Goswami · source on GitHub". This overrides the SIT
 "The footer says so in one line"; SITE_RULES.md itself is left as written. The rest of that rule
 still holds: Acyclic's name appears only as the SwarmBench credit in the method section and the
 README, never as branding.
+
+## D35. Landing section 5 leads with the fix that holds on every seed
+
+**Owner decision (2026-11-17), after all 36 replays finished.** At W=4, from the run files:
+R1 (rate table to every worker) finds 9 of 12 on seeds 1, 2 and 3 (originals 3, 1 and 4);
+R4 (one sentence to the planner) finds 9, 9 and 0. In seed 3, R4's planner still gave the rate
+table to worker 1 only, and all four workers returned empty lists.
+
+- **Section 5's headline is now the R1 result**, computed from the files ("Give every worker the rate
+  table: 9 of 12 on all three seeds" when every seed agrees, a per-seed list otherwise), with a
+  per-seed table: original run, R1, R4. The quoted planner sentence stays, as the first fix tried,
+  with R4's per-seed results and one computed sentence for each seed where R4 did worse than R1.
+  The clause "it matches the table fix only when the planner responds by handing every worker the
+  table" is printed only if every seed bears it out.
+- **The "one run" note** now reads: the story above is one run (seed 1 at W=4); this section shows
+  all three seeds at W=4; the nine-run table has every setting; replays done: 36 of 36.
+- **The ASCII stage for section 5** shows R1 (the original blocks with the table added to every
+  worker, R1's kept rows lit) instead of R4, with a caption computed from R1.
+- **README** headline bullets updated the same way; the far-pair claim is limited to W=4, where no
+  replay on any seed recovers a far pair (some no-split replays at W=2 and W=8 do).
