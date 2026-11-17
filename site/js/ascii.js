@@ -21,9 +21,21 @@ function hash(n) { // deterministic 0..1 per glyph, so the scatter looks the sam
 }
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
+// D36: below 1000px the canvas is not shown and the engine does no work at all: the only thing
+// registered is this one media-query listener, so the engine can start if the window widens.
 export function startAscii(stage, model, sections) {
-  const canvas = stage.querySelector("canvas");
   const wide = matchMedia("(min-width: 1000px)");
+  let engine = null;
+  const onChange = () => {
+    if (wide.matches) { if (!engine) engine = boot(stage, model, sections, wide); else engine.resume(); }
+    else if (engine) engine.pause();
+  };
+  wide.addEventListener("change", onChange);
+  if (wide.matches) onChange();
+}
+
+function boot(stage, model, sections, wide) {
+  const canvas = stage.querySelector("canvas");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const ctx = canvas.getContext("2d");
   const caption = stage.querySelector(".ascii-caption");
@@ -147,6 +159,7 @@ export function startAscii(stage, model, sections) {
   function applyScene(name, instant) {
     if (!SCENES[name]) return;
     scene = name;
+    if (!active || !atlas) return; // paused (narrow window): remember the scene, do nothing else
     current = SCENES[name]();
     if (caption) caption.textContent = (model.captions || {})[name] || "";
     cacheValid = false;
@@ -223,7 +236,7 @@ export function startAscii(stage, model, sections) {
   // so scene changes do not pay for it in a frame
   let prebuildJob = 0;
   function prebuild() {
-    if (!current) return;
+    if (!current || !active || !atlas) return;
     const want = [];
     for (let ti = 0; ti < tokens.length; ti++) {
       const tg = current.targets[ti];
@@ -383,37 +396,60 @@ export function startAscii(stage, model, sections) {
     else { running = false; lastFrame = 0; }
   }
   function kick() {
-    if (!wide.matches) return;
+    if (!active || !wide.matches) return;
     if (reduce.matches) { step(performance.now()); draw(performance.now()); return; }
     if (!running && visible && !document.hidden) { running = true; frame = requestAnimationFrame(loop); }
   }
 
-  // ---- wiring
-  function init() {
-    if (!wide.matches) return false;
+  // ---- wiring: attached on resume(), removed on pause() (D36)
+  let active = false;
+  const handlers = {
+    onPointerMove: (e) => {
+      if (reduce.matches) return;
+      const r = canvas.getBoundingClientRect();
+      pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; lastPointer = performance.now(); kick();
+    },
+    onPointerLeave: () => { pointer = null; lastPointer = performance.now(); kick(); },
+    onScroll: () => { lastScroll = performance.now(); kick(); },
+    onVisibility: () => { if (!document.hidden) kick(); },
+    onReduce: () => applyScene(scene, true),
+  };
+  let io = null, visIo = null, ro = null;
+  function resume() {
+    if (active || !wide.matches) return;
+    active = true;
     measure();
+    io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) applyScene(e.target.dataset.scene, reduce.matches);
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    sections.forEach((s) => s.dataset.scene && io.observe(s));
+    visIo = new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) kick(); });
+    visIo.observe(stage);
+    ro = new ResizeObserver(() => { if (!active) return; measure(); applyScene(scene, true); });
+    ro.observe(stage);
+    stage.addEventListener("pointermove", handlers.onPointerMove, { passive: true });
+    stage.addEventListener("pointerleave", handlers.onPointerLeave, { passive: true });
+    addEventListener("scroll", handlers.onScroll, { passive: true });
+    document.addEventListener("visibilitychange", handlers.onVisibility);
+    reduce.addEventListener("change", handlers.onReduce);
     applyScene(scene, true);
-    return true;
   }
-  let ready = false;
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) applyScene(e.target.dataset.scene, reduce.matches);
-  }, { rootMargin: "-40% 0px -55% 0px" });
-  sections.forEach((s) => s.dataset.scene && io.observe(s));
-  new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(stage);
-  new ResizeObserver(() => { if (!wide.matches) return; ready = true; measure(); applyScene(scene, true); }).observe(stage);
-  stage.addEventListener("pointermove", (e) => {
-    if (reduce.matches) return;
-    const r = canvas.getBoundingClientRect();
-    pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; lastPointer = performance.now(); kick();
-  }, { passive: true });
-  stage.addEventListener("pointerleave", () => { pointer = null; lastPointer = performance.now(); kick(); }, { passive: true });
-  addEventListener("scroll", () => { lastScroll = performance.now(); kick(); }, { passive: true });
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) kick(); });
-  reduce.addEventListener("change", () => applyScene(scene, true));
-  wide.addEventListener("change", () => { if (wide.matches) init(); });
-  (document.fonts ? document.fonts.load('12px "JetBrains Mono"') : Promise.resolve()).then(() => { ready = init() || ready; });
+  function pause() {
+    if (!active) return;
+    active = false;
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0; running = false;
+    prebuildJob++; // cancels pending idle pre-rendering
+    io.disconnect(); visIo.disconnect(); ro.disconnect();
+    stage.removeEventListener("pointermove", handlers.onPointerMove);
+    stage.removeEventListener("pointerleave", handlers.onPointerLeave);
+    removeEventListener("scroll", handlers.onScroll);
+    document.removeEventListener("visibilitychange", handlers.onVisibility);
+    reduce.removeEventListener("change", handlers.onReduce);
+  }
+  (document.fonts ? document.fonts.load('12px "JetBrains Mono"') : Promise.resolve()).then(resume);
 
-  window.__ascii = { glyphs: glyphs.length, scene: () => scene, // for the performance check
+  window.__ascii = { glyphs: glyphs.length, scene: () => scene, active: () => active, // for the checks
     stats: () => ({ frames: stats.frames, avg_ms: +(stats.ms / Math.max(1, stats.frames)).toFixed(2), max_ms: +stats.max.toFixed(2), lite }) };
+  return { resume, pause };
 }

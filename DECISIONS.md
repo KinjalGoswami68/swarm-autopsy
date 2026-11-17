@@ -720,3 +720,26 @@ table to worker 1 only, and all four workers returned empty lists.
   worker, R1's kept rows lit) instead of R4, with a caption computed from R1.
 - **README** headline bullets updated the same way; the far-pair claim is limited to W=4, where no
   replay on any seed recovers a far pair (some no-split replays at W=2 and W=8 do).
+
+## D36. ASCII engine does no work when the canvas is hidden; error check; size-M run dropped
+
+**Bug (owner report, 2026-11-17):** below 1000 px the canvas is hidden, but the engine still built
+its rows and observers; scrolling triggered `applyScene` → idle pre-rendering → `tokenImage` with
+no glyph atlas, throwing `TypeError: Cannot read properties of null` (`ascii.js:215`) at 360, 800
+and 999 px.
+
+**Fix:** `startAscii` is now a gate. Below 1000 px it registers one media-query listener (the only
+way to notice the window widening) and nothing else: no rows, no observers, no listeners, no
+pre-rendering. The engine is built the first time the canvas is shown. If the window narrows again
+it pauses: observers disconnected, listeners removed, the animation frame and pending idle work
+cancelled; it resumes when the window widens.
+
+**Check (`tools/check_errors.mjs`):** loads index, explorer and try at 360, 800, 999, 1000 and
+1440 px, scrolls the landing page top to bottom, and resizes the landing page 1440 → 800 → 1440;
+it fails on any page error, console error or failed request, and reports whether the engine is
+built and active. The check also caught a `favicon.ico` 404 on first load; each page now has an
+inline SVG icon (a data URI, so no request). Result: zero errors at every width; engine not built
+below 1000 px, active at 1000 and 1440, paused at 800 after the resize and active again at 1440.
+
+**Gemini size-M run:** dropped (owner). It never completed (HTTP 503, Google's servers overloaded,
+on 2026-11-13), and it is not needed.
