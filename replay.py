@@ -33,6 +33,39 @@ TRUTH_SENTENCE = ("Workers cannot communicate with each other, and each worker s
 _ANCHOR = "Their reports will then be combined into one final answer."
 
 REPLAY_DIR = Path(__file__).parent / "runs" / "replays"
+# Guidance replays (D37) live apart from R1-R4 so build_site.py does not publish them yet.
+GUIDANCE_DIR = Path(__file__).parent / "runs" / "guidance"
+GUIDANCE_LINE = "Delegation guidance:"
+R5_FILE = Path(__file__).parent / "protocol" / "acyclic-delegation.md"
+R5_NAME = "Acyclic delegation guidance"
+
+
+def git_blob_sha(data):
+    """The id git gives these bytes as a blob (same as `git hash-object --no-filters`)."""
+    import hashlib
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
+def load_guidance(path, label=None, name=None):
+    """Planner guidance read byte for byte from `path` (D37). Label defaults to G-<blob prefix>."""
+    path = Path(path)
+    data = path.read_bytes()
+    sha = git_blob_sha(data)
+    try:
+        shown = path.resolve().relative_to(Path(__file__).parent.resolve()).as_posix()
+    except ValueError:
+        shown = path.name
+    return {"label": label or f"G-{sha[:8]}", "name": name or f"planner guidance from {path.name}",
+            "text": data.decode("utf-8"), "file": shown, "git_blob": sha, "bytes": len(data)}
+
+
+def r5_guidance():
+    return load_guidance(R5_FILE, "R5", R5_NAME)
+
+
+def guidance_planner_prompt(task, workers, text):
+    """The frozen planner prompt with the guidance text appended verbatim under GUIDANCE_LINE."""
+    return f"{ledger2.planner_prompt(task, workers)}\n\n{GUIDANCE_LINE}\n{text}"
 
 
 def regenerate(run):
@@ -63,9 +96,13 @@ def _reused(orig_stage):
     return out
 
 
-def replay(run, label):
-    """Return the replay record for `label` (see module docstring). Model calls are cached."""
-    assert label in REPLAYS
+def replay(run, label, guidance=None):
+    """Return the replay record for `label` (see module docstring). Model calls are cached.
+    With `guidance` (load_guidance()), the planner prompt gets that text appended (D37)."""
+    if guidance:
+        label = guidance["label"]
+    else:
+        assert label in REPLAYS
     task = regenerate(run)
     fam = swarm.family(task)
     cfg = _cfg(run)
@@ -73,8 +110,13 @@ def replay(run, label):
     tid = task["task_id"]
     orig = run["swarm"]
 
-    if label == "R4":
-        plan_call = swarm._call(cfg, truth_planner_prompt(task, W), [tid, "replay", label, "planner", W])
+    new_planner = label == "R4" or bool(guidance)
+    # D29 reuse rule: a byte-identical worker/merger prompt reuses the original output. Applied to
+    # guidance replays (D37); the R4 code never applied it, and stays as it ran.
+    reuse_ok = label != "R4"
+    if new_planner:
+        prompt = guidance_planner_prompt(task, W, guidance["text"]) if guidance else truth_planner_prompt(task, W)
+        plan_call = swarm._call(cfg, prompt, [tid, "replay", label, "planner", W])
         assignments, notes = swarm.parse_plan(plan_call["raw_text"], fam.n_rows(task), W)
         planner = {"call": plan_call, "status": swarm._status(plan_call, assignments or None),
                    "parsed_ok": bool(assignments), "parse_notes": notes,
@@ -93,7 +135,7 @@ def replay(run, label):
             brief = NEUTRAL_BRIEF
         rows = fam.rows_in_ranges(task["rows"], ranges)
         prompt = fam.worker_prompt(brief, rows)
-        before = orig["workers"][i - 1] if label != "R4" and i <= len(orig["workers"]) else None
+        before = orig["workers"][i - 1] if reuse_ok and i <= len(orig["workers"]) else None
         if before and before["call"] and before["call"]["prompt"] == prompt:
             w = _reused(before)
             w["ranges"] = ranges
@@ -114,7 +156,7 @@ def replay(run, label):
     if workers:
         m_prompt = fam.merger_prompt(task, reports)
         om = orig["merger"]
-        if label != "R4" and om.get("call") and om["call"]["prompt"] == m_prompt:
+        if reuse_ok and om.get("call") and om["call"]["prompt"] == m_prompt:
             merger = _reused(om)
         else:
             m_call = swarm._call(cfg, m_prompt, [tid, "replay", label, "merger", W])
@@ -132,18 +174,26 @@ def replay(run, label):
     rec["run_id"] = f"{run['run_id']}__{label}"
     rec["created_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     rec["swarm"] = {"planner": planner, "workers": workers, "merger": merger}
-    rec["replay"] = {"of": run["run_id"], "label": label, "name": REPLAYS[label],
-                     "change": {"R1": "rate-table rows added to every worker's slice",
-                                "R2": f"every brief replaced by: {NEUTRAL_BRIEF}",
-                                "R3": "R1 and R2 together",
-                                "R4": f"planner prompt + sentence: {TRUTH_SENTENCE}"}[label],
+    if guidance:
+        change = (f"planner prompt + a line \"{GUIDANCE_LINE}\" + {guidance['file']} verbatim "
+                  f"({guidance['bytes']} bytes, git blob {guidance['git_blob']})")
+        name = guidance["name"]
+    else:
+        change = {"R1": "rate-table rows added to every worker's slice",
+                  "R2": f"every brief replaced by: {NEUTRAL_BRIEF}",
+                  "R3": "R1 and R2 together",
+                  "R4": f"planner prompt + sentence: {TRUTH_SENTENCE}"}[label]
+        name = REPLAYS[label]
+    rec["replay"] = {"of": run["run_id"], "label": label, "name": name, "change": change,
                      "baseline": "copied from the original run (not re-run)"}
-    calls = [planner.get("call") if label == "R4" else None,
+    if guidance:
+        rec["replay"]["guidance"] = {k: guidance[k] for k in ("file", "git_blob", "bytes", "text")}
+    calls = [planner.get("call") if new_planner else None,
              *[w["call"] for w in workers if not w.get("reused_from_original")],
              merger.get("call") if not merger.get("reused_from_original") else None]
     rec["usage"] = {"replay_new_calls": swarm._usage(calls)}
     return rec
 
 
-def path_for(run, label):
-    return REPLAY_DIR / f"{run['run_id']}__{label}.json"
+def path_for(run, label, guidance=None):
+    return (GUIDANCE_DIR if guidance else REPLAY_DIR) / f"{run['run_id']}__{label}.json"

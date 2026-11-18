@@ -124,17 +124,24 @@ def why_table(runs):
 def cmd_replay(args):
     agent.BUDGET = agent.RequestBudget(rpd=args.rpd)
     agent.PACER = agent.Pacer(itpm=args.tpm, combined=True) if args.tpm else agent.Pacer(itpm=0)
+    # D37: --planner-guidance FILE adds one guidance replay; "R5" is Acyclic's delegation text
+    jobs = [(label, None) for label in args.replays if label != "R5"]
+    if "R5" in args.replays:
+        jobs.append(("R5", replay.r5_guidance()))
+    if args.planner_guidance:
+        g = replay.load_guidance(args.planner_guidance, args.guidance_label)
+        jobs.append((g["label"], g))
     for path in args.run_files:
         run = runfile.load(path)
         agent.set_endpoint(run["config"]["endpoint"])
-        for label in args.replays:
-            out = replay.path_for(run, label)
+        for label, guidance in jobs:
+            out = replay.path_for(run, label, guidance)
             if out.exists() and not args.force:
                 print(f"{out.name}: exists, skipped", flush=True)
                 continue
             start = time.monotonic()
             try:
-                rec = replay.replay(run, label)
+                rec = replay.replay(run, label, guidance)
             except agent.RateLimitStop as e:
                 print(f"STOPPED by rate limit: {e}\nRe-run the same command later; cached calls are "
                       "replayed and finished replays are skipped.", flush=True)
@@ -376,7 +383,11 @@ def main(argv=None):
 
     rp = sub.add_parser("replay", help="stage 2 counterfactual replays (D29)")
     rp.add_argument("run_files", nargs="+")
-    rp.add_argument("--replays", nargs="+", default=list(replay.REPLAYS), choices=list(replay.REPLAYS))
+    rp.add_argument("--replays", nargs="*", default=list(replay.REPLAYS), choices=[*replay.REPLAYS, "R5"],
+                    help="R1-R4 (D29); R5 = Acyclic's delegation text as planner guidance (D37)")
+    rp.add_argument("--planner-guidance", metavar="FILE",
+                    help="append FILE verbatim to the planner prompt under 'Delegation guidance:' (D37)")
+    rp.add_argument("--guidance-label", help="label for --planner-guidance (default G-<git blob prefix>)")
     rp.add_argument("--tpm", type=int, default=8000)
     rp.add_argument("--rpd", type=int, default=1000)
     rp.add_argument("--force", action="store_true")

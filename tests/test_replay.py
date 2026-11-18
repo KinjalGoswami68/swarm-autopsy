@@ -99,3 +99,55 @@ def test_original_file_never_changes_and_table(stored, capsys):
     assert out.count("| S s1 W=4 |") == 5
     rec = runfile.load(next(replay.REPLAY_DIR.glob("*__R1.json")))
     assert autopsy.swarm_autopsy(rec)["key_count"] == 12
+
+
+# ---------- D37: planner guidance replays (R5 = Acyclic's delegation text) ----------
+
+def test_protocol_file_is_byte_identical_to_source_blob():
+    g = replay.r5_guidance()
+    assert g["git_blob"] == "d9b9a8fa1d4325572ab1cb933b1e0320392cfef3" and g["bytes"] == 497
+
+
+def test_r5_planner_prompt_is_frozen_plus_guidance(stored, monkeypatch, tmp_path):
+    path, fake, task = stored
+    monkeypatch.setattr(replay, "GUIDANCE_DIR", tmp_path / "guidance")
+    g = replay.r5_guidance()
+    rec = replay.replay(runfile.load(path), "R5", g)
+    planner_calls = [p for cid, p in fake.calls if cid[3] == "planner"]
+    assert len(planner_calls) == 1
+    assert planner_calls[0] == ledger2.planner_prompt(task, 4) + "\n\nDelegation guidance:\n" + g["text"]
+    assert rec["replay"]["label"] == "R5" and rec["replay"]["guidance"]["git_blob"] == g["git_blob"]
+    assert rec["run_id"].endswith("__R5")
+    assert replay.path_for(rec, "R5", g).parent == tmp_path / "guidance"
+
+
+def test_guidance_replay_applies_reuse_rule(stored):
+    path, fake, task = stored
+    rec = replay.replay(runfile.load(path), "R5", replay.r5_guidance())
+    # the fake planner returns the same even split, so every worker prompt and the merger prompt
+    # are byte-identical to the original's and are reused (D29), not re-called
+    assert all(w["reused_from_original"] for w in rec["swarm"]["workers"])
+    assert rec["swarm"]["merger"]["reused_from_original"] is True
+    assert [cid[3] for cid, _ in fake.calls] == ["planner"]
+
+
+def test_custom_guidance_file_label_and_cli(stored, monkeypatch, tmp_path, capsys):
+    path, fake, task = stored
+    monkeypatch.setattr(replay, "GUIDANCE_DIR", tmp_path / "guidance")
+    gfile = tmp_path / "my-guidance.md"
+    gfile.write_bytes(b"Give each worker every row it needs.\n")
+    g = replay.load_guidance(gfile)
+    assert g["label"] == "G-" + replay.git_blob_sha(b"Give each worker every row it needs.\n")[:8]
+    cli.main(["replay", str(path), "--replays", "--planner-guidance", str(gfile), "--tpm", "0"])
+    out = list((tmp_path / "guidance").glob("*.json"))
+    assert len(out) == 1 and out[0].name.endswith(f"__{g['label']}.json")
+    assert runfile.load(out[0])["replay"]["guidance"]["text"] == "Give each worker every row it needs.\n"
+
+
+def test_guidance_replays_are_not_published():
+    import build_site
+    import tempfile
+    from pathlib import Path
+    with tempfile.TemporaryDirectory() as d:
+        m = build_site.build(Path(d) / "_site")
+    assert not any("guidance" in p for p in m["runs"] + m["replays"])

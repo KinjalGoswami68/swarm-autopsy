@@ -743,3 +743,32 @@ below 1000 px, active at 1000 and 1440, paused at 800 after the resize and activ
 
 **Gemini size-M run:** dropped (owner). It never completed (HTTP 503, Google's servers overloaded,
 on 2026-11-13), and it is not needed.
+
+## D37. Replay R5: Acyclic's delegation text as planner guidance; general --planner-guidance
+
+**Owner decision (2026-11-18).**
+
+- **Source text.** `protocol/acyclic-delegation.md` is a byte-for-byte copy of
+  `rust/crates/harness-core/src/seed/delegation.md` from `acyclic-labs/sdk` at HEAD `92fd222`
+  (pulled 2026-11-18; the file was last changed in `3d38d4f`, 2026-11-14), git blob
+  `d9b9a8fa1d4325572ab1cb933b1e0320392cfef3`, 497 bytes, Apache-2.0. Copied from the git object
+  (the local clone is sparse and does not write `seed/` to disk) and verified with `git hash-object`.
+  The source's LICENSE and NOTICE are copied beside it, as Apache-2.0 requires.
+  Details: `protocol/PROVENANCE.md`.
+- **General flag.** `cli.py replay --planner-guidance FILE [--guidance-label L]`: the frozen
+  planner prompt (D22) with a line `Delegation guidance:` and FILE's full text appended verbatim;
+  a new planner call, then workers and merger as usual, with the run's own model and settings.
+  The label defaults to `G-<first 8 of the file's git blob id>`; the replay records the file, its
+  blob id, size and text. **R5** is this flag with `protocol/acyclic-delegation.md`
+  (`--replays R5`).
+- **Reuse rule.** As D29 states it: a worker or merger prompt byte-identical to the original's
+  reuses the original output. (The R4 code never applied the check; in practice it made no
+  difference: none of R4's 42 worker prompts or 9 merger prompts matched the original's.)
+- **Storage.** Guidance replays go to `runs/guidance/`, which `build_site.py` does not publish:
+  the site does not change yet (owner).
+- **Annotations.** The new briefs (R5), and those of R1 and R4 for the comparison table, are
+  judge-annotated as in D27/D28 (model-read; never a score).
+- **Limit, stated plainly.** In Acyclic's harness a child agent can read the parent's files; in this
+  harness a worker sees only its brief and its slice of rows, and the planner can only split once
+  into W parallel workers (no "atomic" self-execution, no sequential or speculative forks; the merger
+  is the only join). So R5 tests **their guidance sentence inside this harness, not their system.**
