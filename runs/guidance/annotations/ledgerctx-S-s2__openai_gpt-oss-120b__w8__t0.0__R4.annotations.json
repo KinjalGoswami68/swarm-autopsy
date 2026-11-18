@@ -1,0 +1,204 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 11‑17.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "record the line_id and shortfall (amount owed – paid) rounded to two decimals. Also identify any claim_id that appears more than once within rows 11‑17 and list those claim_ids.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "no",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 11‑17.\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"record the line_id and shortfall (amount owed – paid) rounded to two decimals. Also identify any claim_id that appears more than once within rows 11‑17 and list those claim_ids.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 520,
+   "completion_tokens": 435,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 18‑24.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Report any line where paid < owed with line_id and shortfall (two‑decimal). Also report any claim_id that occurs more than once within rows 18‑24.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 18‑24.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report any line where paid < owed with line_id and shortfall (two‑decimal). Also report any claim_id that occurs more than once within rows 18‑24.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 483,
+   "completion_tokens": 367,
+   "cached": false
+  },
+  {
+   "worker": 3,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "If paid is less than owed, output the line_id and shortfall (owed‑paid) to two decimals. Also list any claim_id that appears more than once within rows 25‑31.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, output the line_id and shortfall (owed‑paid) to two decimals. Also list any claim_id that appears more than once within rows 25‑31.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 493,
+   "completion_tokens": 270,
+   "cached": false
+  },
+  {
+   "worker": 4,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Record any line where paid < owed, giving line_id and shortfall (rounded to two decimals). Also identify claim_id values that occur more than once within rows 32‑38.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Record any line where paid < owed, giving line_id and shortfall (rounded to two decimals). Also identify claim_id values that occur more than once within rows 32‑38.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 489,
+   "completion_tokens": 341,
+   "cached": false
+  },
+  {
+   "worker": 5,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 39‑45.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "If paid is less than owed, output line_id and shortfall (two‑decimal). Also list any claim_id that appears multiple times within rows 39‑45.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 39‑45.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, output line_id and shortfall (two‑decimal). Also list any claim_id that appears multiple times within rows 39‑45.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 484,
+   "completion_tokens": 311,
+   "cached": false
+  },
+  {
+   "worker": 6,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Report any line where paid < owed with line_id and shortfall (rounded to two decimals). Also report any claim_id that occurs more than once within rows 46‑52.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Report any line where paid < owed with line_id and shortfall (rounded to two decimals). Also report any claim_id that occurs more than once within rows 46‑52.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 485,
+   "completion_tokens": 280,
+   "cached": false
+  },
+  {
+   "worker": 7,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "If paid is less than owed, record line_id and shortfall (two‑decimal). Also identify any claim_id that appears more than once within rows 53‑59.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, record line_id and shortfall (two‑decimal). Also identify any claim_id that appears more than once within rows 53‑59.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 489,
+   "completion_tokens": 352,
+   "cached": false
+  },
+  {
+   "worker": 8,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "For any line where paid < owed, output the line_id and shortfall (rounded to two decimals). Also list any claim_id that occurs more than once within rows 60‑70.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "no",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"For any line where paid < owed, output the line_id and shortfall (rounded to two decimals). Also list any claim_id that occurs more than once within rows 60‑70.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 486,
+   "completion_tokens": 470,
+   "cached": false
+  }
+ ]
+}

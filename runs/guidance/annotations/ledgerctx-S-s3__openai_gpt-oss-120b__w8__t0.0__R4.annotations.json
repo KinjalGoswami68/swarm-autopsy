@@ -1,0 +1,203 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid < amount owed, record the line as underpaid with shortfall = (amount owed – paid) rounded to two decimals.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount owed, record the line as underpaid with shortfall = (amount owed – paid) rounded to two decimals.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 535,
+   "completion_tokens": 237,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 263,
+   "cached": false
+  },
+  {
+   "worker": 3,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 246,
+   "cached": false
+  },
+  {
+   "worker": 4,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 247,
+   "cached": false
+  },
+  {
+   "worker": 5,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 251,
+   "cached": false
+  },
+  {
+   "worker": 6,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "Using rows 1‑10 (rate table) and rows 46‑52 (line items), perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using rows 1‑10 (rate table) and rows 46‑52 (line items), perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 321,
+   "cached": false
+  },
+  {
+   "worker": 7,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "Using rows 1‑10 (rate table) and rows 53‑59 (line items), perform the same analysis as described for worker 1.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Using rows 1‑10 (rate table) and rows 53‑59 (line items), perform the same analysis as described for worker 1.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 295,
+   "cached": false
+  },
+  {
+   "worker": 8,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "perform the same analysis as described for worker 1",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output a JSON object with keys \"underpaid\" and \"claims\".",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "no",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"perform the same analysis as described for worker 1\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"Output a JSON object with keys \\\"underpaid\\\" and \\\"claims\\\".\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 435,
+   "completion_tokens": 479,
+   "cached": false
+  }
+ ]
+}

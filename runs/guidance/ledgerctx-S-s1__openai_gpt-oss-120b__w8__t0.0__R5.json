@@ -1,0 +1,1726 @@
+{
+ "schema_version": 2,
+ "run_id": "ledgerctx-S-s1__openai_gpt-oss-120b__w8__t0.0__R5",
+ "created_utc": "2026-11-18T07:01:01+00:00",
+ "config": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low",
+  "workers": 8,
+  "max_tokens": null,
+  "max_tokens_total": 8000,
+  "tpm": 8000,
+  "itpm": 0,
+  "otpm": 0
+ },
+ "task": {
+  "family": "ledger-ctx",
+  "task_id": "ledgerctx-S-s1",
+  "size": "S",
+  "seed": 1,
+  "n_lines": 60,
+  "n_rate_codes": 10,
+  "n_rows": 70,
+  "counts": {
+   "line": 4,
+   "context": 4,
+   "far_pair": 3,
+   "near_pair": 1
+  },
+  "task_text": "You are auditing a remittance ledger with two sections. The rate table lists rate codes and their unit rates. Each line item is one billed service; it gives either its own unit_rate or a rate_code whose unit rate is in the rate table. The amount owed for a line is qty x unit rate. A line is UNDERPAID when paid is less than the amount owed; its shortfall is (amount owed) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported as underpaid. A claim is DUPLICATED when the same claim_id appears on more than one line item (billed more than once). Find every underpaid line and every duplicated claim.",
+  "structure_text": "The ledger has 70 rows. Rows 1 to 10 are the rate table, with columns:\nrow,rate_code,unit_rate\nRows 11 to 70 are line items, with columns:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\nA line item gives either its own unit_rate or a rate_code defined in the rate table. A claim_id may appear on more than one line item.\nYou will not see the rows themselves.",
+  "rate_columns": [
+   "row",
+   "rate_code",
+   "unit_rate"
+  ],
+  "line_columns": [
+   "row",
+   "line_id",
+   "claim_id",
+   "qty",
+   "unit_rate",
+   "rate_code",
+   "paid"
+  ],
+  "rows": [
+   {
+    "row": 1,
+    "id": "RATE:RC-B2L",
+    "rate_code": "RC-B2L",
+    "unit_rate_cents": 22167
+   },
+   {
+    "row": 2,
+    "id": "RATE:RC-7XG",
+    "rate_code": "RC-7XG",
+    "unit_rate_cents": 6103
+   },
+   {
+    "row": 3,
+    "id": "RATE:RC-XGL",
+    "rate_code": "RC-XGL",
+    "unit_rate_cents": 12540
+   },
+   {
+    "row": 4,
+    "id": "RATE:RC-6CW",
+    "rate_code": "RC-6CW",
+    "unit_rate_cents": 6150
+   },
+   {
+    "row": 5,
+    "id": "RATE:RC-BAN",
+    "rate_code": "RC-BAN",
+    "unit_rate_cents": 4180
+   },
+   {
+    "row": 6,
+    "id": "RATE:RC-EMU",
+    "rate_code": "RC-EMU",
+    "unit_rate_cents": 3441
+   },
+   {
+    "row": 7,
+    "id": "RATE:RC-GRY",
+    "rate_code": "RC-GRY",
+    "unit_rate_cents": 12779
+   },
+   {
+    "row": 8,
+    "id": "RATE:RC-KNJ",
+    "rate_code": "RC-KNJ",
+    "unit_rate_cents": 1816
+   },
+   {
+    "row": 9,
+    "id": "RATE:RC-7V7",
+    "rate_code": "RC-7V7",
+    "unit_rate_cents": 25732
+   },
+   {
+    "row": 10,
+    "id": "RATE:RC-MLR",
+    "rate_code": "RC-MLR",
+    "unit_rate_cents": 20874
+   },
+   {
+    "row": 11,
+    "line_id": "RX-53AMY",
+    "claim_id": "CL-D4YGAR",
+    "qty": 1,
+    "unit_rate_cents": 7257,
+    "rate_code": null,
+    "paid_cents": 7257
+   },
+   {
+    "row": 12,
+    "line_id": "RX-TDM9R",
+    "claim_id": "CL-ZACBH5",
+    "qty": 5,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 9080
+   },
+   {
+    "row": 13,
+    "line_id": "RX-4R796",
+    "claim_id": "CL-5TXMW4",
+    "qty": 24,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 43584
+   },
+   {
+    "row": 14,
+    "line_id": "RX-S39V6",
+    "claim_id": "CL-KAK6KC",
+    "qty": 2,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 4286
+   },
+   {
+    "row": 15,
+    "line_id": "RX-WT4VY",
+    "claim_id": "CL-NFW8AE",
+    "qty": 9,
+    "unit_rate_cents": null,
+    "rate_code": "RC-GRY",
+    "paid_cents": 115011
+   },
+   {
+    "row": 16,
+    "line_id": "RX-N2RYF",
+    "claim_id": "CL-4UU92F",
+    "qty": 17,
+    "unit_rate_cents": null,
+    "rate_code": "RC-7XG",
+    "paid_cents": 103751
+   },
+   {
+    "row": 17,
+    "line_id": "RX-DWAMQ",
+    "claim_id": "CL-BUGATV",
+    "qty": 36,
+    "unit_rate_cents": null,
+    "rate_code": "RC-6CW",
+    "paid_cents": 291576
+   },
+   {
+    "row": 18,
+    "line_id": "RX-956HN",
+    "claim_id": "CL-BS4FMT",
+    "qty": 27,
+    "unit_rate_cents": 30519,
+    "rate_code": null,
+    "paid_cents": 824013
+   },
+   {
+    "row": 19,
+    "line_id": "RX-SEXMM",
+    "claim_id": "CL-5S74GS",
+    "qty": 2,
+    "unit_rate_cents": 35994,
+    "rate_code": null,
+    "paid_cents": 71988
+   },
+   {
+    "row": 20,
+    "line_id": "RX-H4LJE",
+    "claim_id": "CL-PT6BV5",
+    "qty": 34,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 753678
+   },
+   {
+    "row": 21,
+    "line_id": "RX-KU3NV",
+    "claim_id": "CL-EHS3TK",
+    "qty": 39,
+    "unit_rate_cents": null,
+    "rate_code": "RC-GRY",
+    "paid_cents": 498381
+   },
+   {
+    "row": 22,
+    "line_id": "RX-7GKGZ",
+    "claim_id": "CL-QCBNQN",
+    "qty": 16,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 29056
+   },
+   {
+    "row": 23,
+    "line_id": "RX-JXTLG",
+    "claim_id": "CL-CZBTUD",
+    "qty": 18,
+    "unit_rate_cents": 25726,
+    "rate_code": null,
+    "paid_cents": 463068
+   },
+   {
+    "row": 24,
+    "line_id": "RX-ATM4V",
+    "claim_id": "CL-Y4QZVY",
+    "qty": 14,
+    "unit_rate_cents": 22904,
+    "rate_code": null,
+    "paid_cents": 342207
+   },
+   {
+    "row": 25,
+    "line_id": "RX-ZMKAD",
+    "claim_id": "CL-45V2Z4",
+    "qty": 40,
+    "unit_rate_cents": 10742,
+    "rate_code": null,
+    "paid_cents": 387640
+   },
+   {
+    "row": 26,
+    "line_id": "RX-6DVVX",
+    "claim_id": "CL-GWUD99",
+    "qty": 26,
+    "unit_rate_cents": 12975,
+    "rate_code": null,
+    "paid_cents": 406643
+   },
+   {
+    "row": 27,
+    "line_id": "RX-5F3M5",
+    "claim_id": "CL-ECKAZX",
+    "qty": 26,
+    "unit_rate_cents": null,
+    "rate_code": "RC-GRY",
+    "paid_cents": 332254
+   },
+   {
+    "row": 28,
+    "line_id": "RX-HZKWW",
+    "claim_id": "CL-LUTFVK",
+    "qty": 24,
+    "unit_rate_cents": null,
+    "rate_code": "RC-EMU",
+    "paid_cents": 57380
+   },
+   {
+    "row": 29,
+    "line_id": "RX-SYEHS",
+    "claim_id": "CL-4JVLM7",
+    "qty": 40,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 886680
+   },
+   {
+    "row": 30,
+    "line_id": "RX-2VRQH",
+    "claim_id": "CL-GSXRUF",
+    "qty": 18,
+    "unit_rate_cents": null,
+    "rate_code": "RC-7V7",
+    "paid_cents": 463176
+   },
+   {
+    "row": 31,
+    "line_id": "RX-TP7VU",
+    "claim_id": "CL-VKTUKF",
+    "qty": 35,
+    "unit_rate_cents": 45369,
+    "rate_code": null,
+    "paid_cents": 1587915
+   },
+   {
+    "row": 32,
+    "line_id": "RX-5TXX6",
+    "claim_id": "CL-EQA2EE",
+    "qty": 20,
+    "unit_rate_cents": null,
+    "rate_code": "RC-BAN",
+    "paid_cents": 100439
+   },
+   {
+    "row": 33,
+    "line_id": "RX-QUPKV",
+    "claim_id": "CL-AQNCRP",
+    "qty": 3,
+    "unit_rate_cents": 8289,
+    "rate_code": null,
+    "paid_cents": 24867
+   },
+   {
+    "row": 34,
+    "line_id": "RX-ZHYJS",
+    "claim_id": "CL-VLDYGS",
+    "qty": 18,
+    "unit_rate_cents": null,
+    "rate_code": "RC-7V7",
+    "paid_cents": 369137
+   },
+   {
+    "row": 35,
+    "line_id": "RX-RNHXK",
+    "claim_id": "CL-QATEVU",
+    "qty": 1,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 22167
+   },
+   {
+    "row": 36,
+    "line_id": "RX-PNK47",
+    "claim_id": "CL-PN65U5",
+    "qty": 37,
+    "unit_rate_cents": 2500,
+    "rate_code": null,
+    "paid_cents": 70983
+   },
+   {
+    "row": 37,
+    "line_id": "RX-H6V7J",
+    "claim_id": "CL-DL72EB",
+    "qty": 20,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 443340
+   },
+   {
+    "row": 38,
+    "line_id": "RX-ZK7V8",
+    "claim_id": "CL-FVBW23",
+    "qty": 11,
+    "unit_rate_cents": null,
+    "rate_code": "RC-XGL",
+    "paid_cents": 137940
+   },
+   {
+    "row": 39,
+    "line_id": "RX-X2RLY",
+    "claim_id": "CL-DNZKRV",
+    "qty": 40,
+    "unit_rate_cents": null,
+    "rate_code": "RC-BAN",
+    "paid_cents": 167200
+   },
+   {
+    "row": 40,
+    "line_id": "RX-N3TXA",
+    "claim_id": "CL-XHRNSX",
+    "qty": 2,
+    "unit_rate_cents": null,
+    "rate_code": "RC-MLR",
+    "paid_cents": 41748
+   },
+   {
+    "row": 41,
+    "line_id": "RX-8WXFE",
+    "claim_id": "CL-VKUEQ9",
+    "qty": 1,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 1816
+   },
+   {
+    "row": 42,
+    "line_id": "RX-H8TXF",
+    "claim_id": "CL-3CFSXE",
+    "qty": 30,
+    "unit_rate_cents": null,
+    "rate_code": "RC-MLR",
+    "paid_cents": 626220
+   },
+   {
+    "row": 43,
+    "line_id": "RX-CDLLF",
+    "claim_id": "CL-52K5JR",
+    "qty": 37,
+    "unit_rate_cents": null,
+    "rate_code": "RC-EMU",
+    "paid_cents": 125029
+   },
+   {
+    "row": 44,
+    "line_id": "RX-EFLX2",
+    "claim_id": "CL-GZ7W66",
+    "qty": 3,
+    "unit_rate_cents": 37638,
+    "rate_code": null,
+    "paid_cents": 112914
+   },
+   {
+    "row": 45,
+    "line_id": "RX-MZ572",
+    "claim_id": "CL-2C42RF",
+    "qty": 14,
+    "unit_rate_cents": 19767,
+    "rate_code": null,
+    "paid_cents": 214453
+   },
+   {
+    "row": 46,
+    "line_id": "RX-GZVVL",
+    "claim_id": "CL-XKPN39",
+    "qty": 10,
+    "unit_rate_cents": null,
+    "rate_code": "RC-MLR",
+    "paid_cents": 170429
+   },
+   {
+    "row": 47,
+    "line_id": "RX-CYWJ4",
+    "claim_id": "CL-GGAGG3",
+    "qty": 20,
+    "unit_rate_cents": 21087,
+    "rate_code": null,
+    "paid_cents": 421740
+   },
+   {
+    "row": 48,
+    "line_id": "RX-4YDR4",
+    "claim_id": "CL-HBLAYQ",
+    "qty": 18,
+    "unit_rate_cents": 12954,
+    "rate_code": null,
+    "paid_cents": 233172
+   },
+   {
+    "row": 49,
+    "line_id": "RX-TTAEW",
+    "claim_id": "CL-TUZKNT",
+    "qty": 17,
+    "unit_rate_cents": null,
+    "rate_code": "RC-6CW",
+    "paid_cents": 104550
+   },
+   {
+    "row": 50,
+    "line_id": "RX-823VV",
+    "claim_id": "CL-BQRZDK",
+    "qty": 2,
+    "unit_rate_cents": 5981,
+    "rate_code": null,
+    "paid_cents": 15315
+   },
+   {
+    "row": 51,
+    "line_id": "RX-C9TVB",
+    "claim_id": "CL-T73MNY",
+    "qty": 39,
+    "unit_rate_cents": 36567,
+    "rate_code": null,
+    "paid_cents": 1395671
+   },
+   {
+    "row": 52,
+    "line_id": "RX-95H9X",
+    "claim_id": "CL-2UL2ZT",
+    "qty": 28,
+    "unit_rate_cents": 13892,
+    "rate_code": null,
+    "paid_cents": 388976
+   },
+   {
+    "row": 53,
+    "line_id": "RX-LBKCW",
+    "claim_id": "CL-7EJNYE",
+    "qty": 25,
+    "unit_rate_cents": 47015,
+    "rate_code": null,
+    "paid_cents": 1175375
+   },
+   {
+    "row": 54,
+    "line_id": "RX-B7SN9",
+    "claim_id": "CL-2UL2ZT",
+    "qty": 28,
+    "unit_rate_cents": 13892,
+    "rate_code": null,
+    "paid_cents": 388976
+   },
+   {
+    "row": 55,
+    "line_id": "RX-MX3CG",
+    "claim_id": "CL-WM74QC",
+    "qty": 26,
+    "unit_rate_cents": 39698,
+    "rate_code": null,
+    "paid_cents": 1375145
+   },
+   {
+    "row": 56,
+    "line_id": "RX-Q9Z3J",
+    "claim_id": "CL-RPZ9VX",
+    "qty": 18,
+    "unit_rate_cents": null,
+    "rate_code": "RC-7V7",
+    "paid_cents": 463176
+   },
+   {
+    "row": 57,
+    "line_id": "RX-2FFTA",
+    "claim_id": "CL-4UU92F",
+    "qty": 17,
+    "unit_rate_cents": null,
+    "rate_code": "RC-7XG",
+    "paid_cents": 103751
+   },
+   {
+    "row": 58,
+    "line_id": "RX-VT28H",
+    "claim_id": "CL-WQTFPS",
+    "qty": 39,
+    "unit_rate_cents": 27611,
+    "rate_code": null,
+    "paid_cents": 1076829
+   },
+   {
+    "row": 59,
+    "line_id": "RX-BPCRA",
+    "claim_id": "CL-7S859Q",
+    "qty": 16,
+    "unit_rate_cents": null,
+    "rate_code": "RC-EMU",
+    "paid_cents": 55056
+   },
+   {
+    "row": 60,
+    "line_id": "RX-22ZJV",
+    "claim_id": "CL-TFUPZY",
+    "qty": 7,
+    "unit_rate_cents": null,
+    "rate_code": "RC-MLR",
+    "paid_cents": 146118
+   },
+   {
+    "row": 61,
+    "line_id": "RX-V57JM",
+    "claim_id": "CL-UF3CYE",
+    "qty": 12,
+    "unit_rate_cents": 43172,
+    "rate_code": null,
+    "paid_cents": 518064
+   },
+   {
+    "row": 62,
+    "line_id": "RX-YUR76",
+    "claim_id": "CL-WHZX7N",
+    "qty": 21,
+    "unit_rate_cents": 4980,
+    "rate_code": null,
+    "paid_cents": 104580
+   },
+   {
+    "row": 63,
+    "line_id": "RX-ENC5G",
+    "claim_id": "CL-LVRRRW",
+    "qty": 19,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 421173
+   },
+   {
+    "row": 64,
+    "line_id": "RX-XZE7Q",
+    "claim_id": "CL-JTGZSD",
+    "qty": 3,
+    "unit_rate_cents": null,
+    "rate_code": "RC-BAN",
+    "paid_cents": 13938
+   },
+   {
+    "row": 65,
+    "line_id": "RX-5DQLS",
+    "claim_id": "CL-5D8BWY",
+    "qty": 31,
+    "unit_rate_cents": 5661,
+    "rate_code": null,
+    "paid_cents": 175491
+   },
+   {
+    "row": 66,
+    "line_id": "RX-UJ2CB",
+    "claim_id": "CL-AQNCRP",
+    "qty": 3,
+    "unit_rate_cents": 8289,
+    "rate_code": null,
+    "paid_cents": 24867
+   },
+   {
+    "row": 67,
+    "line_id": "RX-Z3J7J",
+    "claim_id": "CL-C9MMX2",
+    "qty": 8,
+    "unit_rate_cents": null,
+    "rate_code": "RC-KNJ",
+    "paid_cents": 14528
+   },
+   {
+    "row": 68,
+    "line_id": "RX-XRDVL",
+    "claim_id": "CL-RCBPJN",
+    "qty": 18,
+    "unit_rate_cents": null,
+    "rate_code": "RC-B2L",
+    "paid_cents": 399006
+   },
+   {
+    "row": 69,
+    "line_id": "RX-468SX",
+    "claim_id": "CL-FVBW23",
+    "qty": 11,
+    "unit_rate_cents": null,
+    "rate_code": "RC-XGL",
+    "paid_cents": 137940
+   },
+   {
+    "row": 70,
+    "line_id": "RX-XL9GZ",
+    "claim_id": "CL-R3AGWP",
+    "qty": 1,
+    "unit_rate_cents": 22336,
+    "rate_code": null,
+    "paid_cents": 22336
+   }
+  ],
+  "fixed_sentence": "This family is built so that splitting can hurt; its numbers show the autopsy detects split and context failures, not how often swarms lose in general."
+ },
+ "items": {
+  "universe": [
+   "RATE:RC-B2L",
+   "RATE:RC-7XG",
+   "RATE:RC-XGL",
+   "RATE:RC-6CW",
+   "RATE:RC-BAN",
+   "RATE:RC-EMU",
+   "RATE:RC-GRY",
+   "RATE:RC-KNJ",
+   "RATE:RC-7V7",
+   "RATE:RC-MLR",
+   "RX-53AMY",
+   "RX-TDM9R",
+   "RX-4R796",
+   "RX-S39V6",
+   "RX-WT4VY",
+   "RX-N2RYF",
+   "RX-DWAMQ",
+   "RX-956HN",
+   "RX-SEXMM",
+   "RX-H4LJE",
+   "RX-KU3NV",
+   "RX-7GKGZ",
+   "RX-JXTLG",
+   "RX-ATM4V",
+   "RX-ZMKAD",
+   "RX-6DVVX",
+   "RX-5F3M5",
+   "RX-HZKWW",
+   "RX-SYEHS",
+   "RX-2VRQH",
+   "RX-TP7VU",
+   "RX-5TXX6",
+   "RX-QUPKV",
+   "RX-ZHYJS",
+   "RX-RNHXK",
+   "RX-PNK47",
+   "RX-H6V7J",
+   "RX-ZK7V8",
+   "RX-X2RLY",
+   "RX-N3TXA",
+   "RX-8WXFE",
+   "RX-H8TXF",
+   "RX-CDLLF",
+   "RX-EFLX2",
+   "RX-MZ572",
+   "RX-GZVVL",
+   "RX-CYWJ4",
+   "RX-4YDR4",
+   "RX-TTAEW",
+   "RX-823VV",
+   "RX-C9TVB",
+   "RX-95H9X",
+   "RX-LBKCW",
+   "RX-B7SN9",
+   "RX-MX3CG",
+   "RX-Q9Z3J",
+   "RX-2FFTA",
+   "RX-VT28H",
+   "RX-BPCRA",
+   "RX-22ZJV",
+   "RX-V57JM",
+   "RX-YUR76",
+   "RX-ENC5G",
+   "RX-XZE7Q",
+   "RX-5DQLS",
+   "RX-UJ2CB",
+   "RX-Z3J7J",
+   "RX-XRDVL",
+   "RX-468SX",
+   "RX-XL9GZ"
+  ],
+  "key": [
+   {
+    "id": "RX-ZMKAD",
+    "value": 42040,
+    "type": "line",
+    "needs": [
+     "RX-ZMKAD"
+    ]
+   },
+   {
+    "id": "RX-HZKWW",
+    "value": 25204,
+    "type": "context",
+    "needs": [
+     "RX-HZKWW",
+     "RATE:RC-EMU"
+    ],
+    "context": [
+     "RATE:RC-EMU"
+    ]
+   },
+   {
+    "id": "RX-ZHYJS",
+    "value": 94039,
+    "type": "context",
+    "needs": [
+     "RX-ZHYJS",
+     "RATE:RC-7V7"
+    ],
+    "context": [
+     "RATE:RC-7V7"
+    ]
+   },
+   {
+    "id": "RX-PNK47",
+    "value": 21517,
+    "type": "line",
+    "needs": [
+     "RX-PNK47"
+    ]
+   },
+   {
+    "id": "RX-CDLLF",
+    "value": 2288,
+    "type": "context",
+    "needs": [
+     "RX-CDLLF",
+     "RATE:RC-EMU"
+    ],
+    "context": [
+     "RATE:RC-EMU"
+    ]
+   },
+   {
+    "id": "RX-MZ572",
+    "value": 62285,
+    "type": "line",
+    "needs": [
+     "RX-MZ572"
+    ]
+   },
+   {
+    "id": "RX-GZVVL",
+    "value": 38311,
+    "type": "context",
+    "needs": [
+     "RX-GZVVL",
+     "RATE:RC-MLR"
+    ],
+    "context": [
+     "RATE:RC-MLR"
+    ]
+   },
+   {
+    "id": "RX-C9TVB",
+    "value": 30442,
+    "type": "line",
+    "needs": [
+     "RX-C9TVB"
+    ]
+   },
+   {
+    "id": "PAIR:RX-2FFTA+RX-N2RYF",
+    "value": null,
+    "type": "pair",
+    "needs": [
+     "RX-N2RYF",
+     "RX-2FFTA"
+    ],
+    "subtype": "far",
+    "rows": [
+     16,
+     57
+    ],
+    "distance": 41
+   },
+   {
+    "id": "PAIR:RX-QUPKV+RX-UJ2CB",
+    "value": null,
+    "type": "pair",
+    "needs": [
+     "RX-QUPKV",
+     "RX-UJ2CB"
+    ],
+    "subtype": "far",
+    "rows": [
+     33,
+     66
+    ],
+    "distance": 33
+   },
+   {
+    "id": "PAIR:RX-468SX+RX-ZK7V8",
+    "value": null,
+    "type": "pair",
+    "needs": [
+     "RX-ZK7V8",
+     "RX-468SX"
+    ],
+    "subtype": "far",
+    "rows": [
+     38,
+     69
+    ],
+    "distance": 31
+   },
+   {
+    "id": "PAIR:RX-95H9X+RX-B7SN9",
+    "value": null,
+    "type": "pair",
+    "needs": [
+     "RX-95H9X",
+     "RX-B7SN9"
+    ],
+    "subtype": "near",
+    "rows": [
+     52,
+     54
+    ],
+    "distance": 2
+   }
+  ],
+  "value_unit": "cents"
+ },
+ "swarm": {
+  "planner": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger with two sections. The rate table lists rate codes and their unit rates. Each line item is one billed service; it gives either its own unit_rate or a rate_code whose unit rate is in the rate table. The amount owed for a line is qty x unit rate. A line is UNDERPAID when paid is less than the amount owed; its shortfall is (amount owed) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported as underpaid. A claim is DUPLICATED when the same claim_id appears on more than one line item (billed more than once). Find every underpaid line and every duplicated claim.\n\nThe ledger has 70 rows. Rows 1 to 10 are the rate table, with columns:\nrow,rate_code,unit_rate\nRows 11 to 70 are line items, with columns:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\nA line item gives either its own unit_rate or a rate_code defined in the rate table. A claim_id may appear on more than one line item.\nYou will not see the rows themselves.\n\nYou coordinate 8 workers. Each worker receives only the brief you write for it and the ledger rows you assign to it, given as inclusive row ranges. Workers cannot see the task description above, each other, or any rows you do not assign to them. Their reports will then be combined into one final answer.\n\nWrite a brief for each of the 8 workers. Do not show your working or any explanation. Reply with only a JSON object:\n{\"workers\": [{\"worker\": 1, \"brief\": \"<instructions>\", \"ranges\": [[<first row>, <last row>]]}, ...]}\n\nDelegation guidance:\nFor your task, decide in order: atomic—do it yourself when it fits your context; parallel fork—spawn independent parts at once, then join and check; speculative fork—state a guess and start dependent work, or try competing approaches and keep the one that passes checks, then keep, repair or discard work when results arrive; sequence—spawn the first piece, wait, then decide again. Give children self-contained briefs and clear ownership. Quality first, then latency; cost is not a goal.\n",
+    "raw_text": "{\n  \"workers\": [\n    {\n      \"worker\": 1,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 11‑18. For each line item compute the amount owed: if unit_rate is non‑empty use it, otherwise look up the unit_rate for the given rate_code in the rate table. Amount owed = qty × unit_rate. Compare to the paid column. If paid < amount owed, record the line_id and the shortfall (amount owed – paid) rounded to two decimals. Also record every claim_id you encounter. Output two arrays: underpaid (objects with line_id and shortfall) and claims (list of claim_id strings). Do NOT filter duplicates here; just list what you see.\",\n      \"ranges\": [[1, 10], [11, 18]]\n    },\n    {\n      \"worker\": 2,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 19‑26. Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter. Return two arrays: underpaid and claims.\",\n      \"ranges\": [[1, 10], [19, 26]]\n    },\n    {\n      \"worker\": 3,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 27‑34. Compute amount owed for each line (use its unit_rate or look up the rate_code), compare to paid, and record any underpaid line (line_id and shortfall to two decimals). Also collect every claim_id you see. Return arrays underpaid and claims.\",\n      \"ranges\": [[1, 10], [27, 34]]\n    },\n    {\n      \"worker\": 4,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 35‑42. For each line, calculate amount owed (qty × appropriate unit_rate), determine if paid is less than owed, and if so output line_id with shortfall (two‑decimal). Also output all claim_id values you encounter. Provide two arrays: underpaid and claims.\",\n      \"ranges\": [[1, 10], [35, 42]]\n    },\n    {\n      \"worker\": 5,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 43‑50. Follow the same procedure: compute owed amount, flag underpaid lines (line_id, shortfall), and list every claim_id present. Return arrays underpaid and claims.\",\n      \"ranges\": [[1, 10], [43, 50]]\n    },\n    {\n      \"worker\": 6,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 51‑58. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and record any underpaid line (line_id, shortfall to two decimals). Also record all claim_id values you encounter. Output two arrays: underpaid and claims.\",\n      \"ranges\": [[1, 10], [51, 58]]\n    },\n    {\n      \"worker\": 7,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 59‑66. Perform the same analysis: calculate owed amount, identify underpaid lines (line_id, shortfall), and collect every claim_id you see. Return arrays underpaid and claims.\",\n      \"ranges\": [[1, 10], [59, 66]]\n    },\n    {\n      \"worker\": 8,\n      \"brief\": \"You have the rate table (rows 1‑10) and line items rows 67‑70. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and if underpaid record line_id and shortfall (two‑decimal). Also list all claim_id values you encounter. Output two arrays: underpaid and claims.\",\n      \"ranges\": [[1, 10], [67, 70]]\n    }\n  ]\n}",
+    "reasoning": "We need to assign rows. Rate table rows 1-10 needed for all. So each worker needs that? Could give each worker full rate table plus its segment. Provide brief to compute underpaid and duplicates in their range. Also need to combine duplicates across workers—so each should report claim_ids seen. We'll instruct to output two lists: underpaid lines (line_id, shortfall) and claim_ids seen. Then final combine dedupe. Provide ranges: split 11-70 into 8 roughly equal parts (~7-8 rows each). Include rows 1-10 in each worker's range. Provide brief.",
+    "finish_reason": "stop",
+    "prompt_tokens": 547,
+    "completion_tokens": 1016,
+    "latency_ms": 5272,
+    "retries": 0,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "briefs_used": 8
+  },
+  "workers": [
+   {
+    "worker": 1,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 11‑18. For each line item compute the amount owed: if unit_rate is non‑empty use it, otherwise look up the unit_rate for the given rate_code in the rate table. Amount owed = qty × unit_rate. Compare to the paid column. If paid < amount owed, record the line_id and the shortfall (amount owed – paid) rounded to two decimals. Also record every claim_id you encounter. Output two arrays: underpaid (objects with line_id and shortfall) and claims (list of claim_id strings). Do NOT filter duplicates here; just list what you see.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      11,
+      18
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-53AMY",
+     "RX-TDM9R",
+     "RX-4R796",
+     "RX-S39V6",
+     "RX-WT4VY",
+     "RX-N2RYF",
+     "RX-DWAMQ",
+     "RX-956HN"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 11‑18. For each line item compute the amount owed: if unit_rate is non‑empty use it, otherwise look up the unit_rate for the given rate_code in the rate table. Amount owed = qty × unit_rate. Compare to the paid column. If paid < amount owed, record the line_id and the shortfall (amount owed – paid) rounded to two decimals. Also record every claim_id you encounter. Output two arrays: underpaid (objects with line_id and shortfall) and claims (list of claim_id strings). Do NOT filter duplicates here; just list what you see.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n11,RX-53AMY,CL-D4YGAR,1,72.57,,72.57\n12,RX-TDM9R,CL-ZACBH5,5,,RC-KNJ,90.80\n13,RX-4R796,CL-5TXMW4,24,,RC-KNJ,435.84\n14,RX-S39V6,CL-KAK6KC,2,,RC-KNJ,42.86\n15,RX-WT4VY,CL-NFW8AE,9,,RC-GRY,1150.11\n16,RX-N2RYF,CL-4UU92F,17,,RC-7XG,1037.51\n17,RX-DWAMQ,CL-BUGATV,36,,RC-6CW,2915.76\n18,RX-956HN,CL-BS4FMT,27,305.19,,8240.13\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute. Row11: unit_rate 72.57 qty1 amount 72.57 paid72.57 shortfall0.\n\nRow12: qty5 rate_code RC-KNJ unit_rate from table 18.16 amount=5*18.16=90.8 paid90.8 shortfall0.\n\nRow13: qty24 *18.16=435.84 paid435.84 shortfall0.\n\nRow14: qty2*18.16=36.32 paid42.86 overpaid shortfall0.\n\nRow15: qty9*127.79=1150.11 paid1150.11 shortfall0.\n\nRow16: qty17*61.03=1037.51 paid1037.51 shortfall0.\n\nRow17: qty36*61.50=2214? wait 61.5*36=2214.0 paid2915.76 overpaid.\n\nRow18: unit_rate 305.19 qty27 amount=823... 305.19*27 = 823... compute: 300*27=8100, 5.19*27=140.13, sum 8240.13 paid8240.13 shortfall0.\n\nThus none underpaid. Also need claims list? The prompt earlier said output two arrays underpaid and claims, but final instruction JSON includes underpaid and duplicates? It says {\"underpaid\": [...], \"duplicates\": [...]}. No claims. So output underpaid empty, duplicates empty.",
+     "finish_reason": "stop",
+     "prompt_tokens": 631,
+     "completion_tokens": 329,
+     "latency_ms": 1350,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [],
+    "reused_from_original": false
+   },
+   {
+    "worker": 2,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 19‑26. Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter. Return two arrays: underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      19,
+      26
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-SEXMM",
+     "RX-H4LJE",
+     "RX-KU3NV",
+     "RX-7GKGZ",
+     "RX-JXTLG",
+     "RX-ATM4V",
+     "RX-ZMKAD",
+     "RX-6DVVX"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 19‑26. Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter. Return two arrays: underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n19,RX-SEXMM,CL-5S74GS,2,359.94,,719.88\n20,RX-H4LJE,CL-PT6BV5,34,,RC-B2L,7536.78\n21,RX-KU3NV,CL-EHS3TK,39,,RC-GRY,4983.81\n22,RX-7GKGZ,CL-QCBNQN,16,,RC-KNJ,290.56\n23,RX-JXTLG,CL-CZBTUD,18,257.26,,4630.68\n24,RX-ATM4V,CL-Y4QZVY,14,229.04,,3422.07\n25,RX-ZMKAD,CL-45V2Z4,40,107.42,,3876.40\n26,RX-6DVVX,CL-GWUD99,26,129.75,,4066.43\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [\n    {\n      \"line_id\": \"RX-ZMKAD\",\n      \"shortfall\": 420.40\n    }\n  ],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute expected amount = qty * unit_rate (from rate table if missing). For each line: if unit_rate given use that else lookup rate_code. Then compare to paid. Compute shortfall = expected - paid if positive.\n\nLet's calculate.\n\nRate codes values: RC-B2L 221.67, RC-GRY 127.79, RC-KNJ 18.16.\n\nLine19: qty2 unit_rate 359.94 given, expected = 2*359.94=719.88 paid 719.88 shortfall 0.\n\nLine20: qty34 rate_code RC-B2L unit_rate missing so use 221.67. expected =34*221.67= 34*221.67 = 7536.78 (since 221.67*30=6650.1, plus 4*221.67=886.68 total 7536.78). paid 7536.78 shortfall 0.\n\nLine21: qty39 RC-GRY 127.79 => expected 39*127.79 = let's compute: 127.79*40=5111.6 minus 127.79 =4983.81. paid 4983.81 shortfall0.\n\nLine22: qty16 RC-KNJ 18.16 => expected 16*18.16= 290.56. paid 290.56 shortfall0.\n\nLine23: qty18 unit_rate 257.26 expected = 18*257.26 = 4630.68 (since 257.26*10=2572.6, *8=2058.08 sum 4630.68). paid 4630.68 shortfall0.\n\nLine24: qty14 unit_rate 229.04 expected =14*229.04 = 3206.56? Wait compute: 229.04*10=2290.4, *4=916.16 total 3206.56. Paid 3422.07 which is higher, so no shortfall (overpaid). shortfall 0.\n\nLine25: qty40 unit_rate107.42 expected =40*107.42= 4296.8. Paid 3876.40. Shortfall = 4296.8-3876.4=420.4.\n\nLine26: qty26 unit_rate129.75 expected =26*129.75 = 336? compute: 129.75*20=2595, *6=778.5 total 3373.5. Paid 4066.43 overpaid, no shortfall.\n\nThus only line25 underpaid shortfall 420.40.\n\nAlso need \"duplicates\": they asked duplicates? The prompt says return underpaid and duplicates arrays. duplicates list line_ids that are duplicates? No duplicates in data. So empty list.\n\nReturn JSON.",
+     "finish_reason": "stop",
+     "prompt_tokens": 560,
+     "completion_tokens": 638,
+     "latency_ms": 2795,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-ZMKAD",
+      "value": 42040,
+      "kind": "underpaid"
+     }
+    ],
+    "reused_from_original": false
+   },
+   {
+    "worker": 3,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 27‑34. Compute amount owed for each line (use its unit_rate or look up the rate_code), compare to paid, and record any underpaid line (line_id and shortfall to two decimals). Also collect every claim_id you see. Return arrays underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      27,
+      34
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-5F3M5",
+     "RX-HZKWW",
+     "RX-SYEHS",
+     "RX-2VRQH",
+     "RX-TP7VU",
+     "RX-5TXX6",
+     "RX-QUPKV",
+     "RX-ZHYJS"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 27‑34. Compute amount owed for each line (use its unit_rate or look up the rate_code), compare to paid, and record any underpaid line (line_id and shortfall to two decimals). Also collect every claim_id you see. Return arrays underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n27,RX-5F3M5,CL-ECKAZX,26,,RC-GRY,3322.54\n28,RX-HZKWW,CL-LUTFVK,24,,RC-EMU,573.80\n29,RX-SYEHS,CL-4JVLM7,40,,RC-B2L,8866.80\n30,RX-2VRQH,CL-GSXRUF,18,,RC-7V7,4631.76\n31,RX-TP7VU,CL-VKTUKF,35,453.69,,15879.15\n32,RX-5TXX6,CL-EQA2EE,20,,RC-BAN,1004.39\n33,RX-QUPKV,CL-AQNCRP,3,82.89,,248.67\n34,RX-ZHYJS,CL-VLDYGS,18,,RC-7V7,3691.37\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [\n    {\n      \"line_id\": \"RX-HZKWW\",\n      \"shortfall\": 252.04\n    },\n    {\n      \"line_id\": \"RX-ZHYJS\",\n      \"shortfall\": 940.39\n    }\n  ],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute expected amount = qty * unit_rate (use given unit_rate if present else lookup rate_code). Then compare to paid. Shortfall = expected - paid if positive.\n\nCompute:\n\nRow27: qty26, rate_code RC-GRY unit_rate 127.79. Expected =26*127.79=3322.54? 127.79*26 = 3322.54 exactly. Paid 3322.54 => shortfall 0.\n\nRow28: qty24, RC-EMU rate 34.41. Expected 24*34.41=825.84. Paid 573.80. Shortfall =252.04.\n\nRow29: qty40, RC-B2L 221.67. Expected 40*221.67=8866.8. Paid 8866.80 =>0.\n\nRow30: qty18, RC-7V7 257.32. Expected 18*257.32=4631.76. Paid 4631.76 =>0.\n\nRow31: qty35, unit_rate given 453.69. Expected 35*453.69=15879.15. Paid 15879.15 =>0.\n\nRow32: qty20, RC-BAN 41.80. Expected 20*41.80=836.0. Paid 1004.39. Overpaid, shortfall 0.\n\nRow33: qty3, unit_rate 82.89. Expected 3*82.89=248.67. Paid 248.67 =>0.\n\nRow34: qty18, RC-7V7 257.32. Expected 18*257.32=4631.76? Wait earlier row30 same. 18*257.32=4631.76. Paid 3691.37. Shortfall = 940.39.\n\nThus underpaid lines: RX-HZKWW shortfall 252.04, RX-ZHYJS shortfall 940.39.\n\nAlso need collect every claim_id you see. But output format only underpaid and duplicates? The prompt says return arrays underpaid and claims. But final instruction says JSON object with underpaid and duplicates. Confusing. It says \"Return arrays underpaid and claims.\" Then later \"Reply with only a JSON object: {\"underpaid\": [...], \"duplicates\": [...]}\" So use duplicates field? Probably they want duplicates of line_ids? Not sure. No duplicates present. So duplicates empty list.\n\nThus output.",
+     "finish_reason": "stop",
+     "prompt_tokens": 569,
+     "completion_tokens": 588,
+     "latency_ms": 1731,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-HZKWW",
+      "value": 25204,
+      "kind": "underpaid"
+     },
+     {
+      "id": "RX-ZHYJS",
+      "value": 94039,
+      "kind": "underpaid"
+     }
+    ],
+    "reused_from_original": false
+   },
+   {
+    "worker": 4,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 35‑42. For each line, calculate amount owed (qty × appropriate unit_rate), determine if paid is less than owed, and if so output line_id with shortfall (two‑decimal). Also output all claim_id values you encounter. Provide two arrays: underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      35,
+      42
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-RNHXK",
+     "RX-PNK47",
+     "RX-H6V7J",
+     "RX-ZK7V8",
+     "RX-X2RLY",
+     "RX-N3TXA",
+     "RX-8WXFE",
+     "RX-H8TXF"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 35‑42. For each line, calculate amount owed (qty × appropriate unit_rate), determine if paid is less than owed, and if so output line_id with shortfall (two‑decimal). Also output all claim_id values you encounter. Provide two arrays: underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n35,RX-RNHXK,CL-QATEVU,1,,RC-B2L,221.67\n36,RX-PNK47,CL-PN65U5,37,25.00,,709.83\n37,RX-H6V7J,CL-DL72EB,20,,RC-B2L,4433.40\n38,RX-ZK7V8,CL-FVBW23,11,,RC-XGL,1379.40\n39,RX-X2RLY,CL-DNZKRV,40,,RC-BAN,1672.00\n40,RX-N3TXA,CL-XHRNSX,2,,RC-MLR,417.48\n41,RX-8WXFE,CL-VKUEQ9,1,,RC-KNJ,18.16\n42,RX-H8TXF,CL-3CFSXE,30,,RC-MLR,6262.20\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [\n    {\n      \"line_id\": \"RX-PNK47\",\n      \"shortfall\": 215.17\n    }\n  ],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute owed = qty * unit_rate from rate table. For rows where unit_rate missing, use rate_code to get rate. Compute.\n\nRow35: qty1, rate_code RC-B2L =>221.67 owed=221.67 paid221.67 shortfall0.\n\nRow36: qty37, unit_rate given 25.00 (override) owed=925.00 paid709.83 shortfall215.17.\n\nRow37: qty20, RC-B2L 221.67 owed=4433.40 paid4433.40 shortfall0.\n\nRow38: qty11, RC-XGL 125.40 owed=1379.40 paid1379.40 shortfall0.\n\nRow39: qty40, RC-BAN 41.80 owed=1672.00 paid1672.00 shortfall0.\n\nRow40: qty2, RC-MLR 208.74 owed=417.48 paid417.48 shortfall0.\n\nRow41: qty1, RC-KNJ 18.16 owed=18.16 paid18.16 shortfall0.\n\nRow42: qty30, RC-MLR 208.74 owed=6262.20 paid6262.20 shortfall0.\n\nOnly line36 underpaid 215.17.\n\nAlso need \"claims\" array? The prompt says provide two arrays: underpaid and claims. But final JSON spec shows underpaid and duplicates? Actually says {\"underpaid\": [...], \"duplicates\": [...]} . Confusing. Use duplicates? Probably they want duplicates of line_ids? No duplicates present. So duplicates empty.\n\nProvide claims? Not in spec. Use given spec: underpaid and duplicates.\n\nReturn JSON.",
+     "finish_reason": "stop",
+     "prompt_tokens": 569,
+     "completion_tokens": 400,
+     "latency_ms": 1361,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-PNK47",
+      "value": 21517,
+      "kind": "underpaid"
+     }
+    ],
+    "reused_from_original": false
+   },
+   {
+    "worker": 5,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 43‑50. Follow the same procedure: compute owed amount, flag underpaid lines (line_id, shortfall), and list every claim_id present. Return arrays underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      43,
+      50
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-CDLLF",
+     "RX-EFLX2",
+     "RX-MZ572",
+     "RX-GZVVL",
+     "RX-CYWJ4",
+     "RX-4YDR4",
+     "RX-TTAEW",
+     "RX-823VV"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 43‑50. Follow the same procedure: compute owed amount, flag underpaid lines (line_id, shortfall), and list every claim_id present. Return arrays underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n43,RX-CDLLF,CL-52K5JR,37,,RC-EMU,1250.29\n44,RX-EFLX2,CL-GZ7W66,3,376.38,,1129.14\n45,RX-MZ572,CL-2C42RF,14,197.67,,2144.53\n46,RX-GZVVL,CL-XKPN39,10,,RC-MLR,1704.29\n47,RX-CYWJ4,CL-GGAGG3,20,210.87,,4217.40\n48,RX-4YDR4,CL-HBLAYQ,18,129.54,,2331.72\n49,RX-TTAEW,CL-TUZKNT,17,,RC-6CW,1045.50\n50,RX-823VV,CL-BQRZDK,2,59.81,,153.15\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [\n    {\"line_id\": \"RX-CDLLF\", \"shortfall\": 22.88},\n    {\"line_id\": \"RX-MZ572\", \"shortfall\": 622.85},\n    {\"line_id\": \"RX-GZVVL\", \"shortfall\": 383.11}\n  ],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute owed = qty * unit_rate (from rate table if missing). Then compare paid. Compute shortfall = owed - paid if positive.\n\nLet's get rates: map code to unit_rate.\n\nNow lines:\n\n43: qty37, unit_rate missing, rate_code RC-EMU => rate 34.41. Owed=37*34.41=1273.17. Paid1250.29. Shortfall=22.88.\n\n44: qty3, unit_rate 376.38 given, rate_code missing. Owed=3*376.38=1129.14. Paid1129.14. Shortfall0.\n\n45: qty14, unit_rate197.67. Owed=14*197.67=2767.38? Wait 197.67*14 = 2767.38. Paid2144.53. Shortfall=622.85.\n\n46: qty10, rate_code RC-MLR 208.74. Owed=10*208.74=2087.4. Paid1704.29. Shortfall=383.11.\n\n47: qty20, unit_rate210.87. Owed=20*210.87=4217.4. Paid4217.40. Shortfall0.\n\n48: qty18, unit_rate129.54. Owed=18*129.54=2331.72. Paid2331.72. Shortfall0.\n\n49: qty17, rate_code RC-6CW 61.50. Owed=17*61.5=1045.5. Paid1045.50. Shortfall0.\n\n50: qty2, unit_rate59.81. Owed=2*59.81=119.62. Paid153.15. Overpaid, shortfall negative ignore.\n\nUnderpaid lines: 43,45,46.\n\nNow also need \"claims\" list? The prompt says return arrays underpaid and claims. But final format given is underpaid and duplicates. Actually they changed to duplicates. Use that. No duplicates present. So duplicates empty list.\n\nReturn JSON.",
+     "finish_reason": "stop",
+     "prompt_tokens": 548,
+     "completion_tokens": 520,
+     "latency_ms": 1592,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-CDLLF",
+      "value": 2288,
+      "kind": "underpaid"
+     },
+     {
+      "id": "RX-MZ572",
+      "value": 62285,
+      "kind": "underpaid"
+     },
+     {
+      "id": "RX-GZVVL",
+      "value": 38311,
+      "kind": "underpaid"
+     }
+    ],
+    "reused_from_original": false
+   },
+   {
+    "worker": 6,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 51‑58. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and record any underpaid line (line_id, shortfall to two decimals). Also record all claim_id values you encounter. Output two arrays: underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      51,
+      58
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-C9TVB",
+     "RX-95H9X",
+     "RX-LBKCW",
+     "RX-B7SN9",
+     "RX-MX3CG",
+     "RX-Q9Z3J",
+     "RX-2FFTA",
+     "RX-VT28H"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 51‑58. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and record any underpaid line (line_id, shortfall to two decimals). Also record all claim_id values you encounter. Output two arrays: underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n51,RX-C9TVB,CL-T73MNY,39,365.67,,13956.71\n52,RX-95H9X,CL-2UL2ZT,28,138.92,,3889.76\n53,RX-LBKCW,CL-7EJNYE,25,470.15,,11753.75\n54,RX-B7SN9,CL-2UL2ZT,28,138.92,,3889.76\n55,RX-MX3CG,CL-WM74QC,26,396.98,,13751.45\n56,RX-Q9Z3J,CL-RPZ9VX,18,,RC-7V7,4631.76\n57,RX-2FFTA,CL-4UU92F,17,,RC-7XG,1037.51\n58,RX-VT28H,CL-WQTFPS,39,276.11,,10768.29\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [\n    {\n      \"line_id\": \"RX-C9TVB\",\n      \"shortfall\": 304.42\n    }\n  ],\n  \"duplicates\": [\n    {\n      \"line_ids\": [\n        \"RX-95H9X\",\n        \"RX-B7SN9\"\n      ]\n    }\n  ]\n}",
+     "reasoning": "We need compute amount = qty * (unit_rate if present else lookup rate_code). Then compare to paid. Shortfall = amount - paid if positive. Also record claim_id values? But output spec changed: wants underpaid and duplicates? Actually says output two arrays: underpaid and claims. But final says {\"underpaid\":..., \"duplicates\":...}. Confusing. We'll follow final instruction. No claim list. Compute.\n\nRow51: qty39 unit_rate365.67 => amount = 39*365.67 = 14261.13. Paid 13956.71. Shortfall = 304.42.\n\nRow52: 28*138.92= 3889.76 paid same 3889.76 shortfall 0.\n\nRow53: 25*470.15=11753.75 paid same 0.\n\nRow54 same as 52 amount 3889.76 paid same 0.\n\nRow55: 26*396.98=10321.48? Wait compute: 396.98*26 = 396.98*20=7939.6; *6=2381.88 total 10321.48. Paid 13751.45 higher, so no shortfall (negative). So none.\n\nRow56: qty18 rate_code RC-7V7 lookup 257.32. amount=18*257.32=4631.76. Paid 4631.76 shortfall 0.\n\nRow57: qty17 rate_code RC-7XG lookup 61.03. amount=17*61.03=1037.51? 61.03*10=610.3, *7=427.21 total 1037.51. Paid 1037.51 shortfall 0.\n\nRow58: qty39 unit_rate276.11 amount=39*276.11= 276.11*40=11044.4 minus 276.11 =10768.29. Paid same 0.\n\nThus only line 51 underpaid 304.42.\n\nDuplicates? maybe duplicate claim_ids? Need duplicates array of line_ids that share same claim_id? Not specified. Probably duplicates of claim_id. Find claim_ids appearing more than once: CL-2UL2ZT appears rows 52 and 54. So duplicate line_ids [\"RX-95H9X\",\"RX-B7SN9\"].\n\nReturn JSON.",
+     "finish_reason": "stop",
+     "prompt_tokens": 579,
+     "completion_tokens": 578,
+     "latency_ms": 4598,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [
+     {
+      "id": "RX-C9TVB",
+      "value": 30442,
+      "kind": "underpaid"
+     },
+     {
+      "id": "PAIR:RX-95H9X+RX-B7SN9",
+      "value": null,
+      "kind": "pair"
+     }
+    ],
+    "reused_from_original": false
+   },
+   {
+    "worker": 7,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 59‑66. Perform the same analysis: calculate owed amount, identify underpaid lines (line_id, shortfall), and collect every claim_id you see. Return arrays underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      59,
+      66
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-BPCRA",
+     "RX-22ZJV",
+     "RX-V57JM",
+     "RX-YUR76",
+     "RX-ENC5G",
+     "RX-XZE7Q",
+     "RX-5DQLS",
+     "RX-UJ2CB"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 59‑66. Perform the same analysis: calculate owed amount, identify underpaid lines (line_id, shortfall), and collect every claim_id you see. Return arrays underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n59,RX-BPCRA,CL-7S859Q,16,,RC-EMU,550.56\n60,RX-22ZJV,CL-TFUPZY,7,,RC-MLR,1461.18\n61,RX-V57JM,CL-UF3CYE,12,431.72,,5180.64\n62,RX-YUR76,CL-WHZX7N,21,49.80,,1045.80\n63,RX-ENC5G,CL-LVRRRW,19,,RC-B2L,4211.73\n64,RX-XZE7Q,CL-JTGZSD,3,,RC-BAN,139.38\n65,RX-5DQLS,CL-5D8BWY,31,56.61,,1754.91\n66,RX-UJ2CB,CL-AQNCRP,3,82.89,,248.67\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\n  \"underpaid\": [],\n  \"duplicates\": []\n}",
+     "reasoning": "We need compute owed = qty * unit_rate (using rate_code lookup if unit_rate missing). Then compare paid. Compute shortfall = owed - paid if positive.\n\nLet's compute.\n\nRate lookup:\nRC-EMU 34.41\nRC-MLR 208.74\nRC-B2L 221.67\nRC-BAN 41.80\n\nRows:\n\n59: qty16, unit_rate missing, rate_code RC-EMU => unit_rate 34.41. Owed =16*34.41=550.56. Paid 550.56 => shortfall 0.\n\n60: qty7, rate_code RC-MLR unit 208.74. Owed=7*208.74=1461.18. Paid 1461.18 =>0.\n\n61: qty12, unit_rate 431.72 given. Owed=12*431.72=5180.64. Paid 5180.64 =>0.\n\n62: qty21, unit_rate 49.80. Owed=21*49.80=1045.8. Paid 1045.80 =>0.\n\n63: qty19, rate_code RC-B2L unit 221.67. Owed=19*221.67=4211.73 (19*221.67=4211.73). Paid 4211.73 =>0.\n\n64: qty3, rate_code RC-BAN unit 41.80. Owed=3*41.80=125.40. Paid 139.38. Paid > owed, so no shortfall (maybe overpaid). Shortfall 0.\n\n65: qty31, unit_rate 56.61. Owed=31*56.61=1754.91. Paid 1754.91 =>0.\n\n66: qty3, unit_rate 82.89. Owed=3*82.89=248.67. Paid 248.67 =>0.\n\nAll shortfalls zero. So underpaid empty.\n\nDuplicates? The prompt says return \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]. But we have no duplicates. So empty list.\n\nReturn JSON.",
+     "finish_reason": "stop",
+     "prompt_tokens": 549,
+     "completion_tokens": 475,
+     "latency_ms": 4584,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [],
+    "reused_from_original": false
+   },
+   {
+    "worker": 8,
+    "brief": "You have the rate table (rows 1‑10) and line items rows 67‑70. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and if underpaid record line_id and shortfall (two‑decimal). Also list all claim_id values you encounter. Output two arrays: underpaid and claims.",
+    "ranges": [
+     [
+      1,
+      10
+     ],
+     [
+      67,
+      70
+     ]
+    ],
+    "slice": [
+     "RATE:RC-B2L",
+     "RATE:RC-7XG",
+     "RATE:RC-XGL",
+     "RATE:RC-6CW",
+     "RATE:RC-BAN",
+     "RATE:RC-EMU",
+     "RATE:RC-GRY",
+     "RATE:RC-KNJ",
+     "RATE:RC-7V7",
+     "RATE:RC-MLR",
+     "RX-Z3J7J",
+     "RX-XRDVL",
+     "RX-468SX",
+     "RX-XL9GZ"
+    ],
+    "call": {
+     "prompt": "You have the rate table (rows 1‑10) and line items rows 67‑70. Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and if underpaid record line_id and shortfall (two‑decimal). Also list all claim_id values you encounter. Output two arrays: underpaid and claims.\n\nYour ledger rows:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n67,RX-Z3J7J,CL-C9MMX2,8,,RC-KNJ,145.28\n68,RX-XRDVL,CL-RCBPJN,18,,RC-B2L,3990.06\n69,RX-468SX,CL-FVBW23,11,,RC-XGL,1379.40\n70,RX-XL9GZ,CL-R3AGWP,1,223.36,,223.36\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+     "raw_text": "{\"underpaid\": [], \"duplicates\": []}",
+     "reasoning": "We need compute amount = qty * unit_rate (use unit_rate field if present else lookup rate_code). Row 67: qty8, unit_rate missing, rate_code RC-KNJ => 18.16. amount=8*18.16=145.28. paid 145.28 => shortfall 0.\n\n68: qty18, rate_code RC-B2L =>221.67. amount=18*221.67=3990.06. paid 3990.06 =>0.\n\n69: qty11, rate_code RC-XGL =>125.40. amount=11*125.40=1379.4. paid 1379.40 =>0.\n\n70: qty1, unit_rate 223.36 given. amount=1*223.36=223.36 paid 223.36 =>0.\n\nAll zero, so underpaid empty. Also need list all claim_id values encountered? The prompt says also list all claim_id values you encounter. But final JSON spec only has underpaid and duplicates. No claim list. The instruction contradictory. The final instruction: \"Reply with only a JSON object: {\"underpaid\": [...], \"duplicates\": [...]}\". So ignore claim list. Duplicates? Need to find duplicate line_ids? None. So duplicates empty.\n\nReturn {\"underpaid\": [], \"duplicates\": []}.",
+     "finish_reason": "stop",
+     "prompt_tokens": 466,
+     "completion_tokens": 298,
+     "latency_ms": 1457,
+     "retries": 0,
+     "cached": false,
+     "error": null,
+     "rejected_too_large": false
+    },
+    "status": "ok",
+    "parsed_ok": true,
+    "parse_notes": [],
+    "nonpositive_dropped": 0,
+    "reported": [],
+    "reused_from_original": false
+   }
+  ],
+  "merger": {
+   "call": {
+    "prompt": "You are auditing a remittance ledger with two sections. The rate table lists rate codes and their unit rates. Each line item is one billed service; it gives either its own unit_rate or a rate_code whose unit rate is in the rate table. The amount owed for a line is qty x unit rate. A line is UNDERPAID when paid is less than the amount owed; its shortfall is (amount owed) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported as underpaid. A claim is DUPLICATED when the same claim_id appears on more than one line item (billed more than once). Find every underpaid line and every duplicated claim.\n\n8 workers each checked part of the ledger. You do not see the ledger. Their reports:\nWorker 1: {\"underpaid\": [], \"duplicates\": []}\nWorker 2: {\"underpaid\": [{\"line_id\": \"RX-ZMKAD\", \"shortfall\": 420.4}], \"duplicates\": []}\nWorker 3: {\"underpaid\": [{\"line_id\": \"RX-HZKWW\", \"shortfall\": 252.04}, {\"line_id\": \"RX-ZHYJS\", \"shortfall\": 940.39}], \"duplicates\": []}\nWorker 4: {\"underpaid\": [{\"line_id\": \"RX-PNK47\", \"shortfall\": 215.17}], \"duplicates\": []}\nWorker 5: {\"underpaid\": [{\"line_id\": \"RX-CDLLF\", \"shortfall\": 22.88}, {\"line_id\": \"RX-MZ572\", \"shortfall\": 622.85}, {\"line_id\": \"RX-GZVVL\", \"shortfall\": 383.11}], \"duplicates\": []}\nWorker 6: {\"underpaid\": [{\"line_id\": \"RX-C9TVB\", \"shortfall\": 304.42}], \"duplicates\": [{\"line_ids\": [\"RX-95H9X\", \"RX-B7SN9\"]}]}\nWorker 7: {\"underpaid\": [], \"duplicates\": []}\nWorker 8: {\"underpaid\": [], \"duplicates\": []}\n\nProduce the final report.\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+    "raw_text": "{\n  \"underpaid\": [\n    {\"line_id\": \"RX-ZMKAD\", \"shortfall\": 420.40},\n    {\"line_id\": \"RX-HZKWW\", \"shortfall\": 252.04},\n    {\"line_id\": \"RX-ZHYJS\", \"shortfall\": 940.39},\n    {\"line_id\": \"RX-PNK47\", \"shortfall\": 215.17},\n    {\"line_id\": \"RX-CDLLF\", \"shortfall\": 22.88},\n    {\"line_id\": \"RX-MZ572\", \"shortfall\": 622.85},\n    {\"line_id\": \"RX-GZVVL\", \"shortfall\": 383.11},\n    {\"line_id\": \"RX-C9TVB\", \"shortfall\": 304.42}\n  ],\n  \"duplicates\": [\n    {\"line_ids\": [\"RX-95H9X\", \"RX-B7SN9\"]}\n  ]\n}",
+    "reasoning": "We need combine all reports. Underpaid list combine all unique entries. Duplicates combine all duplicate groups. Only one duplicate group from worker6. So final underpaid includes all listed lines. Ensure two decimals. List them maybe in any order. Provide JSON.",
+    "finish_reason": "stop",
+    "prompt_tokens": 605,
+    "completion_tokens": 263,
+    "latency_ms": 869,
+    "retries": 0,
+    "cached": false,
+    "error": null,
+    "rejected_too_large": false
+   },
+   "status": "ok",
+   "parsed_ok": true,
+   "parse_notes": [],
+   "nonpositive_dropped": 0,
+   "final": [
+    {
+     "id": "RX-ZMKAD",
+     "value": 42040,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-HZKWW",
+     "value": 25204,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-ZHYJS",
+     "value": 94039,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-PNK47",
+     "value": 21517,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-CDLLF",
+     "value": 2288,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-MZ572",
+     "value": 62285,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-GZVVL",
+     "value": 38311,
+     "kind": "underpaid"
+    },
+    {
+     "id": "RX-C9TVB",
+     "value": 30442,
+     "kind": "underpaid"
+    },
+    {
+     "id": "PAIR:RX-95H9X+RX-B7SN9",
+     "value": null,
+     "kind": "pair"
+    }
+   ],
+   "reused_from_original": false
+  }
+ },
+ "baseline": {
+  "call": {
+   "prompt": "You are auditing a remittance ledger with two sections. The rate table lists rate codes and their unit rates. Each line item is one billed service; it gives either its own unit_rate or a rate_code whose unit rate is in the rate table. The amount owed for a line is qty x unit rate. A line is UNDERPAID when paid is less than the amount owed; its shortfall is (amount owed) - paid, in currency units with two decimals. Lines paid exactly, or overpaid, are not underpayments and must not be reported as underpaid. A claim is DUPLICATED when the same claim_id appears on more than one line item (billed more than once). Find every underpaid line and every duplicated claim.\n\nThe ledger:\nRate table:\nrow,rate_code,unit_rate\n1,RC-B2L,221.67\n2,RC-7XG,61.03\n3,RC-XGL,125.40\n4,RC-6CW,61.50\n5,RC-BAN,41.80\n6,RC-EMU,34.41\n7,RC-GRY,127.79\n8,RC-KNJ,18.16\n9,RC-7V7,257.32\n10,RC-MLR,208.74\n\nLine items:\nrow,line_id,claim_id,qty,unit_rate,rate_code,paid\n11,RX-53AMY,CL-D4YGAR,1,72.57,,72.57\n12,RX-TDM9R,CL-ZACBH5,5,,RC-KNJ,90.80\n13,RX-4R796,CL-5TXMW4,24,,RC-KNJ,435.84\n14,RX-S39V6,CL-KAK6KC,2,,RC-KNJ,42.86\n15,RX-WT4VY,CL-NFW8AE,9,,RC-GRY,1150.11\n16,RX-N2RYF,CL-4UU92F,17,,RC-7XG,1037.51\n17,RX-DWAMQ,CL-BUGATV,36,,RC-6CW,2915.76\n18,RX-956HN,CL-BS4FMT,27,305.19,,8240.13\n19,RX-SEXMM,CL-5S74GS,2,359.94,,719.88\n20,RX-H4LJE,CL-PT6BV5,34,,RC-B2L,7536.78\n21,RX-KU3NV,CL-EHS3TK,39,,RC-GRY,4983.81\n22,RX-7GKGZ,CL-QCBNQN,16,,RC-KNJ,290.56\n23,RX-JXTLG,CL-CZBTUD,18,257.26,,4630.68\n24,RX-ATM4V,CL-Y4QZVY,14,229.04,,3422.07\n25,RX-ZMKAD,CL-45V2Z4,40,107.42,,3876.40\n26,RX-6DVVX,CL-GWUD99,26,129.75,,4066.43\n27,RX-5F3M5,CL-ECKAZX,26,,RC-GRY,3322.54\n28,RX-HZKWW,CL-LUTFVK,24,,RC-EMU,573.80\n29,RX-SYEHS,CL-4JVLM7,40,,RC-B2L,8866.80\n30,RX-2VRQH,CL-GSXRUF,18,,RC-7V7,4631.76\n31,RX-TP7VU,CL-VKTUKF,35,453.69,,15879.15\n32,RX-5TXX6,CL-EQA2EE,20,,RC-BAN,1004.39\n33,RX-QUPKV,CL-AQNCRP,3,82.89,,248.67\n34,RX-ZHYJS,CL-VLDYGS,18,,RC-7V7,3691.37\n35,RX-RNHXK,CL-QATEVU,1,,RC-B2L,221.67\n36,RX-PNK47,CL-PN65U5,37,25.00,,709.83\n37,RX-H6V7J,CL-DL72EB,20,,RC-B2L,4433.40\n38,RX-ZK7V8,CL-FVBW23,11,,RC-XGL,1379.40\n39,RX-X2RLY,CL-DNZKRV,40,,RC-BAN,1672.00\n40,RX-N3TXA,CL-XHRNSX,2,,RC-MLR,417.48\n41,RX-8WXFE,CL-VKUEQ9,1,,RC-KNJ,18.16\n42,RX-H8TXF,CL-3CFSXE,30,,RC-MLR,6262.20\n43,RX-CDLLF,CL-52K5JR,37,,RC-EMU,1250.29\n44,RX-EFLX2,CL-GZ7W66,3,376.38,,1129.14\n45,RX-MZ572,CL-2C42RF,14,197.67,,2144.53\n46,RX-GZVVL,CL-XKPN39,10,,RC-MLR,1704.29\n47,RX-CYWJ4,CL-GGAGG3,20,210.87,,4217.40\n48,RX-4YDR4,CL-HBLAYQ,18,129.54,,2331.72\n49,RX-TTAEW,CL-TUZKNT,17,,RC-6CW,1045.50\n50,RX-823VV,CL-BQRZDK,2,59.81,,153.15\n51,RX-C9TVB,CL-T73MNY,39,365.67,,13956.71\n52,RX-95H9X,CL-2UL2ZT,28,138.92,,3889.76\n53,RX-LBKCW,CL-7EJNYE,25,470.15,,11753.75\n54,RX-B7SN9,CL-2UL2ZT,28,138.92,,3889.76\n55,RX-MX3CG,CL-WM74QC,26,396.98,,13751.45\n56,RX-Q9Z3J,CL-RPZ9VX,18,,RC-7V7,4631.76\n57,RX-2FFTA,CL-4UU92F,17,,RC-7XG,1037.51\n58,RX-VT28H,CL-WQTFPS,39,276.11,,10768.29\n59,RX-BPCRA,CL-7S859Q,16,,RC-EMU,550.56\n60,RX-22ZJV,CL-TFUPZY,7,,RC-MLR,1461.18\n61,RX-V57JM,CL-UF3CYE,12,431.72,,5180.64\n62,RX-YUR76,CL-WHZX7N,21,49.80,,1045.80\n63,RX-ENC5G,CL-LVRRRW,19,,RC-B2L,4211.73\n64,RX-XZE7Q,CL-JTGZSD,3,,RC-BAN,139.38\n65,RX-5DQLS,CL-5D8BWY,31,56.61,,1754.91\n66,RX-UJ2CB,CL-AQNCRP,3,82.89,,248.67\n67,RX-Z3J7J,CL-C9MMX2,8,,RC-KNJ,145.28\n68,RX-XRDVL,CL-RCBPJN,18,,RC-B2L,3990.06\n69,RX-468SX,CL-FVBW23,11,,RC-XGL,1379.40\n70,RX-XL9GZ,CL-R3AGWP,1,223.36,,223.36\n\nDo not show your working or any explanation. Reply with only a JSON object: {\"underpaid\": [{\"line_id\": \"<line_id>\", \"shortfall\": <amount with two decimals>}], \"duplicates\": [{\"line_ids\": [\"<line_id>\", \"<line_id>\"]}]}. List only lines whose shortfall is greater than 0. Use empty lists if there are none.",
+   "raw_text": "{\n  \"underpaid\": [\n    {\"line_id\": \"RX-ZMKAD\", \"shortfall\": 420.40},\n    {\"line_id\": \"RX-HZKWW\", \"shortfall\": 252.04},\n    {\"line_id\": \"RX-ZHYJS\", \"shortfall\": 940.39},\n    {\"line_id\": \"RX-PNK47\", \"shortfall\": 215.17},\n    {\"line_id\": \"RX-CDLLF\", \"shortfall\": 22.88},\n    {\"line_id\": \"RX-MZ572\", \"shortfall\": 622.85},\n    {\"line_id\": \"RX-GZVVL\", \"shortfall\": 383.11},\n    {\"line_id\": \"RX-C9TVB\", \"shortfall\": 304.42}\n  ],\n  \"duplicates\": [\n    {\"line_ids\": [\"RX-95H9X\", \"RX-B7SN9\"]},\n    {\"line_ids\": [\"RX-N2RYF\", \"RX-2FFTA\"]},\n    {\"line_ids\": [\"RX-QUPKV\", \"RX-UJ2CB\"]},\n    {\"line_ids\": [\"RX-ZK7V8\", \"RX-468SX\"]}\n  ]\n}",
+   "reasoning": "We need compute underpaid. Quick check some: line12 qty5 rate_code RC-KNJ unit 18.16 => amount 5*18.16=90.8 paid 90.80 exact 0. No underpay.\n\n13 qty24 *18.16=435.84 paid 435.84 exact.\n\n14 qty2*18.16=36.32 paid42.86 overpaid not under.\n\n15 qty9*127.79=1150.11 paid exact.\n\n16 qty17*61.03=1037.51 exact.\n\n17 qty36*61.5=2214? wait 36*61.5=2214.0 paid 2915.76 over.\n\n18 has unit_rate 305.19 qty27 amount=823... 305.19*27=823... compute: 300*27=8100, 5.19*27=140.13 total 8240.13 paid 8240.13 exact.\n\n19 qty2 unit 359.94 amount 719.88 paid exact.\n\n20 qty34 RC-B2L 221.67 => 34*221.67 = 7536.78 exact.\n\n21 qty39 RC-GRY 127.79 => 39*127.79 = 4983.81 exact.\n\n22 qty16 RC-KNJ 18.16 => 290.56 exact.\n\n23 qty18 unit 257.26 amount 4630.68 paid exact.\n\n24 qty14 unit 229.04 amount 3206.56? compute 229.04*14 = 229.04*10=2290.4 +*4=916.16 total 3206.56 but paid 3422.07 over.\n\n25 qty40 unit107.42 amount 4296.8 paid 3876.40 underpaid shortfall 420.40.\n\n26 qty26 unit129.75 amount 3373.5 paid 4066.43 over.\n\n27 qty26 RC-GRY 127.79 amount 3322.54 paid exact.\n\n28 qty24 RC-EMU 34.41 amount 825.84 paid 573.80 underpaid shortfall 252.04.\n\n29 qty40 RC-B2L 221.67 amount 8866.8 paid 8866.80 exact.\n\n30 qty18 RC-7V7 257.32 amount 4631.76 paid exact.\n\n31 qty35 unit453.69 amount 15879.15 paid exact.\n\n32 qty20 RC-BAN 41.80 amount 836.0 paid 1004.39 over.\n\n33 qty3 unit82.89 amount 248.67 paid exact.\n\n34 qty18 RC-7V7 amount 4631.76 paid 3691.37 underpaid shortfall 940.39.\n\n35 qty1 RC-B2L amount 221.67 paid 221.67 exact.\n\n36 qty37 unit25 amount 925.00 paid 709.83 underpaid 215.17.\n\n37 qty20 RC-B2L amount 4433.40 paid exact.\n\n38 qty11 RC-XGL 125.40 amount 1379.4 paid exact.\n\n39 qty40 RC-BAN 41.80 amount 1672.0 paid exact.\n\n40 qty2 RC-MLR 208.74 amount 417.48 paid exact.\n\n41 qty1 RC-KNJ amount 18.16 paid exact.\n\n42 qty30 RC-MLR amount 6262.2 paid exact.\n\n43 qty37 RC-EMU amount 1272.... 34.41*37=1272.... compute 34.41*30=1032.3, *7=240.87 total 1273.17? actually 34.41*7=240.87, sum 1273.17 paid 1250.29 underpaid shortfall 22.88.\n\n44 qty3 unit376.38 amount 1129.14 paid exact.\n\n45 qty14 unit197.67 amount 2767.38 paid 2144.53 underpaid 622.85.\n\n46 qty10 RC-MLR amount 2087.4 paid 1704.29 underpaid 383.11.\n\n47 qty20 unit210.87 amount 4217.4 paid exact.\n\n48 qty18 unit129.54 amount 2331.72 paid exact.\n\n49 qty17 RC-6CW 61.5 amount 1045.5 paid exact.\n\n50 qty2 unit59.81 amount 119.62 paid 153.15 over.\n\n51 qty39 unit365.67 amount 14261.13 paid 13956.71 underpaid 304.42.\n\n52 qty28 unit138.92 amount 3889.76 paid exact.\n\n53 qty25 unit470.15 amount 11753.75 paid exact.\n\n54 duplicate claim CL-2UL2ZT also line52 same amount exact.\n\n55 qty26 unit396.98 amount 10321.48 paid 13751.45 over.\n\n56 qty18 RC-7V7 amount 4631.76 paid same 4631.76 exact.\n\n57 duplicate claim CL-4UU92F line16 also line57 qty17 RC-7XG amount 1037.51 paid same exact.\n\n58 qty39 unit276.11 amount 10768.29 paid exact.\n\n59 qty16 RC-EMU amount 550.56 paid exact.\n\n60 qty7 RC-MLR amount 1461.18 paid exact.\n\n61 qty12 unit431.72 amount 5180.64 paid exact.\n\n62 qty21 unit49.80 amount 1045.8 paid 1045.80 exact (rounded).\n\n63 qty19 RC-B2L amount 4211.73 paid exact.\n\n64 qty3 RC-BAN amount 125.4? 41.80*3=125.4 paid 139.38 over.\n\n65 qty31 unit56.61 amount 1754.91 paid exact.\n\n66 duplicate claim CL-AQNCRP line33 also line66 same amount exact.\n\n67 qty8 RC-KNJ amount 145.28 paid exact.\n\n68 qty18 RC-B2L amount 3990.06 paid exact.\n\n69 duplicate claim CL-FVBW23 line38 also line69 same amount exact.\n\n70 qty1 unit223.36 amount 223.36 paid exact.\n\nNow compile underpaid list with shortfalls computed:\n\n25 shortfall 420.40\n28 shortfall 252.04\n34 shortfall 940.39\n36 shortfall 215.17\n43 shortfall 22.88\n45 shortfall 622.85\n46 shortfall 383.11\n51 shortfall 304.42\n\nCheck any others? that's it.\n\nDuplicates: need groups where claim_id appears more than once. Identify claim_ids with multiple lines:\n\nCL-2UL2ZT lines52 and54\nCL-4UU92F lines16 and57\nCL-AQNCRP lines33 and66\nCL-FVBW23 lines38 and69\n\nAlso any others? Check list: maybe CL-7V7 appears many times but different lines with same rate_code but claim_id different. So duplicates list each group.\n\nProvide JSON.",
+   "finish_reason": "stop",
+   "prompt_tokens": 1969,
+   "completion_tokens": 1774,
+   "latency_ms": 5144,
+   "retries": 0,
+   "cached": true,
+   "error": null,
+   "rejected_too_large": false
+  },
+  "status": "ok",
+  "parsed_ok": true,
+  "parse_notes": [],
+  "nonpositive_dropped": 0,
+  "final": [
+   {
+    "id": "RX-ZMKAD",
+    "value": 42040,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-HZKWW",
+    "value": 25204,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-ZHYJS",
+    "value": 94039,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-PNK47",
+    "value": 21517,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-CDLLF",
+    "value": 2288,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-MZ572",
+    "value": 62285,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-GZVVL",
+    "value": 38311,
+    "kind": "underpaid"
+   },
+   {
+    "id": "RX-C9TVB",
+    "value": 30442,
+    "kind": "underpaid"
+   },
+   {
+    "id": "PAIR:RX-95H9X+RX-B7SN9",
+    "value": null,
+    "kind": "pair"
+   },
+   {
+    "id": "PAIR:RX-2FFTA+RX-N2RYF",
+    "value": null,
+    "kind": "pair"
+   },
+   {
+    "id": "PAIR:RX-QUPKV+RX-UJ2CB",
+    "value": null,
+    "kind": "pair"
+   },
+   {
+    "id": "PAIR:RX-468SX+RX-ZK7V8",
+    "value": null,
+    "kind": "pair"
+   }
+  ]
+ },
+ "usage": {
+  "replay_new_calls": {
+   "calls": 10,
+   "prompt_tokens": 5623,
+   "completion_tokens": 5105,
+   "latency_ms": 25609
+  }
+ },
+ "replay": {
+  "of": "ledgerctx-S-s1__openai_gpt-oss-120b__w8__t0.0",
+  "label": "R5",
+  "name": "Acyclic delegation guidance",
+  "change": "planner prompt + a line \"Delegation guidance:\" + protocol/acyclic-delegation.md verbatim (497 bytes, git blob d9b9a8fa1d4325572ab1cb933b1e0320392cfef3)",
+  "baseline": "copied from the original run (not re-run)",
+  "guidance": {
+   "file": "protocol/acyclic-delegation.md",
+   "git_blob": "d9b9a8fa1d4325572ab1cb933b1e0320392cfef3",
+   "bytes": 497,
+   "text": "For your task, decide in order: atomic—do it yourself when it fits your context; parallel fork—spawn independent parts at once, then join and check; speculative fork—state a guess and start dependent work, or try competing approaches and keep the one that passes checks, then keep, repair or discard work when results arrive; sequence—spawn the first piece, wait, then decide again. Give children self-contained briefs and clear ownership. Quality first, then latency; cost is not a goal.\n"
+  }
+ },
+ "annotations": {
+  "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+  "judge_version": 1,
+  "judge": {
+   "model": "openai/gpt-oss-120b",
+   "endpoint": "https://api.groq.com/openai/v1",
+   "temperature": 0.0,
+   "reasoning_effort": "low"
+  },
+  "briefs": [
+   {
+    "worker": 1,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Output two arrays: underpaid (objects with line_id and shortfall) and claims (list of claim_id strings).",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two arrays: underpaid (objects with line_id and shortfall) and claims (list of claim_id strings).\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 529,
+    "completion_tokens": 211,
+    "cached": false
+   },
+   {
+    "worker": 2,
+    "relies_on_missing": {
+     "answer": "yes",
+     "quote": "Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter.",
+     "quote_verified": true
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same calculations as described for worker 1: determine amount owed, flag underpaid lines with line_id and shortfall, and list all claim_id values you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 455,
+    "completion_tokens": 296,
+    "cached": false
+   },
+   {
+    "worker": 3,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Compute amount owed for each line (use its unit_rate or look up the rate_code), compare to paid, and record any underpaid line (line_id and shortfall to two decimals). Also collect every claim_id you see.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Compute amount owed for each line (use its unit_rate or look up the rate_code), compare to paid, and record any underpaid line (line_id and shortfall to two decimals). Also collect every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 464,
+    "completion_tokens": 370,
+    "cached": false
+   },
+   {
+    "worker": 4,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "For each line, calculate amount owed (qty × appropriate unit_rate), determine if paid is less than owed, and if so output line_id with shortfall (two‑decimal). Also output all claim_id values you encounter.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"For each line, calculate amount owed (qty × appropriate unit_rate), determine if paid is less than owed, and if so output line_id with shortfall (two‑decimal). Also output all claim_id values you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 465,
+    "completion_tokens": 350,
+    "cached": false
+   },
+   {
+    "worker": 5,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "flag underpaid lines (line_id, shortfall), and list every claim_id present.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"flag underpaid lines (line_id, shortfall), and list every claim_id present.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 445,
+    "completion_tokens": 223,
+    "cached": false
+   },
+   {
+    "worker": 6,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and record any underpaid line (line_id, shortfall to two decimals). Also record all claim_id values you encounter.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and record any underpaid line (line_id, shortfall to two decimals). Also record all claim_id values you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 466,
+    "completion_tokens": 308,
+    "cached": false
+   },
+   {
+    "worker": 7,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Perform the same analysis: calculate owed amount, identify underpaid lines (line_id, shortfall), and collect every claim_id you see.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Perform the same analysis: calculate owed amount, identify underpaid lines (line_id, shortfall), and collect every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 446,
+    "completion_tokens": 205,
+    "cached": false
+   },
+   {
+    "worker": 8,
+    "relies_on_missing": {
+     "answer": "no",
+     "quote": "",
+     "quote_verified": false
+    },
+    "limits_kinds": {
+     "answer": "yes",
+     "quote": "Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and if underpaid record line_id and shortfall (two‑decimal). Also list all claim_id values you encounter.",
+     "quote_verified": true,
+     "kinds": [
+      "underpaid"
+     ],
+     "judge_answer": "yes",
+     "derived_from_kinds": true
+    },
+    "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Compute amount owed for each line (using its unit_rate or the rate_code lookup), compare to paid, and if underpaid record line_id and shortfall (two‑decimal). Also list all claim_id values you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+    "error": null,
+    "prompt_tokens": 465,
+    "completion_tokens": 291,
+    "cached": false
+   }
+  ]
+ }
+}

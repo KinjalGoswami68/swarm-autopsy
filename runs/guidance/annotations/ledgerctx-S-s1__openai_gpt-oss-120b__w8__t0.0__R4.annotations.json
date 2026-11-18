@@ -1,0 +1,196 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid < amount owed, record the line as underpaid with shortfall = amount owed – paid (rounded to two decimals). Also record every claim_id you see.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount owed, record the line as underpaid with shortfall = amount owed – paid (rounded to two decimals). Also record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 522,
+   "completion_tokens": 214,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "Compute amount owed = qty × (unit_rate if present, else the unit_rate from the rate_code). Report any line where paid < amount owed as underpaid with its shortfall (two‑decimal). Also list all claim_id values you encounter.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Compute amount owed = qty × (unit_rate if present, else the unit_rate from the rate_code). Report any line where paid < amount owed as underpaid with its shortfall (two‑decimal). Also list all claim_id values you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 489,
+   "completion_tokens": 280,
+   "cached": false
+  },
+  {
+   "worker": 3,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 25‑31.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid is less than owed, output the line_id and shortfall (owed‑paid, two decimals). Also output every claim_id you see.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 25‑31.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, output the line_id and shortfall (owed‑paid, two decimals). Also output every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 481,
+   "completion_tokens": 346,
+   "cached": false
+  },
+  {
+   "worker": 4,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 32‑38.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "Record lines where paid < owed as underpaid with shortfall (rounded to two decimals). Also record all claim_id values.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 32‑38.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Record lines where paid < owed as underpaid with shortfall (rounded to two decimals). Also record all claim_id values.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 486,
+   "completion_tokens": 286,
+   "cached": false
+  },
+  {
+   "worker": 5,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid is less than owed, list the line as underpaid with its shortfall (two‑decimal). Also list every claim_id you encounter.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, list the line as underpaid with its shortfall (two‑decimal). Also list every claim_id you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 473,
+   "completion_tokens": 246,
+   "cached": false
+  },
+  {
+   "worker": 6,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 46‑52.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "When paid < owed, record the line_id and shortfall (rounded to two decimals). Also capture all claim_id values.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 46‑52.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"When paid < owed, record the line_id and shortfall (rounded to two decimals). Also capture all claim_id values.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 485,
+   "completion_tokens": 371,
+   "cached": false
+  },
+  {
+   "worker": 7,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid is less than owed, output the line_id and shortfall (two‑decimal). Also output every claim_id you see.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than owed, output the line_id and shortfall (two‑decimal). Also output every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 473,
+   "completion_tokens": 327,
+   "cached": false
+  },
+  {
+   "worker": 8,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "Using rows 1‑10 as the rate table, process line items rows 60‑70.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "Record any line where paid < owed as underpaid with its shortfall (rounded to two decimals). Also list all claim_id values encountered.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"Using rows 1‑10 as the rate table, process line items rows 60‑70.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Record any line where paid < owed as underpaid with its shortfall (rounded to two decimals). Also list all claim_id values encountered.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 490,
+   "completion_tokens": 333,
+   "cached": false
+  }
+ ]
+}
