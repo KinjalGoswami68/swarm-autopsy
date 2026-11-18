@@ -311,10 +311,10 @@ def render(run, a=None):
         out.append(f"  brief: {w['brief'][:300]}")
         ann = {b["worker"]: b for b in ((run.get("annotations") or {}).get("briefs") or [])}
         if w["worker"] in ann:
-            b = ann[w["worker"]]
+            an = ann[w["worker"]]  # not `b`: that name holds the baseline autopsy (D37 fix)
             for label, key in (("relies on something not given", "relies_on_missing"),
                                ("limits kinds of finding", "limits_kinds")):
-                x = b[key]
+                x = an[key]
                 quote = (f' -- "{x["quote"]}"' + ("" if x["quote_verified"] else " [quote not found in brief]")
                          if x.get("answer") == "yes" else "")
                 out.append(f"  why (model-read annotation): {label}: {x.get('answer')}{quote}")

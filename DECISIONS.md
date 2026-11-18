@@ -772,3 +772,30 @@ on 2026-11-13), and it is not needed.
   harness a worker sees only its brief and its slice of rows, and the planner can only split once
   into W parallel workers (no "atomic" self-execution, no sequential or speculative forks; the merger
   is the only join). So R5 tests **their guidance sentence inside this harness, not their system.**
+
+**R5 results (2026-11-18), all nine runs, gpt-oss-120b, low reasoning; items found of 12:**
+
+| W | seed | original | R1 table to everyone | R4 one sentence | R5 Acyclic guidance |
+|---|---|---|---|---|---|
+| 2 | 1 / 2 / 3 | 3 / 8 / 3 | 10 / 10 / 9 | 12 / 0 / 10 (all no split) | 8 / 9 / 9 |
+| 4 | 1 / 2 / 3 | 3 / 1 / 4 | 9 / 9 / 9 | 9 / 9 / 0 | 9 / 8 / 9 |
+| 8 | 1 / 2 / 3 | 4 / 2 / 5 | 8 / 9 / 9 (seeds 1 and 3 no split) | 8 / 8 / 9 | 9 / 9 / 9 |
+
+- In all nine R5 runs the planner gave **every** worker the rate table, and never gave one worker
+  every row. Every R5 loss is a far pair (or once the near pair) split across workers, plus one
+  "holder answered, missed it"; **no R5 run recovers a far pair** (0 of 3 in all nine), because
+  the planner still cuts the line items into contiguous blocks.
+- Briefs that rely on something the worker was not given (judge-read, D27/D28): R5 1 of 4 per
+  seed at W=4 and 1 of 8 at W=8, against 3 of 4 and 6-7 of 8 in the original runs. Hand reading
+  of the 12 W=4 R5 briefs: many point to another worker's instructions ("Follow the same
+  procedure as Worker 1:") and then restate the steps; the judge mostly answers "no" for these
+  (4 of 12 "yes"), a strict reading gives 9 of 12. The question names "another worker's output",
+  so the judge's reading is defensible; the shares are model-read and indicative only.
+- One judge error noted: R1 seed 1 W=2 worker 2's brief still says the rate table is "NOT in your
+  range", but under R1 the worker has it; the judge answered "yes".
+- Three seeds per setting; read as a pattern, not a measurement. The limit above applies: this
+  is their guidance text in this harness, not their system.
+
+**Bug fixed:** `autopsy.render` reused the name `b` (the baseline autopsy) inside the annotation
+loop, so for annotated runs the "Every lost key item" lines read "baseline not scored". Renamed;
+regression test added. The site's JavaScript was not affected.

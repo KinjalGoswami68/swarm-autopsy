@@ -164,3 +164,13 @@ def test_returned_nothing_vs_answered_missed():
     by = {p["id"]: p["bucket"] for p in autopsy.swarm_autopsy(run)["per_item"]}
     assert by == {"B": "holder_answered_missed", "C": "holder_returned_nothing"}
     assert autopsy.autopsy(run)["cross"]["assigned_missed"] == 2  # both count as missed
+
+
+def test_render_with_annotations_keeps_baseline_labels():
+    # regression (D37): the annotation loop used to overwrite the baseline variable in render()
+    run = make_run([(["B", "C"], [])], final=[], key=("B", "C"), baseline_final=["B"])
+    no = {"answer": "no", "quote": "", "quote_verified": False}
+    run["annotations"] = {"briefs": [{"worker": 1, "relies_on_missing": no, "limits_kinds": dict(no, kinds=[])}]}
+    text = autopsy.render(run)
+    assert "baseline found it" in text and "baseline also missed" in text
+    assert "baseline not scored" not in text
