@@ -144,10 +144,32 @@ def test_custom_guidance_file_label_and_cli(stored, monkeypatch, tmp_path, capsy
     assert runfile.load(out[0])["replay"]["guidance"]["text"] == "Give each worker every row it needs.\n"
 
 
-def test_guidance_replays_are_not_published():
+def test_guidance_replays_and_sidecars_are_published():
+    """D38: the site loads R5 (runs/guidance) and the R1/R4 annotation sidecars; R1-R4 stay separate."""
     import build_site
     import tempfile
     from pathlib import Path
+    root = Path(build_site.ROOT)
     with tempfile.TemporaryDirectory() as d:
-        m = build_site.build(Path(d) / "_site")
-    assert not any("guidance" in p for p in m["runs"] + m["replays"])
+        out = Path(d) / "_site"
+        m = build_site.build(out)
+        assert m["guidance"] == [f"runs/guidance/{p.name}" for p in sorted((root / "runs/guidance").glob("*.json"))]
+        assert m["annotations"] == [f"runs/guidance/annotations/{p.name}"
+                                    for p in sorted((root / "runs/guidance/annotations").glob("*.json"))]
+        assert all((out / p).read_bytes() == (root / p).read_bytes() for p in m["guidance"] + m["annotations"])
+        assert not any("guidance" in p for p in m["runs"] + m["replays"])
+        assert (out / "protocol/acyclic-delegation.md").read_bytes() == replay.R5_FILE.read_bytes()
+    for p in m["annotations"]:  # every sidecar belongs to a published replay
+        run_id = Path(p).name.removesuffix(".annotations.json")
+        assert f"runs/replays/{run_id}.json" in m["replays"]
+
+
+def test_provenance_json_matches_file_and_provenance_md():
+    from pathlib import Path
+    prov = json.loads((Path(replay.R5_FILE).parent / "acyclic-delegation.provenance.json").read_text(encoding="utf-8"))
+    g = replay.r5_guidance()
+    assert prov["git_blob"] == g["git_blob"] and prov["bytes"] == g["bytes"] and prov["file"] == g["file"]
+    md = (Path(replay.R5_FILE).parent / "PROVENANCE.md").read_text(encoding="utf-8")
+    for k in ("source_path", "source_commit", "last_changed_commit", "git_blob"):
+        assert prov[k] in md, k
+    assert prov["licence"] == "Apache-2.0" and all((Path(replay.R5_FILE).parent.parent / f).exists() for f in prov["licence_files"])

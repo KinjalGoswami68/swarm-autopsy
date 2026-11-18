@@ -66,10 +66,18 @@ function bucketSection(run, a) {
     caveat(run));
 }
 
-function replaySection(run, a, replays) {
+/** Model-read share of briefs that rely on something the worker was not given: "2 of 4", or null. */
+function reliesShare(r, sidecars) {
+  const ann = r.annotations || (sidecars && sidecars.get(r.run_id));
+  const briefs = ann && ann.briefs;
+  if (!briefs || !briefs.length) return null;
+  return frac(briefs.filter((b) => b.relies_on_missing && b.relies_on_missing.answer === "yes").length, r.swarm.workers.length);
+}
+
+function replaySection(run, a, replays, sidecars) {
   if (!replays || !replays.length) return null;
   const head = ["Replay", "Recall", ...LOSS_BUCKETS.map((b) => BUCKET_LABEL[b].replace(/ \((split|worker|merge|reply cut off)\)$/, "")),
-    "Recovered", "Newly lost", "Far pairs", "Near pairs", "Note"];
+    "Recovered", "Newly lost", "Far pairs", "Near pairs", "Relies on something not given (model-read)", "Note"];
   const line = (label, r, ra) => {
     const bt = ra.swarm.score.by_type;
     const far = bt["far pair"] || { found: 0, total: 0 }, near = bt["near pair"] || { found: 0, total: 0 };
@@ -80,6 +88,7 @@ function replaySection(run, a, replays) {
       ...LOSS_BUCKETS.map((b) => String(ra.swarm.buckets[b])),
       diff ? `+${diff.recovered.length}` : "", diff ? `−${diff.newly_lost.length}` : "",
       frac(far.found, far.total), frac(near.found, near.total),
+      reliesShare(r, sidecars) ?? "not read",
       whole ? `no split: a worker held all ${r.items.universe.length} rows` : ""] };
   };
   const rows = [line("original", run, a), ...replays.map((r) => line(`${r.replay.label} ${r.replay.name}`, r, autopsy(r)))];
@@ -90,6 +99,10 @@ function replaySection(run, a, replays) {
       "A far pair comes back only when both its rows land with one worker."),
     el("ul", { class: "muted" }, replays.map((r) => el("li", {}, `${r.replay.label}: ${r.replay.change}`))),
     table(head, rows, { class: "replays" }),
+    el("p", { class: "muted" }, "Relies on something not given: of the run's briefs, how many a judge model read as relying on ",
+      "something the worker was not given. Model-read (D27): it never changes a score, and it is not checked against the rows. ",
+      "A strict reading counts more of them: briefs that point to another worker's instructions while restating the steps ",
+      "were mostly read as not relying on them. \"Not read\": that run's briefs have no judge annotation."),
     caveat(run));
 }
 
@@ -184,14 +197,14 @@ function tracerSection(run, a) {
     el("label", { for: "trace-item" }, "Key item "), select, out);
 }
 
-export function renderRun(container, run, replays = []) {
+export function renderRun(container, run, replays = [], sidecars = null) {
   const a = autopsy(run);
   container.replaceChildren(...[  // replaceChildren would turn a null into the text "null"
     el("header", { class: "run-head" },
       el("h1", {}, run.run_id),
       el("p", { class: "muted" }, `Model ${run.config.model} · temperature ${run.config.temperature} · reasoning ${run.config.reasoning_effort ?? "provider default"} · ${run.config.workers} workers`),
       caveat(run)),
-    scoreSection(run, a), bucketSection(run, a), replaySection(run, a, replays),
+    scoreSection(run, a), bucketSection(run, a), replaySection(run, a, replays, sidecars),
     workerSection(run, a), tracerSection(run, a),
   ].filter(Boolean));
   return a;

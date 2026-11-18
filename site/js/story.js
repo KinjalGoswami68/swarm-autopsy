@@ -1,8 +1,8 @@
 // Landing story. One run tells it (STORY_RUN, seed 1 at W=4); every number is computed by
 // autopsy.js from that run, its replays and the other run files. Nothing here is typed in.
 import { autopsy, BUCKET_LABEL, LOSS_BUCKETS, pct, noSplit } from "./autopsy.js";
-import { loadAll, replaysByOriginal } from "./data.js";
-import { el, table, caveat, nav, footer } from "./ui.js";
+import { loadAll, replaysByOriginal, loadProvenance } from "./data.js";
+import { el, table, caveat, nav, footer, REPO_URL } from "./ui.js";
 import { startMetal } from "./metal.js";
 import { startAscii } from "./ascii.js";
 
@@ -39,8 +39,8 @@ const SHORT = {
   dropped_at_merge: "a worker reported it and the merger left it out",
 };
 
-/** Everything the ASCII stage draws, read from the run (and its R4 replay). */
-function buildAsciiModel(run, a, r4run, r4a) {
+/** Everything the ASCII stage draws, read from the run (and its R1 and R5 replays). */
+function buildAsciiModel(run, a, r4run, r4a, r5run, r5a) {
   const upper = (x) => String(x).toUpperCase();
   const rows = run.task.rows.map((r) => {
     const id = upper(r.line_id || r.id);
@@ -82,6 +82,11 @@ function buildAsciiModel(run, a, r4run, r4a) {
     captions.rescatter = (h4.length === n4 ? "every worker given the rate table" : `${h4.length} of ${n4} workers given the rate table`) +
       `: ${r4a.swarm.score.true_positives} of ${a.swarm.key_count} found`;
   }
+  if (r5run) {
+    const h5 = holders(r5run.swarm.workers), n5 = r5run.swarm.workers.length;
+    captions.r5 = "R5: " + (h5.length === n5 ? "every worker given the rate table" : `${h5.length} of ${n5} workers given the rate table`) +
+      `, blocks by position: ${r5a.swarm.score.true_positives} of ${a.swarm.key_count} found`;
+  }
   return {
     captions, farPairs,
     rows,
@@ -90,6 +95,8 @@ function buildAsciiModel(run, a, r4run, r4a) {
     kept: kept(a),
     columnsR4: r4run ? cols(r4run.swarm.workers) : null,
     keptR4: r4a ? kept(r4a) : null,
+    columnsR5: r5run ? cols(r5run.swarm.workers) : null,
+    keptR5: r5a ? kept(r5a) : null,
     farRows,
   };
 }
@@ -105,7 +112,9 @@ async function main() {
     return;
   }
   const byPath = new Map(data.runs.map((r) => [r.path, r.run]));
-  const reps = replaysByOriginal(data.replays);
+  const reps = replaysByOriginal(data.replays); // R1-R4
+  const repsAll = replaysByOriginal([...data.replays, ...data.guidance]); // R1-R5 (D38)
+  const provenance = await loadProvenance();
   const run = byPath.get(STORY_RUN);
   const a = autopsy(run);
   const s = a.swarm, base = a.baseline, K = s.key_count, W = run.config.workers, t = run.task;
@@ -113,7 +122,7 @@ async function main() {
   const workers = run.swarm.workers;
   const emptyWorkers = workers.filter((w) => w.reported.length === 0).map((w) => w.worker);
   const tableHolders = workers.filter((w) => w.slice.some((i) => String(i).startsWith("RATE:"))).map((w) => w.worker);
-  const storyReps = (reps.get(run.run_id) || []).map((r) => r.run);
+  const storyReps = (repsAll.get(run.run_id) || []).map((r) => r.run);
   const repA = new Map(storyReps.map((r) => [r.replay.label, { run: r, a: autopsy(r) }]));
   const r4 = repA.get("R4");
 
@@ -249,16 +258,87 @@ async function main() {
       }), { caption: `Replays at the other worker counts` }) : null,
       shortCaveat()));
 
+    // 5b. Acyclic's own delegation text as planner guidance (R5, D37/D38). Items found only.
+    const r5Of = (x) => (repsAll.get(x.run.run_id) || []).map((r) => r.run).find((q) => q.replay.label === "R5");
+    const r5All = fam2A.map((x) => ({ x, r5: r5Of(x) })).filter((y) => y.r5)
+      .sort((p, q) => p.x.run.config.workers - q.x.run.config.workers || p.x.run.task.seed - q.x.run.task.seed)
+      .map((y) => ({ ...y, a5: autopsy(y.r5) }));
+    if (r5All.length) {
+      const n5 = r5All.length, allRuns = n5 === fam2A.length;
+      const f5 = r5All.map((y) => y.a5.swarm.score.true_positives);
+      const lo = Math.min(...f5), hi = Math.max(...f5);
+      const span = lo === hi ? `${lo}` : hi - lo === 1 ? `${lo} or ${hi}` : `${lo} to ${hi}`;
+      const g = r5All[0].r5.replay.guidance;
+      const sentences = g.text.trim().split(/(?<=\.)\s+/);
+      const quoted = sentences.find((x) => x.startsWith("Give children")) || g.text.trim();
+      const prov = provenance && provenance.git_blob === g.git_blob && r5All.every((y) => y.r5.replay.guidance.git_blob === g.git_blob)
+        ? provenance : null;
+      const every = (pred) => r5All.every(pred);
+      const tableToAll = every((y) => holdsTable(y.r5.swarm.workers).length === y.r5.swarm.workers.length);
+      const neverWhole = every((y) => !noSplit(y.r5));
+      const emptyW = r5All.flatMap((y) => y.r5.swarm.workers.filter((w) => w.reported.length === 0).map((w) => ({ y, w })));
+      const emptyHeldNothing = emptyW.every(({ y, w }) => !y.a5.swarm.per_item.some((p) => p.complete_in.includes(w.worker)));
+      const returnedNothing = r5All.reduce((n, y) => n + y.a5.swarm.buckets.holder_returned_nothing, 0);
+      const farOf = (y) => y.a5.swarm.score.by_type["far pair"];
+      const farTotal = farOf(r5All[0]).total;
+      const farFound = r5All.reduce((n, y) => n + farOf(y).found, 0);
+      const farAllSplit = every((y) => y.a5.swarm.per_item.filter((p) => p.type === "far pair").every((p) => p.bucket === "evidence_split"));
+      // "by position": each worker's line-item rows are one unbroken block of the ledger
+      const byPosition = every((y) => y.r5.swarm.workers.every((w) => {
+        const rows = w.slice.filter((i) => !String(i).startsWith("RATE:"))
+          .map((i) => y.r5.task.rows.find((r) => r.line_id === i)).filter(Boolean).map((r) => r.row);
+        return !rows.length || Math.max(...rows) - Math.min(...rows) + 1 === rows.length;
+      }));
+      const r5AtW = seedsAtW.map((x) => ({ ...x, r5: r5All.find((y) => y.x.run.config.workers === W && y.x.run.task.seed === x.seed) }))
+        .filter((x) => x.r5);
+      const ws = [...new Set(r5All.map((y) => y.x.run.config.workers))];
+      const seeds = [...new Set(r5All.map((y) => y.x.run.task.seed))].sort((p, q) => p - q);
+      const sourceLink = prov ? `${prov.source_url}/blob/${prov.source_commit}/${prov.source_path}` : null;
+      const facts = [];
+      if (tableToAll) facts.push(`In ${allRuns ? "all " : ""}${word(n5)} runs the new planner gave every worker the rate table` +
+        (neverWhole ? ", and never gave one worker every row." : "."));
+      if (returnedNothing === 0) facts.push(emptyW.length === 0 ? "No worker returned an empty list."
+        : `No item was lost to a worker returning nothing: ${emptyW.length} of ${r5All.reduce((n, y) => n + y.r5.swarm.workers.length, 0)} workers returned empty lists` +
+          (emptyHeldNothing ? ", and none of them held a whole item." : "."));
+      if (farFound === 0) facts.push(`Far pairs stayed at 0 of ${farTotal} in ${allRuns ? "all " : ""}${word(n5)} runs` +
+        (byPosition && farAllSplit ? `, because the split is still by position: each worker got one block of consecutive line items, so each pair's two rows, at least half the ledger apart, went to different workers.` : "."));
+      parts.push(section("acyclic", "r5", `Acyclic's own delegation sentence: ${span} of ${K} in ${allRuns ? "all " : ""}${word(n5)} runs`,
+        el("p", { class: "plain-limit" }, "This tests their guidance sentence in this harness, not their system. In Acyclic's harness a child can read the parent's files; here a worker sees only its brief and its rows."),
+        el("p", {}, `Replay R5 appends Acyclic Labs' delegation guidance, verbatim, to the planner's prompt under a line "Delegation guidance:". A new planner splits the ledger; workers and merger then run as before. The guidance includes this sentence:`),
+        el("blockquote", {}, quoted),
+        el("p", { class: "muted source" }, prov
+          ? ["From ", el("a", { href: sourceLink }, prov.source_path), ` in ${prov.source_repo}, commit ${prov.source_commit.slice(0, 7)}, licensed ${prov.licence}. The full ${prov.bytes}-byte text is used unmodified (`,
+            el("a", { href: `${REPO_URL}/blob/main/${prov.file}` }, prov.file), ")."]
+          : `From ${g.file}, ${g.bytes} bytes, used unmodified.`),
+        el("details", {}, el("summary", {}, "The full guidance text"), el("p", { class: "guidance-text" }, g.text.trim())),
+        r5AtW.length ? table(["Seed", "Original run", "R1: rate table to every worker", "R5: Acyclic's guidance"],
+          r5AtW.map((x) => [`seed ${x.seed}`, `${x.orig} of ${K}`, `${found(x.r1)} of ${K}`,
+            `${x.r5.a5.swarm.score.true_positives} of ${K}`]), { caption: `At W=${W}, items found` }) : null,
+        table(["Workers", ...seeds.map((sd) => `Seed ${sd}`)], ws.map((w) => [`W=${w}`, ...seeds.map((sd) => {
+          const y = r5All.find((q) => q.x.run.config.workers === w && q.x.run.task.seed === sd);
+          return y ? `${y.a5.swarm.score.true_positives} (${y.x.a.swarm.score.true_positives})` : "not run";
+        })]), { caption: `R5 in ${allRuns ? "all " : ""}${word(n5)} runs: items found of ${K}, the original run in brackets` }),
+        facts.length ? el("ul", {}, facts.map((f) => el("li", {}, f))) : null,
+        el("p", {}, "How each R5 brief reads, by a judge model, is in the ",
+          el("a", { href: `explorer.html?run=${encodeURIComponent(run.run_id)}` }, "run explorer"), "."),
+        shortCaveat()));
+    }
+
     // 6. The far pairs
     const far = (x) => x.a.swarm.score.by_type["far pair"];
     const all = [{ a }, ...[...repA.values()]];
     const farLost = Math.min(...all.map((x) => far(x).total - far(x).found));
-    const r4Holders = r4.a.swarm.per_item.filter((p) => p.type === "far pair" && p.complete_in.length).length;
+    const fresh = ["R4", "R5"].filter((l) => repA.has(l)); // replays with a new planner call
+    const newPlanners = andList(fresh);
+    const newHolders = fresh.reduce((n, l) => n + repA.get(l).a.swarm.per_item.filter((p) => p.type === "far pair" && p.complete_in.length).length, 0);
+    const r5Runs = fam2A.map((x) => (repsAll.get(x.run.run_id) || []).map((r) => r.run).find((q) => q.replay.label === "R5"))
+      .filter(Boolean).map((r) => ({ a: autopsy(r) }));
     parts.push(section("pairs", "apart", `The ${farLost} no fix here recovers`,
       el("p", {}, `The ${far({ a }).total} far pairs: one claim billed twice, on rows at least half the ledger apart. Only a worker holding both rows can see the duplicate.`),
       el("p", {}, `Far pairs found: ${far({ a }).found} of ${far({ a }).total} in the original run, and ` +
-        ["R1", "R2", "R3", "R4"].filter((l) => repA.has(l)).map((l) => `${far(repA.get(l)).found} in ${l}`).join(", ") + ". " +
-        `R1 to R3 keep the planner's blocks of rows; in R4 the new planner again cut the line items into blocks, and ${r4Holders === 0 ? "no worker held both rows of any far pair" : `${r4Holders} far pair(s) had both rows with one worker`}.`)));
+        ["R1", "R2", "R3", "R4", "R5"].filter((l) => repA.has(l)).map((l) => `${far(repA.get(l)).found} in ${l}`).join(", ") + ". " +
+        `R1 to R3 keep the planner's blocks of rows; in ${newPlanners} the new planner again cut the line items into blocks, and ${newHolders === 0 ? "no worker held both rows of any far pair" : `${newHolders} far pair(s) had both rows with one worker`}.` +
+        (r5Runs.length ? ` Across ${r5Runs.length === fam2A.length ? "all " : ""}${word(r5Runs.length)} R5 runs, far pairs found: ${r5Runs.reduce((n, y) => n + far(y).found, 0)} of ${r5Runs.reduce((n, y) => n + far(y).total, 0)}.` : ""))));
   }
 
   // Sections 1-6 share one sticky ASCII stage on the right (D32). It draws the run's real rows.
@@ -266,8 +346,9 @@ async function main() {
   const stage = el("div", { class: "track-stage", "aria-hidden": "true" },
     el("canvas", { class: "ascii-canvas" }), el("p", { class: "ascii-caption" }));
   parts.push(el("div", { class: "track" }, el("div", { class: "track-text" }, trackSections), stage));
-  const r1 = repA.get("R1");
-  const asciiModel = buildAsciiModel(run, a, r1 ? r1.run : null, r1 ? r1.a : null); // section 5 shows R1 (D35)
+  const r1 = repA.get("R1"), r5 = repA.get("R5");
+  const asciiModel = buildAsciiModel(run, a, r1 ? r1.run : null, r1 ? r1.a : null, // section 5 shows R1 (D35)
+    r5 ? r5.run : null, r5 ? r5.a : null); // section 5b shows R5 (D38)
 
   // 7. Nine runs
   const byW = new Map();

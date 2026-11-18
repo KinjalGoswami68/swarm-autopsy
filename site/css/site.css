@@ -132,7 +132,7 @@ tr.no-split { color: var(--sec); font-style: italic; }
   tbody tr:last-child { border-bottom: 0; }
   tbody th { padding: 0 0 .3rem; border: 0; color: var(--text); }
   td { padding: .2rem 0 .35rem; border: 0; }
-  td::before { content: attr(data-label); display: block; color: var(--sec); font-size: .8rem; }
+  td::before { content: attr(data-label); display: block; color: var(--sec); font-size: .8rem; white-space: normal; }
   td:empty { display: none; }
   td[data-label=""]::before { display: none; }
   .buckets td:nth-child(3) { width: 100%; }
@@ -201,3 +201,11 @@ select:active, .drop:active { transform: scale(1.01); box-shadow: 0 0 0 4px rgba
 .ascii-dots { position: absolute; inset: -26px 0 0 0; z-index: -1; pointer-events: none; will-change: transform;
   background-image: radial-gradient(circle, rgba(242, 242, 242, .07) 1px, transparent 1.4px); background-size: 26px 26px; background-position: 13px 0; }
 .ascii-canvas { position: relative; }
+
+/* ---------- R5 section (D38) ---------- */
+.story p.plain-limit { color: var(--text); max-width: 44rem; }
+.story p.source { font-size: .9rem; overflow-wrap: anywhere; }
+.story details { margin: .6rem 0 1rem; max-width: 44rem; color: var(--sec); }
+.story summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--text); }
+.story p.guidance-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .95rem; }
+#run-view li { overflow-wrap: anywhere; } /* R5 change line carries a 40-char git blob id */

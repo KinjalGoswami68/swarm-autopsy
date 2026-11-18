@@ -24,12 +24,14 @@ def run_js(paths, pct_cases=None):
 
 
 def committed_runs():
-    return sorted((ROOT / "runs").glob("*.json")) + sorted((ROOT / "runs" / "replays").glob("*.json"))
+    return (sorted((ROOT / "runs").glob("*.json")) + sorted((ROOT / "runs" / "replays").glob("*.json"))
+            + sorted((ROOT / "runs" / "guidance").glob("*.json")))  # published since D38
 
 
 def test_every_committed_run_file_matches():
     paths = committed_runs()
     assert len(paths) >= 20
+    assert any("guidance" in p.parts for p in paths)
     js = run_js(paths)
     for p in paths:
         py = autopsy.autopsy(json.loads(p.read_text(encoding="utf-8")))

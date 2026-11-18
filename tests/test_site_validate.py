@@ -40,7 +40,8 @@ def mutations(run):
 
 
 def test_validity_matches_jsonschema(tmp_path):
-    runs = sorted((ROOT / "runs").glob("*.json")) + sorted((ROOT / "runs" / "replays").glob("*.json"))
+    runs = (sorted((ROOT / "runs").glob("*.json")) + sorted((ROOT / "runs" / "replays").glob("*.json"))
+            + sorted((ROOT / "runs" / "guidance").glob("*.json")))
     base = json.loads((ROOT / "runs" / "ledgerctx-S-s1__openai_gpt-oss-120b__w4__t0.0.json").read_text(encoding="utf-8"))
     paths = list(runs)
     for name, bad in mutations(base).items():

@@ -16,7 +16,7 @@ async function main() {
     return;
   }
   status.textContent = "";
-  const reps = replaysByOriginal(data.replays);
+  const reps = replaysByOriginal([...data.replays, ...data.guidance]); // R1-R5 (D38)
   const groups = new Map();
   for (const r of data.runs) {
     const fam = r.run.task.family === "ledger-ctx" ? "Family 2: context and pairs" : "Family 1: independent lines";
@@ -36,7 +36,7 @@ async function main() {
     const run = byId.get(id);
     if (!run) return;
     picker.value = id;
-    renderRun(view, run, (reps.get(id) || []).map((r) => r.run));
+    renderRun(view, run, (reps.get(id) || []).map((r) => r.run), data.annotations);
     const u = new URL(location.href);
     u.searchParams.set("run", id);
     history.replaceState(null, "", u);

@@ -1,0 +1,12 @@
+{
+ "file": "protocol/acyclic-delegation.md",
+ "source_repo": "acyclic-labs/sdk",
+ "source_url": "https://github.com/acyclic-labs/sdk",
+ "source_path": "rust/crates/harness-core/src/seed/delegation.md",
+ "source_commit": "92fd2224148f58bb0b54dd7319f7e78c445db327",
+ "last_changed_commit": "3d38d4f51c9b340ed6a725445878758360b94893",
+ "git_blob": "d9b9a8fa1d4325572ab1cb933b1e0320392cfef3",
+ "bytes": 497,
+ "licence": "Apache-2.0",
+ "licence_files": ["protocol/LICENSE-acyclic-sdk.txt", "protocol/NOTICE-acyclic-sdk.txt"]
+}

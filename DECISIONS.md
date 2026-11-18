@@ -765,7 +765,7 @@ on 2026-11-13), and it is not needed.
   reuses the original output. (The R4 code never applied the check; in practice it made no
   difference: none of R4's 42 worker prompts or 9 merger prompts matched the original's.)
 - **Storage.** Guidance replays go to `runs/guidance/`, which `build_site.py` does not publish:
-  the site does not change yet (owner).
+  the site does not change yet (owner). *(Superseded by D38: published.)*
 - **Annotations.** The new briefs (R5), and those of R1 and R4 for the comparison table, are
   judge-annotated as in D27/D28 (model-read; never a score).
 - **Limit, stated plainly.** In Acyclic's harness a child agent can read the parent's files; in this
@@ -799,3 +799,37 @@ on 2026-11-13), and it is not needed.
 **Bug fixed:** `autopsy.render` reused the name `b` (the baseline autopsy) inside the annotation
 loop, so for annotated runs the "Every lost key item" lines read "baseline not scored". Renamed;
 regression test added. The site's JavaScript was not affected.
+
+## D38. R5 on the site (2026-11-18)
+
+Owner accepted R5 and asked for it on the site and in the README.
+
+- **Published.** `build_site.py` now copies `runs/guidance/*.json` (the nine R5 replays) and
+  `runs/guidance/annotations/*.json` (the R1/R4 judge sidecars) into `_site/`, listed in
+  `manifest.json` under `guidance` and `annotations`. R1-R4 stay under `replays`, so the
+  "Replays done" count on the landing page still counts R1-R4 only. `protocol/` is published too:
+  the guidance text, PROVENANCE.md and the Apache-2.0 LICENSE/NOTICE copies.
+- **Parity and schema.** The Python/JavaScript parity test and the schema-validity test now cover
+  the guidance files. A test checks every published file is byte-identical to the repo's and that
+  every sidecar belongs to a published replay.
+- **Provenance as data.** The source path, commit and licence the page shows come from
+  `protocol/acyclic-delegation.provenance.json`; a test holds it to PROVENANCE.md and to the
+  file's git blob. The page shows them only if that blob matches the one each R5 replay recorded.
+  The quoted sentence ("Give children self-contained briefs and clear ownership.") is taken from
+  the replay's own copy of the text, not typed in.
+- **Landing section** ("Acyclic's own delegation sentence", after the R1 section, ASCII scene
+  `r5`). Headline from items found only: the lowest and highest R5 count across the R5 runs. The
+  limit sentence sits directly under the headline. Every stated fact is computed and printed only
+  if the files bear it out: every worker given the rate table; no worker given every row; far
+  pairs found; and "split by position" (each worker's line-item rows are one unbroken block, and
+  every far pair landed in evidence split).
+- **"No worker returned nothing", stated precisely.** In the files 11 of 42 R5 workers returned
+  empty lists, but none of them held a whole key item, so the "holder returned nothing" bucket is 0
+  in all nine. The page says that, not that no worker returned an empty list.
+- **Judge shares only in the explorer.** The replay table gains a column "Relies on something not
+  given (model-read)": the original's own annotations, R1/R4 from the sidecars, R5 from its file,
+  "not read" for R2/R3. A note says it never changes a score and that a strict reading counts more
+  (cross-referencing briefs that restate the steps were mostly read as "no").
+- **Far-pair section** now lists R5 beside R1-R4 for the story run and adds the total across all
+  R5 runs.
+

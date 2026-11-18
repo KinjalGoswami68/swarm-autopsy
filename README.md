@@ -32,8 +32,16 @@ replay points cover seeds 1, 2 and 3 with 4 workers:
   three seeds. It matches the table fix only when the planner responds by handing every worker
   the table; in seed 3 the planner still gave the table to worker 1 only, and all four workers
   returned empty lists.
-- At four workers, the 3 far pairs come back in no replay on any seed: no worker ever holds both
-  rows of a pair.
+- **Acyclic Labs' own delegation guidance** (replay R5: their `delegation.md`, verbatim, appended
+  to the planner's prompt; it includes "Give children self-contained briefs and clear ownership.")
+  finds **8 or 9 of 12 in all nine runs** (seeds 1-3 × 2, 4 and 8 workers); at four workers 9, 8
+  and 9. In all nine the new planner gave every worker the rate table, and no item was lost to a
+  worker returning nothing. This tests their guidance sentence in this harness, not their system:
+  in Acyclic's harness a child can read the parent's files; here a worker sees only its brief and
+  its rows.
+- The 3 far pairs come back in no replay: 0 of 3 at four workers in R1-R4 on every seed, and 0 of
+  3 in all nine R5 runs. Every planner, old or new, splits the line items by position, so no
+  worker ever holds both rows of a pair.
 
 Across all nine runs (seeds 1-3 × 2, 4 and 8 workers), the single agent averages 86% recall and the
 swarm 22-39%, and the merger never drops an item a worker reported. On a first ledger where every
@@ -59,8 +67,9 @@ For every key item, exactly one bucket (rules in [DECISIONS.md](DECISIONS.md), D
 Also reported: recall and precision for the swarm and the single agent, recall per item type,
 false positives kept from workers or invented by the merger, and (from stage 2) replays:
 **R1** rate table to every worker, **R2** neutral briefs, **R3** both, **R4** the planner told
-that workers cannot communicate. Brief annotations, made by a judge model and checked by hand,
-are shown as "why" and never change a score.
+that workers cannot communicate, **R5** Acyclic's delegation guidance appended to the planner's
+prompt (any other guidance file works the same way, with `--planner-guidance`). Brief
+annotations, made by a judge model and checked by hand, are shown as "why" and never change a score.
 
 ## Run it
 
@@ -85,6 +94,8 @@ python cli.py table --model openai/gpt-oss-120b                       # summary,
 python cli.py autopsy runs/<run file>.json                            # full autopsy of one run
 python cli.py replay runs/<run file>.json                             # stage 2 replays R1-R4
 python cli.py replay-table runs/<run file>.json
+python cli.py replay runs/<run file>.json --replays R5                # Acyclic's delegation text (D37)
+python cli.py replay runs/<run file>.json --replays --planner-guidance my-guidance.md   # any guidance file
 python cli.py annotate runs/<run file>.json                           # model-read brief annotations
 ```
 

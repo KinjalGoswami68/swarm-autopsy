@@ -45,7 +45,7 @@ function boot(stage, model, sections, wide) {
   const byId = new Map(model.rows.map((r) => [r.id, r]));
 
   // ---- tokens: one per row, plus copies for rows a scene shows in several columns (R4's table)
-  const layouts = [model.columns, model.columnsR4].filter(Boolean);
+  const layouts = [model.columns, model.columnsR4, model.columnsR5].filter(Boolean);
   const copies = new Map(model.rows.map((r) => [r.id, 1]));
   for (const cols of layouts) {
     const n = new Map();
@@ -148,6 +148,9 @@ function boot(stage, model, sections, wide) {
     reform: () => ({ targets: place(block(), (r) => (model.kept.has(r.id) ? { a: 1, c: "white" } : dimmed(r, 0.2)), BLOCK_GAP), labels: null }),
     rescatter: () => (model.columnsR4
       ? { targets: place(model.columnsR4, (r) => (model.keptR4.has(r.id) ? { a: 1, c: "white" } : dimmed(r, 0.38))), labels: model.columnsR4 }
+      : SCENES.scatter()),
+    r5: () => (model.columnsR5
+      ? { targets: place(model.columnsR5, (r) => (model.keptR5.has(r.id) ? { a: 1, c: "white" } : dimmed(r, 0.38))), labels: model.columnsR5 }
       : SCENES.scatter()),
     apart: () => ({ targets: place(model.columns, (r) => (model.farRows.has(r.id) ? { a: 1, c: "pink" } : dimmed(r, 0.14))), labels: model.columns, pairs: true }),
   };

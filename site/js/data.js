@@ -36,12 +36,22 @@ async function loadMany(paths, limit = 4) {
   return out;
 }
 
+/** runs, replays (R1-R4), guidance (planner-guidance replays such as R5, D37/D38) and
+ * annotations: model-read sidecars for replays that do not carry their own, keyed by run_id. */
 export async function loadAll() {
   const m = await loadManifest();
-  return { runs: await loadMany(m.runs), replays: await loadMany(m.replays) };
+  const sidecars = await loadMany(m.annotations || []);
+  const annotations = new Map(sidecars.map((x) => [x.path.split("/").pop().replace(/\.annotations\.json$/, ""), x.run]));
+  return { runs: await loadMany(m.runs), replays: await loadMany(m.replays),
+    guidance: await loadMany(m.guidance || []), annotations };
 }
 
-/** Replays grouped by the run_id they replay, sorted by label (R1..R4). */
+/** The R5 guidance text's provenance (protocol/acyclic-delegation.provenance.json); null if missing. */
+export function loadProvenance() {
+  return loadRun("protocol/acyclic-delegation.provenance.json").catch(() => null);
+}
+
+/** Replays grouped by the run_id they replay, sorted by label (R1..R5). */
 export function replaysByOriginal(replays) {
   const by = new Map();
   for (const r of replays) {
