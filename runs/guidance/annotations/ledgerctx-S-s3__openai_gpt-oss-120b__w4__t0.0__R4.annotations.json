@@ -1,0 +1,104 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid < amount_owed, record this line as UNDERPAID and compute shortfall = amount_owed – paid (round to two decimals). Also record every claim_id you encounter.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, record this line as UNDERPAID and compute shortfall = amount_owed – paid (round to two decimals). Also record every claim_id you encounter.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 596,
+   "completion_tokens": 241,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "otherwise fetch the unit_rate for the given rate_code from the rate table (rows 1‑10, which you do not see, but you can assume the rate table is globally known).",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid is less than amount_owed, record the line as UNDERPAID and calculate shortfall = amount_owed – paid (two‑decimal precision).",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"otherwise fetch the unit_rate for the given rate_code from the rate table (rows 1‑10, which you do not see, but you can assume the rate table is globally known).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than amount_owed, record the line as UNDERPAID and calculate shortfall = amount_owed – paid (two‑decimal precision).\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 546,
+   "completion_tokens": 323,
+   "cached": false
+  },
+  {
+   "worker": 3,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "otherwise look up the unit_rate for its rate_code in the rate table (rows 1‑10).",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid < amount_owed, mark the line as UNDERPAID and compute shortfall = amount_owed – paid (rounded to two decimals).",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"otherwise look up the unit_rate for its rate_code in the rate table (rows 1‑10).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount_owed, mark the line as UNDERPAID and compute shortfall = amount_owed – paid (rounded to two decimals).\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 525,
+   "completion_tokens": 230,
+   "cached": false
+  },
+  {
+   "worker": 4,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "otherwise retrieve the unit_rate for its rate_code from the rate table (rows 1‑10).",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid is less than amount_owed, record the line as UNDERPAID and calculate shortfall = amount_owed – paid (two‑decimal precision).",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"otherwise retrieve the unit_rate for its rate_code from the rate table (rows 1‑10).\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid is less than amount_owed, record the line as UNDERPAID and calculate shortfall = amount_owed – paid (two‑decimal precision).\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 526,
+   "completion_tokens": 262,
+   "cached": false
+  }
+ ]
+}

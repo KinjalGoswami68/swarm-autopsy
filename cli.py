@@ -91,7 +91,12 @@ def cmd_annotate(args):
         except agent.RateLimitStop as e:
             print(f"STOPPED by rate limit: {e}", flush=True)
             sys.exit(2)
-        runfile.save(run, path)
+        if args.sidecar:  # D37: annotations beside, not inside, a published file
+            out = Path(args.sidecar) / f"{run['run_id']}.annotations.json"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(run["annotations"], indent=1, ensure_ascii=False), encoding="utf-8")
+        else:
+            runfile.save(run, path)
         flags = judge.summary(run)
         print(f"{Path(path).name}: " + ", ".join(
             f"w{w} a={a} b={b}" for w, (a, b) in sorted(flags.items())), flush=True)
@@ -379,6 +384,7 @@ def main(argv=None):
     j.add_argument("--tpm", type=int, default=8000)
     j.add_argument("--max-tokens-total", type=int, default=8000)
     j.add_argument("--rpd", type=int, default=1000)
+    j.add_argument("--sidecar", metavar="DIR", help="write annotations to DIR/<run_id>.annotations.json (D37)")
     j.set_defaults(func=cmd_annotate)
 
     rp = sub.add_parser("replay", help="stage 2 counterfactual replays (D29)")

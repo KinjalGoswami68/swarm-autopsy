@@ -1,0 +1,102 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "",
+    "quote_verified": false,
+    "kinds": [],
+    "judge_answer": "no",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": []\n  }\n}",
+   "error": null,
+   "prompt_tokens": 423,
+   "completion_tokens": 167,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "If paid < amount owed, record the line as UNDERPAID and note the shortfall (amount owed – paid) rounded to two decimals.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"If paid < amount owed, record the line as UNDERPAID and note the shortfall (amount owed – paid) rounded to two decimals.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 519,
+   "completion_tokens": 267,
+   "cached": false
+  },
+  {
+   "worker": 3,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "Output the underpaid lines and the list of claim_ids for this range.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Apply the same logic as for worker 2: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output the underpaid lines and the list of claim_ids for this range.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 455,
+   "completion_tokens": 214,
+   "cached": false
+  },
+  {
+   "worker": 4,
+   "relies_on_missing": {
+    "answer": "yes",
+    "quote": "Apply the same logic as for workers 2 and 3: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+    "quote_verified": true
+   },
+   "limits_kinds": {
+    "answer": "yes",
+    "quote": "Apply the same logic as for workers 2 and 3: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Apply the same logic as for workers 2 and 3: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Apply the same logic as for workers 2 and 3: compute amount owed, identify UNDERPAID lines and their shortfall, and record every claim_id you see.\",\n    \"kinds\": [\"underpaid\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 458,
+   "completion_tokens": 293,
+   "cached": false
+  }
+ ]
+}

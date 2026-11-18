@@ -1,0 +1,60 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output two lists: (1) all underpaid lines with row number, claim_id, shortfall; (2) all duplicated claim_ids with the rows on which they appear.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two lists: (1) all underpaid lines with row number, claim_id, shortfall; (2) all duplicated claim_ids with the rows on which they appear.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 560,
+   "completion_tokens": 243,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "no",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"no\",\n    \"quote\": \"\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 560,
+   "completion_tokens": 150,
+   "cached": false
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "note": "Model-read annotations (D27): a judge model's reading of each brief. They never change a bucket or a score.",
+ "judge_version": 1,
+ "judge": {
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "temperature": 0.0,
+  "reasoning_effort": "low"
+ },
+ "briefs": [
+  {
+   "worker": 1,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "output two lists in JSON: (1) underpaid lines as objects {\"row\": <row>, \"shortfall\": <value>}, and (2) claim_ids that appear more than once within the rows you processed as DUPLICATED (list of claim_id strings).",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"output two lists in JSON: (1) underpaid lines as objects {\\\"row\\\": <row>, \\\"shortfall\\\": <value>}, and (2) claim_ids that appear more than once within the rows you processed as DUPLICATED (list of claim_id strings).\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 623,
+   "completion_tokens": 307,
+   "cached": false
+  },
+  {
+   "worker": 2,
+   "relies_on_missing": {
+    "answer": "no",
+    "quote": "",
+    "quote_verified": false
+   },
+   "limits_kinds": {
+    "answer": "no",
+    "quote": "Output two JSON lists: (1) underpaid lines as objects {\"row\": <row>, \"shortfall\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.",
+    "quote_verified": true,
+    "kinds": [
+     "underpaid",
+     "duplicates"
+    ],
+    "judge_answer": "yes",
+    "derived_from_kinds": true
+   },
+   "raw_text": "{\n  \"a\": {\n    \"answer\": \"no\",\n    \"quote\": \"\"\n  },\n  \"b\": {\n    \"answer\": \"yes\",\n    \"quote\": \"Output two JSON lists: (1) underpaid lines as objects {\\\"row\\\": <row>, \\\"shortfall\\\": <value>}, and (2) duplicated claim_ids (list of strings) found in your range only.\",\n    \"kinds\": [\"underpaid\", \"duplicates\"]\n  }\n}",
+   "error": null,
+   "prompt_tokens": 594,
+   "completion_tokens": 230,
+   "cached": false
+  }
+ ]
+}
